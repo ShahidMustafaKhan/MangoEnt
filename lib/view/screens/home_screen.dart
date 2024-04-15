@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mango_ent/view/utils/app_constants.dart';
+import 'package:mango_ent/utils/constants/app_constants.dart';
 import 'package:mango_ent/view/widgets/app_bar.dart';
 import 'package:mango_ent/view/widgets/bottom_nav_shape.dart';
 import 'package:mango_ent/view/widgets/region_widgets.dart';

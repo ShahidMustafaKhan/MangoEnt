@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mango_ent/model/country_model.dart';
-import 'package:mango_ent/view/utils/app_constants.dart';
+import 'package:mango_ent/utils/constants/app_constants.dart';
 
 class RegionViewModel extends GetxController {
   final List<CountryModel> countryModelList = [

@@ -1,3 +1,14 @@
+class AppInfo {
+  static const String packageName = "";
+  static String appTitle = 'MangoEnt';
+  static const String appStoreUrl =
+      'https://apps.apple.com/us/app/itunes-connect/------id---------';
+  static String playStoreUrl =
+      'https://play.google.com/store/apps/details?id=$packageName';
+}
+
+
+
 class AppImagePath {
   static const bangladeshFlag = "assets/svg/bangladesh_flag.svg";
   static const englandFlag = "assets/svg/england_flag.svg";

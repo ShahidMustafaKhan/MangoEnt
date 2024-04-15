@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:mango_ent/view/screens/home_screen.dart';
-import 'package:mango_ent/view/utils/colors_constant.dart';
+import 'package:mango_ent/data/configuration/app_configuration.dart';
+import 'package:mango_ent/utils/constants/app_constants.dart';
+import 'package:mango_ent/utils/routes/app_routes.dart';
+import 'package:mango_ent/utils/theme/theme_helper.dart';
+import 'package:mango_ent/utils/constants/colors_constant.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  AppConfigurations.initialize();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: AppColors.bgColor,
@@ -23,16 +27,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
+      designSize: const Size(375, 812),
       builder: (_, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Demo App',
-        initialRoute: '/',
-        theme: ThemeData(scaffoldBackgroundColor: AppColors.bgColor),
-        routes: {
-          '/': (context) => const HomeScreen(),
-        },
+        navigatorKey: Get.key,
+        title: AppConfigurations.applicationName,
+        scrollBehavior:
+        ScrollConfiguration.of(context).copyWith(overscroll: false),
+        theme: theme,
+        getPages: AppRoutes.pages,
+        initialRoute: AppRoutes.initial,
+        // routes: {
+        //   '/': (context) => const HomeScreen(),
+        // },
       ),
-      designSize: const Size(375, 812),
     );
   }
 }

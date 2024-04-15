@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:mango_ent/view/utils/app_constants.dart';
+import 'package:mango_ent/utils/constants/app_constants.dart';
 import 'package:mango_ent/view_model/trending_controller.dart';
 
 class TrendingWidget extends StatelessWidget {

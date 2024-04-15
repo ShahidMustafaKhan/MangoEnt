@@ -39,7 +39,7 @@
 
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:mango_ent/view/utils/colors_constant.dart';
+import 'package:mango_ent/utils/constants/colors_constant.dart';
 
 
 class RPSCustomPainter extends CustomPainter {
