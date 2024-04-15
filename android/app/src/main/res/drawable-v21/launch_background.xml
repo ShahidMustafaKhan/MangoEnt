@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?android:colorBackground" />
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#1E1F1F"
+                android:centerColor="#1E1F1F"
+                android:endColor="#1E1F1F33"
+                android:centerX="0.7"
+                android:centerY="0.9"
+                android:angle="135" />
 
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
+        </shape>
+    </item>
+
+    <!-- Dino Image -->
+    <item
+        android:left="80dp"
+        android:top="0dp"
+        android:right="80dp">
+
         <bitmap
-            android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+            android:src="@drawable/splash"
+            android:gravity="center" />
+
+    </item>
+
 </layer-list>

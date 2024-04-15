@@ -4,7 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mango_ent/view_model/region_controller.dart';
+
+import '../../utils/constants/typography.dart';
+import '../../view_model/region_controller.dart';
+
 
 class RegionWidget extends StatelessWidget {
   RegionWidget({Key? key}) : super(key: key);
@@ -23,12 +26,12 @@ class RegionWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     "Countries & Regions",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16.sp),
+                    style: sfProDisplayMedium.copyWith(color: Colors.white, fontSize: 16.sp),
                   ),
                 ),
                 Text(
                   "More",
-                  style: TextStyle(color: Colors.grey, fontSize: 16.sp),
+                  style: sfProDisplayRegular.copyWith(color: Colors.grey, fontSize: 16.sp),
                 ),
                 SizedBox(
                   width: 5.w,
@@ -66,7 +69,7 @@ class RegionWidget extends StatelessWidget {
         SvgPicture.asset(cFlag, height: 32.h, width: 44.w,),
         Text(
           cName,
-          style: TextStyle(color: Colors.white, fontSize: 12.sp),
+          style: sfProDisplayRegular.copyWith(color: Colors.white, fontSize: 12.sp)
         )
       ],
     );

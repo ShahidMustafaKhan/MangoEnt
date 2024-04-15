@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:layout_height="match_parent" android:layout_width="match_parent">
+            <gradient
+                android:angle="90"
+                android:centerColor="#FFFFFFFF"
+                android:endColor="#FF84B2E4"
+                android:startColor="#FFFFFFFF" />  <!-- Replace with your start color -->
+        </shape>
+    </item>
+    <!--    <item>-->
+    <!--        <bitmap android:gravity="fill" android:src="@drawable/background"/>-->
+    <!--    </item>-->
+    <item>
+        <bitmap
+            android:gravity="fill"
+            android:src="@drawable/splash" /> <!-- Set height to 447dp -->
+
+    </item>
+
+    <item
+        android:id="@+id/poweredByText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Powered by BelancerX LTD"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:fontFamily="sans-serif-medium"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="52dp"
+        android:textColor="#777777"/>
+</layer-list>

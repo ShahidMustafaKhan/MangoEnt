@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:mango_ent/model/country_model.dart';
-import 'package:mango_ent/utils/constants/app_constants.dart';
+import 'package:teego/model/country_model.dart';
+import 'package:teego/utils/constants/app_constants.dart';
 
 class RegionViewModel extends GetxController {
   final List<CountryModel> countryModelList = [
     CountryModel(name: 'Sweden', flag: AppImagePath.swedishFlag),
-    CountryModel(name: 'Bangladesh', flag: AppImagePath.bangladeshFlag),
+    CountryModel(name: 'USA', flag: "assets/svg/america_flags.svg"),
     CountryModel(name: 'UK', flag: AppImagePath.englandFlag),
     CountryModel(name: 'Saudi Arabia', flag: AppImagePath.saudiFlag),
     CountryModel(name: 'Canada', flag: AppImagePath.canadaFlag),

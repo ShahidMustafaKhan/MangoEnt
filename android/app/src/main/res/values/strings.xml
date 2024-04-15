@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Mango Ent</string>
+    <string name="facebook_app_id" translatable="false">1064476291213356</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1064476291213356</string>
+    <string name="facebook_client_token" translatable="false">d9392e54f25092d3388cceea1d894966</string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-3285903611547029~6914723754</string>
+    <integer name="com_vk_sdk_AppId">51850211</integer>
+</resources>
