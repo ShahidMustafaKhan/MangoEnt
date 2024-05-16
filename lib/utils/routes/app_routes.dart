@@ -16,6 +16,7 @@ import '../../view/screens/live/single_live_streaming/single_audience_live/singl
 import '../../view/screens/live/single_live_streaming/single_audience_live/top_fan_view.dart';
 import '../../view/screens/live/single_live_streaming/single_streamer_live/single_live_screen/single_live_screen.dart';
 import '../../view/screens/live/streamer_live_preview/live_preview_screen.dart';
+import '../../view/screens/live/streamer_live_preview/widgets/live_bottom_card.dart';
 import '../../view/screens/onBoarding.dart';
 import '../../view/screens/profile/profile_screen.dart';
 import 'initial_route.dart';
@@ -135,7 +136,8 @@ class AppRoutes {
         })),
     GetPage(
       name: streamerLivePreview,
-      page: () => LivePreviewScreen(),
+        page: () => LiveBottomCard(),
+        // page: () => LivePreviewScreen(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ThemeController());
         })

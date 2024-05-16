@@ -13,78 +13,54 @@ import '../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 
 class LivePreviewScreen extends StatelessWidget {
 
+  final CameraController cameraController;
+  LivePreviewScreen({required this.cameraController});
+  // final RxBool cameraReady = false.obs;
 
-  late final CameraController cameraController;
+  // final RxBool hideNavigator = false.obs;
 
-  final RxBool cameraReady=false.obs;
-
-  final RxBool hideNavigator=false.obs;
-
-  Future<void> initializeCamera() async {
-    final cameras =  await availableCameras();
-    cameraController = CameraController(cameras[1], ResolutionPreset.medium);
-    cameraController.initialize().whenComplete((){
-
-      cameraReady.value=true;
-
-    });
-  }
+  // Future<void> initializeCamera() async {
+  //   final cameras =  await availableCameras();
+  //   cameraController = CameraController(cameras[1], ResolutionPreset.medium);
+  //   cameraController.initialize().whenComplete((){
+  //
+  //     cameraReady.value=true;
+  //
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-      SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
-        await Future.delayed(const Duration(seconds: 5));
-          SystemChrome.restoreSystemUIOverlays();
-        });
-      LiveViewModel liveViewModel=Get.put(LiveViewModel(ZegoLiveRole.host, null));
-      initializeCamera();
+    // SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
+    //   await Future.delayed(const Duration(seconds: 5));
+    //   SystemChrome.restoreSystemUIOverlays();
+    // });
+    // LiveViewModel liveViewModel =
+    //     Get.put(LiveViewModel(ZegoLiveRole.host, null));
+    // initializeCamera();
 
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Obx(() {
-          if(cameraReady.value==true && hideNavigator==false){
-            hideNavigator.value=true;
-            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
-          }
-
-          return !cameraReady.value ?  SplashScreen() : Container(
-            child: Stack(
-              children: [
-                Positioned(top:0, bottom:0, child: CameraPreview(cameraController)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 45),
-                      RoomAnnouncementCard(),
-                      const SizedBox(height: 16),
-                      LiveViewTopMenu(),
-                      const SizedBox(height: 4),
-                      LanguageCard(),
-                      const Spacer(),
-                      const LiveBottomCard(),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-        ),
-    );}
+    return Container(
+      child: Stack(
+        children: [
+          Positioned(top: 0, bottom: 0, child: CameraPreview(cameraController)),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   child: Column(
+          //     children: [
+          //       const SizedBox(height: 45),
+          //       RoomAnnouncementCard(),
+          //       const SizedBox(height: 16),
+          //       LiveViewTopMenu(),
+          //       const SizedBox(height: 4),
+          //       LanguageCard(),
+          //       const Spacer(),
+          //       // const LiveBottomCard(),
+          //       // const SizedBox(height: 16),
+          //     ],
+          //   ),
+          // ),
+        ],
+      ),
+    );
+  }
 }
-
-
-// IndexedStack(
-// index: bottomTab.indexOf(selectedTab),
-// children: tabPages,
-// ),
-//
-// // Example widgets for each tab
-// final List<Widget> tabPages = [
-// Center(child: Text('Multi-guest Live Content')),
-// Center(child: Text('Live Content')),
-// Center(child: Text('Audio Live Content')),
-// Center(child: Text('Game Live Content')),
-// ];

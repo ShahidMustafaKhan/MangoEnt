@@ -145,6 +145,27 @@ class LiveViewTopMenu extends StatelessWidget {
                             backgroundColor: AppColors.grey300.withOpacity(0.6),
                             child: Image.asset(AppImagePath.cameraOff, width: 14, height: 14),
                           ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: (){
+                              showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                ),
+                                backgroundColor: AppColors.grey500,
+                                builder: (context) => const TagsSheet(),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 16,
+                              backgroundColor: AppColors.grey300.withOpacity(0.6),
+                              child: const Icon(Icons.keyboard_arrow_down_outlined, color: Colors.white, size: 20),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -173,27 +194,8 @@ class LiveViewTopMenu extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Spacer(),
-                              GestureDetector(
-                                onTap: (){
-                                  showModalBottomSheet(
-                                    context: context,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      ),
-                                    ),
-                                    backgroundColor: AppColors.grey500,
-                                    builder: (context) => const TagsSheet(),
-                                  );
-                                },
-                                child: CircleAvatar(
-                                  radius: 16,
-                                  backgroundColor: AppColors.grey300.withOpacity(0.6),
-                                  child: const Icon(Icons.keyboard_arrow_down_outlined, color: Colors.white, size: 20),
-                                ),
-                              ),
+                              // Spacer(),
+
                             ],
                           );
                         }

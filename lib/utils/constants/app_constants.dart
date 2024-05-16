@@ -108,6 +108,9 @@ class AppImagePath {
   static const megaphone = "assets/png/audience/megaphone.png";
   static const audienceBadge = "assets/png/audience/audience_badge.png";
 
+  ///Streamer Assets
+  static const sofaFilled = "assets/svg/sofa-filled.svg";
+
   /// Gifts Assets
   // static const princessEntry = "assets/png/audience/gifts/princess_wedding_entry.png";
   // static const happyBirthday = "assets/png/audience/gifts/happy_birthday.png";
