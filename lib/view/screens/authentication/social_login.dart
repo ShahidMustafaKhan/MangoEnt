@@ -341,6 +341,6 @@ class SocialLogin {
   static void goHome(BuildContext context, UserModel userModel, SharedPreferences? preferences, {bool? isUserNameIncluded=false}) {
     QuickHelp.hideLoadingDialog(context);
     QuickHelp.goToNavigatorScreen(
-        context, DispatchScreen(preferences: preferences, currentUser: userModel, isUserNameIncluded: isUserNameIncluded, ), finish: true, back: false);
+        context, DispatchScreen(preferences: preferences, currentUser: userModel ), finish: true, back: false);
   }
 }

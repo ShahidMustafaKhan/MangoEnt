@@ -23,20 +23,17 @@ class DispatchScreen extends StatefulWidget {
   UserModel? currentUser;
   SharedPreferences? preferences;
   bool fromProfile;
-  bool? isUserNameIncluded;
 
-  DispatchScreen({Key? key, this.currentUser, required this.preferences, this.fromProfile=false, this.isUserNameIncluded=false}) : super(key: key);
+  DispatchScreen({Key? key, this.currentUser, required this.preferences, this.fromProfile=false}) : super(key: key);
 
   @override
   _DispatchScreenState createState() => _DispatchScreenState();
 }
 
 class _DispatchScreenState extends State<DispatchScreen> {
-  late UserViewModel userViewModel;
 
   @override
   void initState() {
-    userViewModel=Get.put(UserViewModel(widget.currentUser!));
     super.initState();
   }
 
@@ -60,7 +57,7 @@ class _DispatchScreenState extends State<DispatchScreen> {
           preferences: widget.preferences,
         ).initialise();
 
-        return DashboardView();
+        return DashboardView(currentUser: widget.currentUser!);
       }
 
     } else {
@@ -91,7 +88,7 @@ class _DispatchScreenState extends State<DispatchScreen> {
             if(snapshot.hasData){
               PermissionStatus permissionStatus = snapshot.data as PermissionStatus;
               if (permissionStatus == PermissionStatus.granted || permissionStatus == PermissionStatus.grantedLimited) {
-                return DashboardView();
+                return DashboardView(currentUser: widget.currentUser!,);
               } else {
                 return LocationScreen(currentUser: widget.currentUser,);
               }

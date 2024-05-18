@@ -27,7 +27,7 @@ class BattleAnimations extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.none,
             children: [
-              if(controller.showBannerAnimation==true)
+              if(controller.showVersusAnimation==true)
                 VersusAnimation(battleViewModel : controller, animationViewModel: animationViewModel,),
               if(controller.showResult==true && controller.rightScoreCard!=controller.leftScoreCard)
                 LoserAnimation(animationViewModel, controller),

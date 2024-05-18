@@ -26,6 +26,12 @@ class ZegoController extends GetxController {
   final liveStreamingManager = ZegoLiveStreamingManager();
   List<StreamSubscription> subscriptions = [];
   bool showingPKDialog = false;
+  ZegoScreenCaptureSource? screenSharingSource;
+  Widget? hostScreenView;
+  int? hostScreenViewID;
+
+  bool isCameraEnabled = true;
+  bool isSharingScreen = false;
 
 
   bool isCurrentUserHost(){
@@ -139,17 +145,7 @@ class ZegoController extends GetxController {
 
   void onPKStart(dynamic event) {
 
-    Get.find<BattleViewModel>().setBattleView=true;
-
-    if(Get.find<BattleViewModel>().isHost){
-      Get.find<BattleViewModel>().subscribeBattleModel(Get.find<UserViewModel>().currentUser.getUid!);
-    }
-
-    if(Get.find<LiveViewModel>().role==ZegoLiveRole.audience){
-      Get.find<BattleViewModel>().fetchBattleModelFromLiveObject();
-    }
-
-    Get.find<BattleViewModel>().pauseLiveStreamingForPkPlayer(true);
+    Get.find<BattleViewModel>().onPkStart();
 
     Get.find<AnimationViewModel>().loadBattleAnimation();
 
@@ -178,7 +174,7 @@ class ZegoController extends GetxController {
           child: InvitationDialog(
             onAccept: () {
               liveStreamingManager.acceptPKBattleRequest(event.requestID);
-              Get.find<BattleViewModel>().fetchBattleModel(int.parse(event.invitation.inviterID!));
+              Get.find<BattleViewModel>().fetchBattleModelForPlayerSideLogic(int.parse(event.invitation.inviterID!));
               Get.back(); },
             avatar: event.invitation.inviterAvatar!,),
         );
@@ -211,9 +207,37 @@ class ZegoController extends GetxController {
 
 
   void onPKEnd(dynamic event){
-    Get.find<BattleViewModel>().endBattleView(endBattle: true);
-    Get.find<BattleViewModel>().pauseLiveStreamingForPkPlayer(false);
-    Get.find<AnimationViewModel>().resetAllAnimationsController();
+    Get.find<BattleViewModel>().onPkEnd();
+  }
+
+
+  Future<void> startScreenSharing() async {
+    screenSharingSource ??= (await ZegoExpressEngine.instance.createScreenCaptureSource())!;
+    await ZegoExpressEngine.instance.setVideoConfig(
+      ZegoVideoConfig.preset(ZegoVideoConfigPreset.Preset720P)..fps = 10,
+      channel: ZegoPublishChannel.Aux,
+    );
+    await ZegoExpressEngine.instance.setVideoSource(ZegoVideoSourceType.ScreenCapture, channel: ZegoPublishChannel.Aux);
+    await screenSharingSource!.startCapture();
+    // String streamID = '${widget.roomID}_${widget.localUserID}_screen';
+    // await ZegoExpressEngine.instance.startPublishingStream(streamID, channel: ZegoPublishChannel.Aux);
+    // await ZegoExpressEngine.instance.stopPublishingStream(channel: ZegoPublishChannel.Aux);
+    // await ZegoExpressEngine.instance.startPublishingStream(streamID, channel: ZegoPublishChannel.Aux);
+    isSharingScreen = true;
+    update();
+
+    bool needPreview = false;
+    // ignore: dead_code
+    if (needPreview && (hostScreenViewID == null)) {
+      await ZegoExpressEngine.instance.createCanvasView((viewID) async {
+        hostScreenViewID = viewID;
+        ZegoCanvas previewCanvas = ZegoCanvas(viewID, viewMode: ZegoViewMode.AspectFit);
+        ZegoExpressEngine.instance.startPreview(canvas: previewCanvas, channel: ZegoPublishChannel.Aux);
+      }).then((canvasViewWidget) {
+        // use this canvasViewWidget to preview the screensharing
+     hostScreenView = canvasViewWidget;
+      });
+    }
   }
 
 

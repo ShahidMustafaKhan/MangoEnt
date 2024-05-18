@@ -37,43 +37,43 @@ class LiveViewTopMenu extends StatelessWidget {
                       return GestureDetector(
                         onTap: ()=> PermissionHandler.checkPermission(false, context,liveStreamingFile: true),
                         child: Container(
-                        height: 90,
-                        width: 90,
-                        decoration: BoxDecoration(
-                          image: controller.parseFile==null ? DecorationImage(
-                            image:  AssetImage(AppImagePath.singleLiveBgImage) ,
-                            fit: BoxFit.cover,
-                          ) : DecorationImage(
-                            image:  NetworkImage(controller.parseFile!.url!),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                                color: AppColors.black.withOpacity(0.4),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Add Image',
-                                  style: sfProDisplayRegular.copyWith(fontSize: 10),
-                                ),
-                              ),
+                          height: 90,
+                          width: 90,
+                          decoration: BoxDecoration(
+                            image: controller.parseFile==null ? DecorationImage(
+                              image:  AssetImage(AppImagePath.singleLiveBgImage) ,
+                              fit: BoxFit.cover,
+                            ) : DecorationImage(
+                              image:  NetworkImage(controller.parseFile!.url!),
+                              fit: BoxFit.cover,
                             ),
-                          ],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                  color: AppColors.black.withOpacity(0.4),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Add Image',
+                                    style: sfProDisplayRegular.copyWith(fontSize: 10),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                    ),
                       );
-                  }
+                    }
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -90,7 +90,7 @@ class LiveViewTopMenu extends StatelessWidget {
                               liveViewModel.title.value=value;
                             }
                             return null;
-                            },
+                          },
                           validator: (value) {},
                           hintText: 'Add a title to chat',
                           borderRadius: 0,
@@ -124,14 +124,14 @@ class LiveViewTopMenu extends StatelessWidget {
                                   const Icon(Icons.groups, size: 20, color: AppColors.white),
                                   const SizedBox(width: 6),
                                   Obx(() {
-                                      return Text(
-                                        liveViewModel.mode.value,
-                                        style: sfProDisplayRegular.copyWith(
-                                          fontSize: 13,
-                                          color: AppColors.white,
-                                        ),
-                                      );
-                                    }
+                                    return Text(
+                                      liveViewModel.mode.value,
+                                      style: sfProDisplayRegular.copyWith(
+                                        fontSize: 13,
+                                        color: AppColors.white,
+                                      ),
+                                    );
+                                  }
                                   ),
                                   const SizedBox(width: 6),
                                   const Icon(Icons.keyboard_arrow_down, size: 14, color: AppColors.white),
@@ -170,35 +170,35 @@ class LiveViewTopMenu extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Obx((){
-                          return Row(
-                            children: [
+                        return Row(
+                          children: [
                             ...List.generate(
                               liveViewModel.tagList.length>2 ? 2 : liveViewModel.tagList.length,
-                                (index) =>  Container(
-                                  margin: EdgeInsets.only(right: 4.w),
-                                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: AppColors.grey300.withOpacity(0.6),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        liveViewModel.tagList[index],
-                                        style: sfProDisplayRegular.copyWith(
-                                          fontSize: 13,
-                                          color: AppColors.white,
-                                        ),
+                                  (index) =>  Container(
+                                margin: EdgeInsets.only(right: 4.w),
+                                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: AppColors.grey300.withOpacity(0.6),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      liveViewModel.tagList[index],
+                                      style: sfProDisplayRegular.copyWith(
+                                        fontSize: 13,
+                                        color: AppColors.white,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              // Spacer(),
+                            ),
+                            // Spacer(),
 
-                            ],
-                          );
-                        }
+                          ],
+                        );
+                      }
                       ),
                     ],
                   ),

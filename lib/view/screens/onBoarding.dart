@@ -13,7 +13,7 @@ import '../widgets/appButton.dart';
 class OnBoardingScreen extends StatelessWidget {
    OnBoardingScreen({Key? key}) : super(key: key);
 
-   // AuthViewModel authViewModel = Get.put(AuthViewModel());
+   AuthViewModel authViewModel = Get.put(AuthViewModel());
 
 
   @override
@@ -25,7 +25,7 @@ class OnBoardingScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const Spacer(),
-          // guestLogin(context),
+          guestLogin(context),
           Image.asset(
             AppImagePath.onBoarding,
           ),
@@ -50,18 +50,18 @@ class OnBoardingScreen extends StatelessWidget {
     );
   }
 
-   // Widget guestLogin(BuildContext context){
-   //   return InkWell(
-   //     onTap: ()=> authViewModel.guestSignIn(context),
-   //     child: Row(
-   //       mainAxisAlignment: MainAxisAlignment.end,
-   //       children: [
-   //         Text('Guest', style: sfProDisplayBold.copyWith(fontSize: 14),),
-   //         Icon(Icons.keyboard_double_arrow_right_outlined),
-   //         SizedBox(width:12.w)
-   //       ],
-   //     ),
-   //   );
-   // }
+   Widget guestLogin(BuildContext context){
+     return InkWell(
+       onTap: ()=> authViewModel.guestSignIn(context),
+       child: Row(
+         mainAxisAlignment: MainAxisAlignment.end,
+         children: [
+           Text('Guest', style: sfProDisplayBold.copyWith(fontSize: 14),),
+           Icon(Icons.keyboard_double_arrow_right_outlined),
+           SizedBox(width:12.w)
+         ],
+       ),
+     );
+   }
 
 }

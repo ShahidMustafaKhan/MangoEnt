@@ -106,7 +106,7 @@ class AppRoutes {
         })),
     GetPage(
         name: dashboardScreen,
-        page: () => const DashboardView(),
+        page: () => DashboardView(currentUser: Get.arguments['currentUser'],),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ThemeController());
         })),
@@ -135,7 +135,7 @@ class AppRoutes {
           Get.lazyPut(() => ThemeController());
         })),
     GetPage(
-      name: streamerLivePreview,
+        name: streamerLivePreview,
         page: () => LiveBottomCard(),
         // page: () => LivePreviewScreen(),
         binding: BindingsBuilder(() {
@@ -143,8 +143,8 @@ class AppRoutes {
         })
     ),
     GetPage(
-      name: streamerSingleLive,
-      page: () => SingleLiveScreen(),
+        name: streamerSingleLive,
+        page: () => SingleLiveScreen(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ThemeController());
         })

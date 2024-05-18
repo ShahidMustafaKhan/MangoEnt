@@ -439,13 +439,6 @@ class PKService {
   }
 
   void onReceivePKAccept(OutgoingUserRequestAcceptedEvent event) {
-    // print("${event.info.extendedData} onReceivePKAccept");
-    // print("${event.info.extendedData} onReceivePKAccept");
-    // print("${event.info.extendedData} onReceivePKAccept");
-    // print("${event.info.extendedData} onReceivePKAccept");
-    // print("${event.info.extendedData} onReceivePKAccept");
-    // print("${event.info.extendedData} onReceivePKAccept");
-    // print("${event.info.extendedData} onReceivePKAccept");
     final Map<String, dynamic> invitationMap =
         jsonDecode(event.info.extendedData);
     final String roomID = invitationMap['room_id'];

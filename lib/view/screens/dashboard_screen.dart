@@ -16,7 +16,9 @@ import 'live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({Key? key,}) : super(key: key);
+  UserModel currentUser;
+
+  DashboardView({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -26,11 +28,12 @@ class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 0;
   UserModel? currentUser;
   late final List<Widget> _screens;
-  UserViewModel userViewModel= Get.find();
+  late UserViewModel userViewModel;
 
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    userViewModel= Get.put(UserViewModel(widget.currentUser));
     currentUser = userViewModel.currentUser;
 
     _screens = [
@@ -55,7 +58,7 @@ class _DashboardViewState extends State<DashboardView> {
   Color _getIconColor(int index) {
     return _selectedIndex == index ? const Color(0xffF9c034) : Colors.grey;
   }
-//
+
   void goToLiveScreen(){
     Get.toNamed(AppRoutes.streamerLivePreview,  arguments: {"role":ZegoLiveRole.host})?.then((value) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);

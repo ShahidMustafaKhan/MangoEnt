@@ -144,7 +144,7 @@ class BottomBar extends StatelessWidget {
                                   onTap: () {
                                     Navigator.pop(context);
                                     controller.setBattleStarted=true;
-                                    controller.startBannerLoadingAnimation();
+                                    controller.triggerVersusAnimation();
                                   },
                                 ),
                               ),

@@ -32,7 +32,7 @@ class ProgressBar extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             lineHeight: 18.h,
             width: MediaQuery.of(context).size.width,
-            animationDuration: 2500,
+            animationDuration: 1500,
             clipLinearGradient: true,
             backgroundColor: Colors.transparent,
             percent: battleViewModel.calculatePkProgressScore(),

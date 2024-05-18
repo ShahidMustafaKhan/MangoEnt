@@ -246,7 +246,7 @@ class _NewUserState extends State<NewUser> {
                                   else{
                                     String gender=genderController.selectedGender.value==Gender.male ? UserModel.keyGenderMale : genderController.selectedGender.value==Gender.female ? UserModel.keyGenderFemale : UserModel.keyGenderOther;
                                     userViewModel.updateUserDetails(name.text, gender, countryController.text, dateOfBirth.text, context)
-                                        .then((value) => Get.toNamed(AppRoutes.languageScreen));
+                                        .then((value) => Get.toNamed(AppRoutes.languageScreen, arguments: {"currentUser" : currentUser}));
                                   }
                                 } else {
                                   isFormDirty.value = true;
