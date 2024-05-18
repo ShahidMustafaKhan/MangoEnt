@@ -16,10 +16,10 @@ import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/ui/container_with_corner.dart';
 import 'package:teego/ui/text_with_tap.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
-import 'package:teego/widgets/AvatarInitials.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/Utils.dart';
+import '../view/widgets/AvatarInitials.dart';
 
 
 class QuickActions {

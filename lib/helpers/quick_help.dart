@@ -26,7 +26,6 @@ import 'package:teego/data/app/config.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:teego/widgets/snackbar_pro/snack_bar_pro.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -40,7 +39,8 @@ import 'package:flutter/foundation.dart'
     show consolidateHttpClientResponseBytes, kIsWeb;
 
 import '../view/widgets/appButton.dart';
-import '../widgets/snackbar_pro/top_snack_bar.dart';
+import '../view/widgets/snackbar_pro/snack_bar_pro.dart';
+import '../view/widgets/snackbar_pro/top_snack_bar.dart';
 
 typedef EmailSendingCallback = void Function(bool sent, ParseError? error);
 
