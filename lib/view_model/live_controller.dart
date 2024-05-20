@@ -35,10 +35,18 @@ class LiveViewModel extends GetxController {
   int giftListLength=0;
   List giftSendersList=[];
   ParseFileBase? parseFile;
+  RxString selectedLiveType='Live'.obs;
+  final List bottomTab = [
+    'Multi-guest Live',
+    'Live',
+    'Audio Live',
+    'Game Live',
+  ];
 
-
-
-
+  int multiLiveIndex=0;
+  int singleLiveIndex=1;
+  int audioLiveIndex=2;
+  int gameLiveIndex=3;
 
 
   addParseFile(ParseFileBase? file){

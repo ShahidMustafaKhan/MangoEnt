@@ -8,85 +8,77 @@ import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/widgets/custom_buttons.dart';
 import 'package:teego/view_model/live_controller.dart';
 
-class LiveBottomCard extends StatefulWidget {
-  const LiveBottomCard();
+class LiveBottomCard extends StatelessWidget {
+  final LiveViewModel liveViewModel;
 
-  @override
-  State<LiveBottomCard> createState() => _LiveBottomCardState();
-}
+  LiveBottomCard(this.liveViewModel);
 
-class _LiveBottomCardState extends State<LiveBottomCard> {
-  List bottomTab = [
-    'Multi-guest Live',
-    'Live',
-    'Audio Live',
-    'Game Live',
-  ];
-
-  String selectedTab = 'Live';
-
+  
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            const SizedBox(width: 20),
-            Image.asset(AppImagePath.makeup, width: 30, height: 30),
-            const SizedBox(width: 40),
-            Expanded(
-              child: PrimaryButton(
-                title: 'Go Live',
-                borderRadius: 35,
-                bgColor: AppColors.yellowBtnColor,
-                onTap: () {
-                  Get.find<LiveViewModel>().createLive(context);
-                  // Get.toNamed(AppRoutes.streamerSingleLivePreview);
-                },
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          Row(
             children: [
-              ...List.generate(
-                bottomTab.length,
-                (index) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedTab = bottomTab[index];
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        Text(
-                          bottomTab[index],
-                          style: sfProDisplayMedium.copyWith(
-                            fontSize: selectedTab == bottomTab[index] ? 16.sp : 14.sp,
-                            color: selectedTab == bottomTab[index] ? AppColors.white : AppColors.white.withOpacity(0.7),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        CircleAvatar(
-                          backgroundColor: selectedTab == bottomTab[index] ? Colors.white : Colors.transparent,
-                          radius: 4,
-                        ),
-                      ],
-                    ),
-                  ),
+              const SizedBox(width: 20),
+              Image.asset(AppImagePath.makeup, width: 30, height: 30),
+              const SizedBox(width: 40),
+              Expanded(
+                child: PrimaryButton(
+                  title: 'Go Live',
+                  borderRadius: 35,
+                  bgColor: AppColors.yellowBtnColor,
+                  onTap: () {
+                    Get.find<LiveViewModel>().createLive(context);
+                  },
                 ),
-              )
+              ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Obx(() {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ...List.generate(
+                      liveViewModel.bottomTab.length,
+                      (index) => Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: GestureDetector(
+                          onTap: () {
+                              liveViewModel.selectedLiveType.value = liveViewModel.bottomTab[index];
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                liveViewModel.bottomTab[index],
+                                style: sfProDisplayMedium.copyWith(
+                                  fontSize: liveViewModel.selectedLiveType.value == liveViewModel.bottomTab[index] ? 16.sp : 14.sp,
+                                  color: liveViewModel.selectedLiveType.value == liveViewModel.bottomTab[index] ? AppColors.white : AppColors.white.withOpacity(0.7),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              CircleAvatar(
+                                backgroundColor: liveViewModel.selectedLiveType.value == liveViewModel.bottomTab[index] ? Colors.white : Colors.transparent,
+                                radius: 4,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              }
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

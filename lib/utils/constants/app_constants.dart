@@ -171,6 +171,10 @@ class AppImagePath {
 
   static const indexAnimation= "assets/svga/index.svga";
 
+  // multiguest
+  static const bitCoinSofa = "assets/png/streamer/bitcoin_sofa.png";
+
+
 }
 
 class SubLists {

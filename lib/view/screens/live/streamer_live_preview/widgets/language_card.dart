@@ -37,6 +37,7 @@ class LanguageCard extends StatelessWidget {
         );
       },
       child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 21),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),

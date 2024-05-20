@@ -136,8 +136,8 @@ class AppRoutes {
         })),
     GetPage(
         name: streamerLivePreview,
-        page: () => LiveBottomCard(),
-        // page: () => LivePreviewScreen(),
+        // page: () => LiveBottomCard(),
+        page: () => LivePreviewScreen(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ThemeController());
         })

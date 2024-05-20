@@ -8,7 +8,10 @@ import 'package:teego/view/screens/live/streamer_live_preview/widgets/live_botto
 import 'package:teego/view/screens/live/streamer_live_preview/widgets/live_view_top_menu.dart';
 import 'package:teego/view/screens/live/streamer_live_preview/widgets/room_announcement.dart';
 import 'package:teego/view/screens/splash_screen.dart';
+import 'package:teego/view/widgets/base_scaffold.dart';
+import '../../../../utils/theme/colors_constant.dart';
 import '../../../../view_model/live_controller.dart';
+import '../multiguest/widgets/three_live_widget.dart';
 import '../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 
 class LivePreviewScreen extends StatelessWidget {
@@ -40,8 +43,9 @@ class LivePreviewScreen extends StatelessWidget {
       initializeCamera();
 
       return Scaffold(
+        backgroundColor: liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex] ? null :AppColors.darkPurple,
         body: Obx(() {
-          if(cameraReady.value==true && hideNavigator==false){
+          if(cameraReady.value==true && hideNavigator.value==false){
             hideNavigator.value=true;
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
           }
@@ -49,9 +53,10 @@ class LivePreviewScreen extends StatelessWidget {
           return !cameraReady.value ?  SplashScreen() : Container(
             child: Stack(
               children: [
+                if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                 Positioned(top:0, bottom:0, child: CameraPreview(cameraController)),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Column(
                     children: [
                       const SizedBox(height: 45),
@@ -59,9 +64,13 @@ class LivePreviewScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       LiveViewTopMenu(),
                       const SizedBox(height: 4),
+                      if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                       LanguageCard(),
-                      const Spacer(),
-                      const LiveBottomCard(),
+                      if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
+                        Spacer(),
+                      if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex])
+                        Expanded(child: ThreeLiveWidget()),
+                      LiveBottomCard(liveViewModel),
                       const SizedBox(height: 16),
                     ],
                   ),

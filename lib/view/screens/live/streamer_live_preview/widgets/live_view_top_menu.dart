@@ -21,6 +21,7 @@ class LiveViewTopMenu extends StatelessWidget {
     final TextEditingController _titleController = TextEditingController();
     final LiveViewModel liveViewModel= Get.find();
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: AppColors.black.withOpacity(0.5),
