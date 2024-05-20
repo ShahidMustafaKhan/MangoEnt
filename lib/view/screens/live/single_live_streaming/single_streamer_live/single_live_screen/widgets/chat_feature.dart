@@ -15,31 +15,31 @@ class ChatFeature extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return GetBuilder<BattleViewModel>(builder: (controller) {
-        return Obx((){
-            return liveMessagesViewModel.showDisclaimerMessage.value && controller.isBattleView==false ?
-            disclaimerMessage():
-            Container(
-              height: 185.h,
-              child: ListView.builder(
-                reverse: true,
-                physics: AlwaysScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: liveMessagesViewModel.liveMessagesModelList.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: 20, right: 10.w),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: ChatCard(liveMessagesModel: liveMessagesViewModel.liveMessagesModelList[0]),
-                    ),
-                  );
-                },
-              ),
+        return GetBuilder<LiveMessagesViewModel>(builder: (liveMessagesViewModel) {
+          return liveMessagesViewModel.showDisclaimerMessage && controller.isBattleView==false ?
+                disclaimerMessage():
+                Container(
+                  height: 185.h,
+                  child: ListView.builder(
+                    reverse: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: liveMessagesViewModel.liveMessagesModelList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 20, right: 10.w),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: ChatCard(liveMessagesModel: liveMessagesViewModel.liveMessagesModelList[index]),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
             );
           }
         );
-      }
-    );
   }
 
    Widget disclaimerMessage(){

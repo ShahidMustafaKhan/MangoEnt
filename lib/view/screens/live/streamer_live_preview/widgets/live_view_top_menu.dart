@@ -98,76 +98,90 @@ class LiveViewTopMenu extends StatelessWidget {
                           fillColor: AppColors.black.withOpacity(0.0),
                         ),
                       ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: (){
-                              showModalBottomSheet(
-                                context: context,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                  ),
-                                ),
-                                backgroundColor: AppColors.grey500,
-                                builder: (context) => PrivacySheet(),
-                              );
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: AppColors.grey300.withOpacity(0.6),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.groups, size: 20, color: AppColors.white),
-                                  const SizedBox(width: 6),
-                                  Obx(() {
-                                    return Text(
-                                      liveViewModel.mode.value,
-                                      style: sfProDisplayRegular.copyWith(
-                                        fontSize: 13,
-                                        color: AppColors.white,
+                      Obx(() {
+                          return Row(
+                            children: [
+                              GestureDetector(
+                                onTap: (){
+                                  showModalBottomSheet(
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
                                       ),
-                                    );
-                                  }
+                                    ),
+                                    backgroundColor: AppColors.grey500,
+                                    builder: (context) => PrivacySheet(),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: AppColors.grey300.withOpacity(0.6),
                                   ),
-                                  const SizedBox(width: 6),
-                                  const Icon(Icons.keyboard_arrow_down, size: 14, color: AppColors.white),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          CircleAvatar(
-                            radius: 15,
-                            backgroundColor: AppColors.grey300.withOpacity(0.6),
-                            child: Image.asset(AppImagePath.cameraOff, width: 14, height: 14),
-                          ),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: (){
-                              showModalBottomSheet(
-                                context: context,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.groups, size: 20, color: AppColors.white),
+                                      const SizedBox(width: 6),
+                                      Obx(() {
+                                        return Text(
+                                          liveViewModel.mode.value,
+                                          style: sfProDisplayRegular.copyWith(
+                                            fontSize: 13,
+                                            color: AppColors.white,
+                                          ),
+                                        );
+                                      }
+                                      ),
+                                      const SizedBox(width: 6),
+                                      const Icon(Icons.keyboard_arrow_down, size: 14, color: AppColors.white),
+                                    ],
                                   ),
                                 ),
-                                backgroundColor: AppColors.grey500,
-                                builder: (context) => const TagsSheet(),
-                              );
-                            },
-                            child: CircleAvatar(
-                              radius: 16,
-                              backgroundColor: AppColors.grey300.withOpacity(0.6),
-                              child: const Icon(Icons.keyboard_arrow_down_outlined, color: Colors.white, size: 20),
-                            ),
-                          ),
-                        ],
+                              ),
+                              const SizedBox(width: 5),
+                              CircleAvatar(
+                                radius: 15,
+                                backgroundColor: AppColors.grey300.withOpacity(0.6),
+                                child: Image.asset(AppImagePath.cameraOff, width: 14, height: 14),
+                              ),
+                              Spacer(),
+                              if(liveViewModel.tagList.length==0)
+                              Text(
+                                'Select tag',
+                                style: sfProDisplayRegular.copyWith(
+                                  fontSize: 12,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                              if(liveViewModel.tagList.length==0)
+                              SizedBox(width: 5),
+                              if(liveViewModel.tagList.length==0)
+                                GestureDetector(
+                                onTap: (){
+                                  showModalBottomSheet(
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                      ),
+                                    ),
+                                    backgroundColor: AppColors.grey500,
+                                    builder: (context) => const TagsSheet(),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  radius: 13,
+                                  backgroundColor: AppColors.grey300.withOpacity(0.6),
+                                  child: Icon(Icons.keyboard_arrow_down_rounded, size: 13, color: AppColors.white),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
                       ),
                       const SizedBox(height: 8),
                       Obx((){
@@ -195,7 +209,28 @@ class LiveViewTopMenu extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // Spacer(),
+                            Spacer(),
+                            if(liveViewModel.tagList.length!=0)
+                            GestureDetector(
+                              onTap: (){
+                                showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                    ),
+                                  ),
+                                  backgroundColor: AppColors.grey500,
+                                  builder: (context) => const TagsSheet(),
+                                );
+                              },
+                              child: CircleAvatar(
+                                radius: 16,
+                                backgroundColor: AppColors.grey300.withOpacity(0.6),
+                                child: const Icon(Icons.keyboard_arrow_down_outlined, color: Colors.white, size: 20),
+                              ),
+                            ),
 
                           ],
                         );

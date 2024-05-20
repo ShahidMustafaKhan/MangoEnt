@@ -23,6 +23,19 @@ class LiveViewModel extends GetxController {
   final ZegoLiveRole role;
   final LiveStreamingModel? liveModel;
 
+  //---- live preview-------
+  final List bottomTab = [
+    'Multi-guest Live',
+    'Live',
+    'Audio Live',
+    'Game Live',
+  ];
+
+  int multiLiveIndex=0;
+  int singleLiveIndex=1;
+  int audioLiveIndex=2;
+  int gameLiveIndex=3;
+  //--------------------
 
   RxString title = ''.obs;
   RxString mode = 'Public'.obs;
@@ -36,17 +49,7 @@ class LiveViewModel extends GetxController {
   List giftSendersList=[];
   ParseFileBase? parseFile;
   RxString selectedLiveType='Live'.obs;
-  final List bottomTab = [
-    'Multi-guest Live',
-    'Live',
-    'Audio Live',
-    'Game Live',
-  ];
-
-  int multiLiveIndex=0;
-  int singleLiveIndex=1;
-  int audioLiveIndex=2;
-  int gameLiveIndex=3;
+  List viewerList=[];
 
 
   addParseFile(ParseFileBase? file){
@@ -94,6 +97,8 @@ class LiveViewModel extends GetxController {
         Get.find<GiftViewModel>().loadAnimation(gift, audio);
     }
       update();
+
+      updateViewersList(value.getViewersId ?? []);
 
       if(value.getStreaming==false && role==ZegoLiveRole.audience){
         closeAlert(Get.context!, forceEnded: true);
@@ -260,6 +265,28 @@ class LiveViewModel extends GetxController {
   sendGift({required String gift, required String audio, required int coins}){
     liveStreamingModel.setGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url!, "coins": coins };
     liveStreamingModel.save();
+  }
+
+  fetchViewersList() async {
+    QueryBuilder<UserModel> query = QueryBuilder(UserModel.forQuery());
+
+    query.whereContainedIn(UserModel.keyUid, liveStreamingModel.getViewersId ?? []);
+    ParseResponse response = await query.query();
+    if(response.success){
+      if(response.results!=null && response.results!.isNotEmpty){
+        viewerList= response.results!;
+        update();
+      }
+      else{
+        viewerList=[];
+        update();
+      }
+    }
+  }
+
+  updateViewersList(List list){
+    if(viewerList.length!=list.length)
+      fetchViewersList();
   }
 
 

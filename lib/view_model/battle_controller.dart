@@ -26,7 +26,6 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   late LiveQuery liveQueryDual;
   Subscription? subscriptionDual;
   Timer? _timer;
-  final RxBool showAvatar = false.obs;
   late BattleModel _battleModel;
   late TimerModel _timerModel;
   bool versusAnimationLoaded = false;
@@ -97,12 +96,6 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
 
-  // Methods
-  void showAvatarAnimation() {
-    Timer(Duration(seconds: 6), () {
-      showAvatar.value = true;
-    });
-  }
 
   // Add other methods as needed...
 
@@ -187,8 +180,8 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   //Step 1 when host send a invitation to another host
   Future<void> initializeBattle({required int time, required int rounds, required UserModel host, required String liveObjectId, required LiveStreamingModel liveObject }) async {
     _battleModel
-      // ..setTime = time * 60
-      ..setTime = 30
+      ..setTime = time * 60
+      // ..setTime = 30
       ..setTotalRounds = rounds
       ..setCurrentRounds = 1
       ..setTeamAWins = 0
@@ -295,20 +288,19 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   // then we turn on flags for clock, progress bar so that are visible
   // host will start Time and index animation will also be triggered.
 
-  void triggerVersusAnimation(){ 
-    Future.delayed(Duration(seconds: 1), () {
-      setVersusAnimation = true;
-      showAvatar.value = true;
-      Get.find<AnimationViewModel>().runVersusAnimation(() {
-        showAvatar.value = false;
-        setClock = true;
-        setProgressBar = true;
-        if(isHost==true)
-          startTimer();
-        Get.find<AnimationViewModel>().runIndexAnimation();
+  void triggerVersusAnimation(){
+    _startDelay();
+  }
 
-      });
-    });
+  void _startDelay() async {
+    setVersusAnimation = true;
+    setClock = true;
+    setProgressBar = true;
+    await Future.delayed(Duration(seconds: 5));
+    setVersusAnimation = false;
+    if(isHost==true)
+      startTimer();
+    Get.find<AnimationViewModel>().runIndexAnimation();
   }
 
   //step 7: startTimer is called then a timer is started which run every second and updateClockTime function is run
@@ -466,7 +458,6 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   Future<void> resetBattleForNextRound() async {
     Get.find<AnimationViewModel>().resetJsonAnimationsController();
     setLapse = false; // lapse value turn off
-    showAvatar.value = false;
     result = false;
     versusAnimationLoaded = false;
     versusAnimation = false;
@@ -551,7 +542,6 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
 
   void resetBattleState({bool endBattle = false}) {
     Get.find<AnimationViewModel>().resetJsonAnimationsController();
-    showAvatar.value = false;
     setResult = false;
     versusAnimationLoaded = false;
     setProgressBar = false;
@@ -695,7 +685,6 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
 
   void audienceLogicIfBattleStarted(){
     if(_battleModel.getBattleStarted==true){
-      showAvatar.value = false;
       setProgressBar = true;
 
       Get.find<AnimationViewModel>().runIndexAnimation();

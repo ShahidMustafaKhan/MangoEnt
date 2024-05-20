@@ -21,7 +21,6 @@ class AnimationViewModel extends GetxController with GetTickerProviderStateMixin
   RxString appDocumentsPath = ''.obs;
 
   late SVGAAnimationController indexAnimationController;
-  late AnimationController vsAnimationController;
   late AnimationController loseAnimationController;
   late AnimationController winAnimationController;
   late AnimationController drawAnimationController;
@@ -29,7 +28,7 @@ class AnimationViewModel extends GetxController with GetTickerProviderStateMixin
 
   Future<void> runAnimation(AnimationController controller, Function() whenComplete, {bool repeat=false} ) async {
     controller
-        .duration = const Duration(milliseconds: 2500);
+        .duration = const Duration(milliseconds: 600);
      if(repeat==false){
        controller.forward().whenComplete(() {
          whenComplete();
@@ -82,10 +81,6 @@ class AnimationViewModel extends GetxController with GetTickerProviderStateMixin
     runAnimation(loseAnimationController, whenComplete, repeat: true);
   }
 
-  void runVersusAnimation(Function() whenComplete){
-    runAnimation(vsAnimationController, whenComplete, repeat: false);
-  }
-
   void runDrawAnimation(Function() whenComplete){
     runAnimation(drawAnimationController, whenComplete, repeat: true);
   }
@@ -98,10 +93,6 @@ class AnimationViewModel extends GetxController with GetTickerProviderStateMixin
     loseAnimationController.reset();
   }
 
-  void resetVersusAnimation(Function() whenComplete){
-    vsAnimationController.reset();
-  }
-
   void resetDrawAnimation(Function() whenComplete){
     drawAnimationController.reset();
   }
@@ -109,7 +100,6 @@ class AnimationViewModel extends GetxController with GetTickerProviderStateMixin
   void resetJsonAnimationsController(){
     this.loseAnimationController.reset();
     this.winAnimationController.reset();
-    this.vsAnimationController.reset();
     this.drawAnimationController.reset();
   }
 
@@ -117,7 +107,6 @@ class AnimationViewModel extends GetxController with GetTickerProviderStateMixin
     this.indexAnimationController.videoItem=null;
     this.loseAnimationController.reset();
     this.winAnimationController.reset();
-    this.vsAnimationController.reset();
     this.drawAnimationController.reset();
   }
 
@@ -130,7 +119,6 @@ class AnimationViewModel extends GetxController with GetTickerProviderStateMixin
     this.indexAnimationController = SVGAAnimationController(vsync: this);
     this.loseAnimationController = AnimationController(vsync: this);
     this.winAnimationController = AnimationController(vsync: this);
-    this.vsAnimationController = AnimationController(vsync: this);
     this.drawAnimationController = AnimationController(vsync: this);
       super.onInit();
     }

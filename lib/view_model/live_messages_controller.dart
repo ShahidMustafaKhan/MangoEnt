@@ -11,14 +11,19 @@ import 'live_controller.dart';
 class LiveMessagesViewModel extends GetxController {
   final ZegoLiveRole role = Get.find<LiveViewModel>().role;
 
-  List liveMessagesModelList=[].obs;
+  List<LiveMessagesModel> liveMessagesModelList=[];
   LiveQuery liveQuery = LiveQuery();
   Subscription? subscription;
-  RxBool showDisclaimerMessage=true.obs;
+  bool showDisclaimerMessage=true;
 
 
 
   updateLiveMessagingModel(){
+    update();
+  }
+
+  set setDisclaimerMessageValue(bool value){
+    showDisclaimerMessage=value;
     update();
   }
 
@@ -44,9 +49,37 @@ class LiveMessagesViewModel extends GetxController {
       print('*** enter ***setupLiveMessage');
 
       liveMessagesModelList.add(liveMessage as LiveMessagesModel);
+      update();
 
     });
 
+  }
+
+  updateLiveMessages() async {
+    QueryBuilder<LiveMessagesModel> queryBuilder = QueryBuilder<LiveMessagesModel>(LiveMessagesModel());
+
+    queryBuilder.whereEqualTo(LiveMessagesModel.keyLiveStreamingId,
+        Get.find<LiveViewModel>().liveStreamingModel.objectId);
+    queryBuilder.orderByDescending(LiveMessagesModel.keyCreatedAt);
+
+
+    queryBuilder.includeObject([
+      LiveMessagesModel.keySenderAuthor,
+      LiveMessagesModel.keyLiveStreaming,
+      LiveMessagesModel.keyGiftSent,
+      LiveMessagesModel.keyGiftSentGift
+    ]);
+
+    ParseResponse response = await queryBuilder.query();
+    if(response.success){
+      if(response.results!=null && response.results!.isNotEmpty){
+        for (var result in response.results!) {
+          // Assuming result is a Map with a 'message' key
+          liveMessagesModelList.add(result as LiveMessagesModel);
+          update();
+        }
+      }
+    }
   }
 
 
@@ -99,7 +132,7 @@ class LiveMessagesViewModel extends GetxController {
 
   Future delayedFunctions() async {
     Future.delayed(Duration(seconds: 6), () {
-      showDisclaimerMessage.value=false;
+      setDisclaimerMessageValue=false;
       if(role==ZegoLiveRole.host) {
         Future.delayed(Duration(seconds: 2), () {
           sendMessage(
@@ -132,6 +165,8 @@ class LiveMessagesViewModel extends GetxController {
   void onInit() {
     setupLiveMessages();
     delayedFunctions();
+    if(role==ZegoLiveRole.audience)
+    updateLiveMessages();
 
     // TODO: implement onInit
     super.onInit();

@@ -167,6 +167,9 @@ dependencies:
   flutter_animation_progress_bar:
 
 
+  confetti:
+
+
 
 dev_dependencies:
   flutter_test:

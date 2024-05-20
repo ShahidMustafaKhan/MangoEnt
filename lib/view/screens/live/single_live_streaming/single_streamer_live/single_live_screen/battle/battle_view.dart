@@ -34,10 +34,7 @@ class BattleView extends StatelessWidget {
                   ZegoPKBattleView(),
                   BattleWidgets(controller),
                   BattleAnimations(controller),
-                    Obx((){
-                        return Visibility(visible: controller.showAvatar.value==true, child: Avatar(battleViewModel : controller, animationViewModel: animationViewModel,));
-                      }
-                    ),
+
                 ],
               ),
             ),

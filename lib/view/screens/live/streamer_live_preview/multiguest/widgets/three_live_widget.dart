@@ -1,9 +1,12 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 
-import '../../../../../utils/theme/colors_constant.dart';
+import '../../../../../../utils/theme/colors_constant.dart';
+
 class ThreeLiveWidget extends StatefulWidget {
-  const ThreeLiveWidget({Key? key}) : super(key: key);
+  final CameraController cameraController;
+  ThreeLiveWidget({Key? key, required this.cameraController}) : super(key: key);
 
   @override
   State<ThreeLiveWidget> createState() => _ThreeLiveWidgetState();
@@ -31,13 +34,9 @@ class _ThreeLiveWidgetState extends State<ThreeLiveWidget> {
                       decoration: BoxDecoration(
                         color: AppColors.black.withOpacity(0.2),
                       ),
-                      child: Image.asset(
-                        AppImagePath.singleLiveBgImage,
-                        fit: BoxFit.cover,
-                      ),
+                      child: CameraPreview(widget.cameraController),
                     ),
                   ),
-                  Divider(color: AppColors.grey300),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

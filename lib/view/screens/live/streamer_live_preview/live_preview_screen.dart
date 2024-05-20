@@ -8,14 +8,12 @@ import 'package:teego/view/screens/live/streamer_live_preview/widgets/live_botto
 import 'package:teego/view/screens/live/streamer_live_preview/widgets/live_view_top_menu.dart';
 import 'package:teego/view/screens/live/streamer_live_preview/widgets/room_announcement.dart';
 import 'package:teego/view/screens/splash_screen.dart';
-import 'package:teego/view/widgets/base_scaffold.dart';
 import '../../../../utils/theme/colors_constant.dart';
 import '../../../../view_model/live_controller.dart';
-import '../multiguest/widgets/three_live_widget.dart';
 import '../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
+import 'multiguest/widgets/three_live_widget.dart';
 
 class LivePreviewScreen extends StatelessWidget {
-
 
   late final CameraController cameraController;
 
@@ -43,16 +41,16 @@ class LivePreviewScreen extends StatelessWidget {
       initializeCamera();
 
       return Scaffold(
-        backgroundColor: liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex] ? null :AppColors.darkPurple,
         body: Obx(() {
           if(cameraReady.value==true && hideNavigator.value==false){
             hideNavigator.value=true;
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
           }
-
           return !cameraReady.value ?  SplashScreen() : Container(
             child: Stack(
               children: [
+                if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex])
+                  Positioned.fill(top:0, bottom:0, child: Container(color: AppColors.darkPurple,)),
                 if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                 Positioned(top:0, bottom:0, child: CameraPreview(cameraController)),
                 Padding(
@@ -69,7 +67,7 @@ class LivePreviewScreen extends StatelessWidget {
                       if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                         Spacer(),
                       if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex])
-                        Expanded(child: ThreeLiveWidget()),
+                        Expanded(child: ThreeLiveWidget(cameraController: cameraController,)),
                       LiveBottomCard(liveViewModel),
                       const SizedBox(height: 16),
                     ],
