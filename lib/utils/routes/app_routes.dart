@@ -12,6 +12,10 @@ import 'package:teego/view/screens/dashboard_screen.dart';
 import 'package:teego/view/screens/home/home_screen.dart';
 import 'package:teego/view/screens/trending/trending_screen.dart';
 import 'package:teego/view_model/theme_controller.dart';
+import '../../view/screens/live/audio_live_streaming/audio_audience_live/audio_audience_live_screen.dart';
+import '../../view/screens/live/audio_live_streaming/audio_streamer_live/audio_streamer_live_screen.dart';
+import '../../view/screens/live/multi_live_streaming/multi_audience_live/multi_audience_live_screen.dart';
+import '../../view/screens/live/multi_live_streaming/multi_streamer_live/multi_streamer_live_screen.dart';
 import '../../view/screens/live/single_live_streaming/single_audience_live/single_audience_live.dart';
 import '../../view/screens/live/single_live_streaming/single_audience_live/top_fan_view.dart';
 import '../../view/screens/live/single_live_streaming/single_streamer_live/single_live_screen/single_live_screen.dart';
@@ -40,6 +44,10 @@ class AppRoutes {
   static const String profileScreen = '/ProfileScreen';
   static const String streamerSingleLive = '/streamerSingleLive';
   static const String audienceSingleLive = '/audienceSingleLive';
+  static const String streamerAudioLive = '/streamerAudioLive';
+  static const String audienceAudioLive = '/audienceAudioLive';
+  static const String streamerMultiLive = '/streamerMultiLive';
+  static const String audienceMultiLive = '/audienceMultiLive';
   static const String streamerLivePreview = '/streamerLivePreview';
   static const String topFan = '/topFan';
   static const String BNBPaint = '/BNBCustomPainter';
@@ -152,6 +160,34 @@ class AppRoutes {
     GetPage(
         name: audienceSingleLive,
         page: () => SingleLiveAudienceScreen(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ThemeController());
+        })
+    ),
+    GetPage(
+        name: streamerAudioLive,
+        page: () => StreamerAudioLive(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ThemeController());
+        })
+    ),
+    GetPage(
+        name: audienceAudioLive,
+        page: () => AudienceAudioLive(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ThemeController());
+        })
+    ),
+    GetPage(
+        name: streamerMultiLive,
+        page: () => StreamerMultiLive(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => ThemeController());
+        })
+    ),
+    GetPage(
+        name: audienceMultiLive,
+        page: () => AudienceMultiLive(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ThemeController());
         })

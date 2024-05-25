@@ -37,9 +37,6 @@ class _SingleLiveScreenState extends State<SingleLiveScreen> with WidgetsBinding
 
 
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

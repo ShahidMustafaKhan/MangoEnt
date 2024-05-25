@@ -30,10 +30,10 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   static String keyAuthorId = "AuthorId";
   static String keyAuthorUid = "AuthorUid";
 
-  static String keyTypeSingleLive = "Single Live Streaming";
-  static String keyTypeMultiGuestLive = "MultiGuest Live Streaming";
-  static String keyTypeGameLive = "Game Live Streaming";
-  static String keyTypeAudioLive = "Audio Live Streaming";
+  static String keyTypeSingleLive = "Live";
+  static String keyTypeMultiGuestLive = "Multi-guest Live";
+  static String keyTypeGameLive = "Game Live";
+  static String keyTypeAudioLive = "Audio Live";
 
   static final String keyPKCoHostUid = "PKCoHostUid";
   static final String keyPKCoHost = "PKCoHost";
@@ -102,6 +102,7 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   static final String keyGoalTitle = "goalTitle";
 
   static final String keyCoHostView = "coHostView";
+  static final String keyAudioSeats = "audioSeats";
 
   static final String keyGiftSenders = "giftSenders";
   static final String keyGiftSendersAuthor = "giftSenders.author";
@@ -210,6 +211,9 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
 
   int? get getSeatNumber=> get<int>(keyCoHostView);
   set setSeatNumber(int seatNumber) => set<int>(keyCoHostView, seatNumber);
+
+  int? get getAudioSeats=> get<int>(keyAudioSeats);
+  set setAudioSeats(int seats) => set<int>(keyAudioSeats, seats);
 
   String? get getAuthorId => get<String>(keyAuthorId);
   set setAuthorId(String authorId) => set<String>(keyAuthorId, authorId);

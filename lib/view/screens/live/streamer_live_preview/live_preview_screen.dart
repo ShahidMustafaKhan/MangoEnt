@@ -11,6 +11,7 @@ import 'package:teego/view/screens/splash_screen.dart';
 import '../../../../utils/theme/colors_constant.dart';
 import '../../../../view_model/live_controller.dart';
 import '../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
+import 'audio_live/audio_preview.dart';
 import 'multiguest/widgets/three_live_widget.dart';
 
 class LivePreviewScreen extends StatelessWidget {
@@ -51,7 +52,9 @@ class LivePreviewScreen extends StatelessWidget {
               children: [
                 if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex])
                   Positioned.fill(top:0, bottom:0, child: Container(color: AppColors.darkPurple,)),
-                if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
+                if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.audioLiveIndex])
+                  Positioned.fill(top:0, bottom:0, child: Container(color: Color(0xFF12323A),)),
+                  if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                 Positioned(top:0, bottom:0, child: CameraPreview(cameraController)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -62,6 +65,8 @@ class LivePreviewScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       LiveViewTopMenu(),
                       const SizedBox(height: 4),
+                      if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.audioLiveIndex])
+                      Expanded(child: AudioEmptyPreview()),
                       if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                       LanguageCard(),
                       if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])

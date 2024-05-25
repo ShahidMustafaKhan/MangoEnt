@@ -25,16 +25,18 @@ class LiveViewModel extends GetxController {
 
   //---- live preview-------
   final List bottomTab = [
-    'Multi-guest Live',
-    'Live',
-    'Audio Live',
-    'Game Live',
+    LiveStreamingModel.keyTypeMultiGuestLive,
+    LiveStreamingModel.keyTypeSingleLive,
+    LiveStreamingModel.keyTypeAudioLive,
+    LiveStreamingModel.keyTypeGameLive,
   ];
 
   int multiLiveIndex=0;
   int singleLiveIndex=1;
   int audioLiveIndex=2;
   int gameLiveIndex=3;
+
+  final RxInt nineMemberIndex = 0.obs;
   //--------------------
 
   RxString title = ''.obs;
@@ -48,8 +50,28 @@ class LiveViewModel extends GetxController {
   int giftListLength=0;
   List giftSendersList=[];
   ParseFileBase? parseFile;
-  RxString selectedLiveType='Live'.obs;
+  RxString selectedLiveType=LiveStreamingModel.keyTypeSingleLive.obs;
   List viewerList=[];
+
+  //------ people who are live list
+  List<UserModel> liveUsers=[];
+
+  //------ people who are live list
+  List<UserModel> friendsList=[];
+
+
+
+  bool get isSingleLive {
+    return liveStreamingModel.getStreamingType == LiveStreamingModel.keyTypeSingleLive;
+  }
+
+  bool get isAudioLive {
+    return liveStreamingModel.getStreamingType == LiveStreamingModel.keyTypeAudioLive;
+  }
+
+  bool get isMultiGuest{
+    return liveStreamingModel.getStreamingType == LiveStreamingModel.keyTypeMultiGuestLive;
+  }
 
 
   addParseFile(ParseFileBase? file){
@@ -120,12 +142,12 @@ class LiveViewModel extends GetxController {
     liveStreamingModel.setAuthor =currentUser;
     liveStreamingModel.setAuthorId =currentUser.objectId!;
     liveStreamingModel.setAuthorUid =currentUser.getUid!;
-    liveStreamingModel.setStreamerFollowers =currentUser.getFollowers!.length;
     // liveStreamingModel.setImage = parseFile!;
     if (currentUser.getGeoPoint != null) {
       liveStreamingModel.setStreamingGeoPoint =currentUser.getGeoPoint!;
     }
     liveStreamingModel.setStreaming = false;
+    liveStreamingModel.setStreamingType= selectedLiveType.value;
     liveStreamingModel.addViewersCount = 0;
     liveStreamingModel.addDiamonds = 0;
     liveStreamingModel.setTitle = title.value;
@@ -133,13 +155,21 @@ class LiveViewModel extends GetxController {
     liveStreamingModel.setMode =  mode.value;
     liveStreamingModel.setRoomAnnouncement =  roomAnnouncement.value;
     liveStreamingModel.setLanguage=  selectedLanguage.value;
-    liveStreamingModel.setStreamingType =  LiveStreamingModel.keyTypeSingleLive;
-    // liveStreamingModel.setSeatNumber =  tabIndex;
+
+    if(selectedLiveType.value == bottomTab[audioLiveIndex])
+    liveStreamingModel.setAudioSeats= nineMemberIndex.value == 0 ? 8 : 11;
 
     liveStreamingModel.save().then((value){
       if (value.success) {
         QuickHelp.hideLoadingDialog(context);
+        if(selectedLiveType.value==bottomTab[singleLiveIndex])
         Get.toNamed(AppRoutes.streamerSingleLive, arguments: {"role" : ZegoLiveRole.host});
+        else if(selectedLiveType.value==bottomTab[multiLiveIndex])
+          Get.toNamed(AppRoutes.streamerMultiLive, arguments: {"role" : ZegoLiveRole.host});
+        else if(selectedLiveType.value==bottomTab[audioLiveIndex])
+          Get.toNamed(AppRoutes.streamerAudioLive, arguments: {"role" : ZegoLiveRole.host});
+        else
+          Get.toNamed(AppRoutes.streamerSingleLive, arguments: {"role" : ZegoLiveRole.host});
       }
       else {
         QuickHelp.hideLoadingDialog(context);
@@ -287,6 +317,91 @@ class LiveViewModel extends GetxController {
   updateViewersList(List list){
     if(viewerList.length!=list.length)
       fetchViewersList();
+  }
+
+  //--------------  for fetching details of waiting users----------
+
+  Future<List?> fetchUserdataRequest(List requestList) async {
+    List<int> intList = requestList.map((str) => int.parse(str)).toList();
+
+    QueryBuilder<UserModel> query = QueryBuilder(UserModel.forQuery());
+    query.whereContainedIn(UserModel.keyUid, intList);
+    query.includeObject([
+      UserModel.keyFirstName
+    ]);
+
+
+    try {
+      final response = await query.query();
+      print("response result${response.results}");
+
+      if (response.success) {
+        List? userList = response.results ;
+
+        return userList;
+
+      } else {
+        print('No data found.');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return null;
+  }
+
+  //---------- people who are live
+
+  Future<void> peopleWhoAreLive() async {
+    List<UserModel> temp=[];
+    QueryBuilder<UserModel> queryUsers = QueryBuilder(UserModel.forQuery());
+    queryUsers.whereValueExists(UserModel.keyUserStatus, true);
+    queryUsers.whereEqualTo(UserModel.keyUserStatus, true);
+    QueryBuilder<LiveStreamingModel> queryBuilder = QueryBuilder<LiveStreamingModel>(LiveStreamingModel());
+    queryBuilder.whereEqualTo(LiveStreamingModel.keyStreaming, true);
+    queryBuilder.whereNotEqualTo(
+        LiveStreamingModel.keyAuthorUid, Get.find<UserViewModel>().currentUser.getUid);
+    queryBuilder.whereNotContainedIn(
+        LiveStreamingModel.keyAuthor, Get.find<UserViewModel>().currentUser.getBlockedUsers!);
+    queryBuilder.whereValueExists(LiveStreamingModel.keyAuthor, true);
+    queryBuilder.whereDoesNotMatchQuery(
+        LiveStreamingModel.keyAuthor, queryUsers);
+    queryBuilder.orderByDescending(LiveStreamingModel.keyCreatedAt);
+    queryBuilder.setLimit(25);
+    queryBuilder.includeObject([
+      LiveStreamingModel.keyAuthor,
+    ]);
+    ParseResponse apiResponse = await queryBuilder.query();
+    if (apiResponse.success) {
+      if (apiResponse.results != null) {
+        apiResponse.results!.forEach((value) {
+          LiveStreamingModel liveModel = value as LiveStreamingModel;
+          if(liveModel.getAuthor != null)
+            temp.add(liveModel.getAuthor!);
+        });
+        liveUsers=temp;
+        update();
+      }
+      else {
+        liveUsers=[];
+        update();
+      }
+    }
+    else {
+      liveUsers=[];
+      update();
+    }
+  }
+
+  // ----------------- friends------------
+  Future<void> peopleWhoAreFriends() async {
+    List<UserModel> temp=[];
+    List result = await Get.find<UserViewModel>().getFollowersUserModel();
+    result.forEach((value) {
+      UserModel userModel = value as UserModel;
+      temp.add(userModel);
+    });
+    friendsList=temp;
+    update();
   }
 
 

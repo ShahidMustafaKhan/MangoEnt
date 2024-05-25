@@ -45,6 +45,7 @@ class _NewUserState extends State<NewUser> {
   late UserModel currentUser;
   String? userAvatar;
   String? userCover;
+  String? selectedCountry;
 
   TextStyle hintStyle= sfProDisplayMedium.copyWith(fontSize: 12.sp, color: Colors.white.withOpacity(0.3));
 
@@ -193,6 +194,7 @@ class _NewUserState extends State<NewUser> {
                                   }
                                   return null;
                                 },
+                                selectedCountry: selectedCountry,
                               ),
                               SizedBox(
                                 height: ScreenUtil().setHeight(15),
@@ -245,7 +247,7 @@ class _NewUserState extends State<NewUser> {
                                   }
                                   else{
                                     String gender=genderController.selectedGender.value==Gender.male ? UserModel.keyGenderMale : genderController.selectedGender.value==Gender.female ? UserModel.keyGenderFemale : UserModel.keyGenderOther;
-                                    userViewModel.updateUserDetails(name.text, gender, countryController.text, dateOfBirth.text, context)
+                                    userViewModel.updateUserDetails(name.text, gender, selectedCountry ?? "Pakistan", dateOfBirth.text, context)
                                         .then((value) => Get.toNamed(AppRoutes.languageScreen, arguments: {"currentUser" : currentUser}));
                                   }
                                 } else {

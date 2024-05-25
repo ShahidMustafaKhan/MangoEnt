@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/view_model/live_controller.dart';
 import '../../../../../../parse/UserModel.dart';
 import '../../../../../../utils/constants/app_constants.dart';
@@ -137,7 +138,7 @@ class AudienceListSheet extends StatelessWidget {
                                       Text(user.getFullName ?? ''),
                                       const SizedBox(width: 16),
                                       SvgPicture.asset(
-                                        AppImagePath.franceFlag,
+                                        QuickActions.getCountryFlag(user),
                                         width: 24,
                                         height: 17,
                                       ),

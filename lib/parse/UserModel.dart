@@ -1182,6 +1182,8 @@ class UserModel extends ParseUser implements ParseCloneable {
       return [];
     }
   }
+  set resetFollowers(List followerList) => setAddAll(keyFollowers, followerList);
+
   set setFollowers(String authorId) => setAddUnique(keyFollowers, authorId);
   set removeFollowers(String authorId) => setRemove(keyFollowers, authorId);
 

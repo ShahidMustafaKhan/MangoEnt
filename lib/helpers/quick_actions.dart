@@ -19,6 +19,7 @@ import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/Utils.dart';
+import '../utils/constants/app_constants.dart';
 import '../view/widgets/AvatarInitials.dart';
 
 
@@ -4791,7 +4792,21 @@ class QuickActions {
   }
 
 
-
+static String getCountryFlag(UserModel currentUser){
+  String country = currentUser.getCountry ?? 'Pakistan';
+    if(country=="Pakistan")
+      return AppImagePath.pakistanFlag;
+    else if(country=="USA")
+      return AppImagePath.americanFlag;
+    else if(country=="Canada")
+      return AppImagePath.canadaFlag;
+    else if(country=="France")
+      return AppImagePath.franceFlag;
+    else if(country=="Ukraine")
+      return AppImagePath.ukraineFlag;
+    else
+      return AppImagePath.pakistanFlag;
+}
 
 
 

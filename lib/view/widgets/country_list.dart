@@ -16,7 +16,7 @@ List<String> countryNames = [
 
 List<String> countryImages = [
   AppImagePath.pakistanFlag,
-  "assets/svg/america_flags.svg",
+  AppImagePath.americanFlag,
   AppImagePath.canadaFlag,
   AppImagePath.franceFlag,
   AppImagePath.ukraineFlag,
@@ -24,13 +24,13 @@ List<String> countryImages = [
 
 class CountryPickerFormField extends StatefulWidget {
   var validator;
-  CountryPickerFormField({this.validator});
+  String? selectedCountry;
+  CountryPickerFormField({this.validator, this.selectedCountry});
   @override
   _CountryPickerFormFieldState createState() => _CountryPickerFormFieldState();
 }
 
 class _CountryPickerFormFieldState extends State<CountryPickerFormField> {
-  String? selectedCountry;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _CountryPickerFormFieldState extends State<CountryPickerFormField> {
       validator: widget.validator,
       autovalidateMode: AutovalidateMode.disabled,
       readOnly: true,
-      controller: TextEditingController(text: selectedCountry),
+      controller: TextEditingController(text: widget.selectedCountry),
       onTap: _showCountryPicker,
       style: sfProDisplayMedium.copyWith(fontSize: 12.sp, color: Colors.white.withOpacity(0.7)),
       decoration: InputDecoration(
@@ -46,11 +46,11 @@ class _CountryPickerFormFieldState extends State<CountryPickerFormField> {
           hintText: "Select your Country",
           hintStyle:sfProDisplayMedium.copyWith(fontSize: 12.sp, color: Colors.white.withOpacity(0.3)),
           border: InputBorder.none,
-          suffixIcon: selectedCountry != null
+          suffixIcon: widget.selectedCountry != null
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: SvgPicture.asset(
-                    countryImages[countryNames.indexOf(selectedCountry!)],
+                    countryImages[countryNames.indexOf(widget.selectedCountry!)],
                     width: 32,
                     height: 32,
                   ),
@@ -85,7 +85,7 @@ class _CountryPickerFormFieldState extends State<CountryPickerFormField> {
                 ListTile(
                   onTap: () {
                     setState(() {
-                      selectedCountry = countryNames[i];
+                      widget.selectedCountry = countryNames[i];
                     });
                     Navigator.pop(context);
                   },

@@ -149,14 +149,6 @@ class LiveViewTopMenu extends StatelessWidget {
                               ),
                               Spacer(),
                               if(liveViewModel.tagList.length==0)
-                              Text(
-                                'Select tag',
-                                style: sfProDisplayRegular.copyWith(
-                                  fontSize: 12,
-                                  color: AppColors.white,
-                                ),
-                              ),
-                              if(liveViewModel.tagList.length==0)
                               SizedBox(width: 5),
                               if(liveViewModel.tagList.length==0)
                                 GestureDetector(

@@ -67,6 +67,40 @@ class UserViewModel extends GetxController {
     }
   }
 
+  Future<void> getFollowers() async {
+    List<String> temp=[];
+    QueryBuilder<UserModel> queryUsers = QueryBuilder(UserModel.forQuery());
+
+    ParseResponse response = await queryUsers.query();
+    if(response.success){
+      if(response.results!=null)
+        response.results!.forEach((value) {
+          UserModel userModel = value as UserModel;
+          if(userModel.getFollowing!=null && userModel.getFollowing!.contains(currentUser.objectId.toString()))
+          temp.add(userModel.objectId!);
+        });
+      currentUser.resetFollowers=temp;
+      currentUser.save();
+      update();
+    }
+  }
+
+
+  Future<List> getFollowersUserModel() async {
+    QueryBuilder<UserModel> queryUsers = QueryBuilder(UserModel.forQuery());
+    queryUsers.whereContainedIn(UserModel.keyObjectId, currentUser.getFollowers ?? []);
+
+    ParseResponse response = await queryUsers.query();
+    if(response.success){
+      if(response.results!=null)
+        return response.results!;
+      else
+        return [];
+    }
+    else
+      return [];
+  }
+
 
   updateViewModel(){
     update();

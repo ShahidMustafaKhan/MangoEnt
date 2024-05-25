@@ -112,7 +112,13 @@ class LivePermissionHandler{
         },
       );
     } else {
-      Get.toNamed(AppRoutes.audienceSingleLive, arguments: liveStreamingModel)?.then((value) => SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]));
+      Get.toNamed(
+       liveStreamingModel!.getStreamingType==LiveStreamingModel.keyTypeSingleLive ?  AppRoutes.audienceSingleLive :
+       liveStreamingModel.getStreamingType==LiveStreamingModel.keyTypeAudioLive ? AppRoutes.audienceAudioLive :
+       liveStreamingModel.getStreamingType==LiveStreamingModel.keyTypeMultiGuestLive ? AppRoutes.audienceMultiLive
+           : AppRoutes.audienceSingleLive ,
+
+          arguments: liveStreamingModel)?.then((value) => SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]));
 
     }
 

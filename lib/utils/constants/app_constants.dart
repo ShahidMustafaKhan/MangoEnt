@@ -19,6 +19,7 @@ class AppImagePath {
   static const swedishFlag = "assets/svg/swedish_flag.svg";
   static const ukraineFlag = "assets/svg/ukrine_flag.svg";
   static const pakistanFlag = "assets/svg/pakistan_flag.svg";
+  static const americanFlag = "assets/svg/america_flags.svg";
   static const canadaFlag = "assets/svg/canada_flag.svg";
   static const cardImage1 = "assets/png/post-placeholder.png";
   static const cardImage2 = "assets/png/post-placeholder_1.png";
@@ -112,12 +113,6 @@ class AppImagePath {
   static const sofaFilled = "assets/svg/sofa-filled.svg";
 
   /// Gifts Assets
-  // static const princessEntry = "assets/png/audience/gifts/princess_wedding_entry.png";
-  // static const happyBirthday = "assets/png/audience/gifts/happy_birthday.png";
-  // static const dragon = "assets/png/audience/gifts/dragon.png";
-  // static const greatPalace = "assets/png/audience/gifts/great_palace.png";
-  // static const lionEntry = "assets/png/audience/gifts/lion_entry.png";
-  // static const runningTiger = "assets/png/audience/gifts/running_tiger.png";
   static const giftOverlay = "assets/png/audience/gifts/gift_overlay.png";
   static const lamborghiniImage = "assets/png/audience/gifts/lamborghini.png";
   static const bearCastleImage = "assets/png/audience/gifts/bear_castle.png";
@@ -129,12 +124,6 @@ class AppImagePath {
   static const motorCycleImage = "assets/png/audience/gifts/motorcycle_entry.png";
 
   /// Gifts Assets - SVGA assets
-  // static const princessWeddingSvga = "assets/svga/princess_wedding_entry.svga";
-  // static const happyBirthdaySvga = "assets/svga/happy_birthday.svga";
-  // static const dragonSvga = "assets/svga/dragon.svga";
-  // static const greatPalaceSvga = "assets/svga/great_palace.svga";
-  // static const lionEntrySvga = "assets/svga/lion_entry.svga";
-  // static const runningTigerSvga = "assets/svga/running_tiger.svga";
 
   static const babyDragon = "assets/svga/baby_dragon.svga";
   static const bearCastle = "assets/svga/bear_castle.svga";
@@ -173,6 +162,26 @@ class AppImagePath {
 
   // multiguest
   static const bitCoinSofa = "assets/png/streamer/bitcoin_sofa.png";
+  static const multiGuestImage = "assets/png/streamer/multiGuestImage.png";
+  static const multiGuestNumberIcon =
+      "assets/png/streamer/multiGuestNumber.png";
+  static const multiGuestNumberIcon2 =
+      "assets/png/streamer/multiGuestNumberIcon2.png";
+  static const deleteUser1 = "assets/png/streamer/deleteUser1.png";
+  static const guestCameraIcon = "assets/png/streamer/guestCameraIcon.png";
+  static const guestGiftIcon = "assets/png/streamer/guestGiftIcon.png";
+  static const youtube = "assets/png/streamer/youtube.png";
+  static const boostIcon = "assets/png/streamer/boostIcon.png";
+  static const whippersIcons = "assets/png/streamer/whippersIcon.png";
+
+  // audio live
+  static const gemStone1 = "assets/png/streamer/gemstone_badge.png";
+  static const audioLiveBadge = "assets/png/streamer/audioLiveBadge.png";
+  static const emptyRoomUser = "assets/png/streamer/empty_room_user.png";
+  static const audioLiveCoin = "assets/png/streamer/audioLiveCoin.png";
+  static const mic_off = "assets/png/streamer/mic_off.png";
+  static const hand_wave = "assets/png/streamer/hand_wave.png";
+  static const end_call = "assets/png/audience/end_call.png";
 
 
 }
@@ -185,6 +194,8 @@ class SubLists {
     "Games",
   ];
 }
+
+
 class Dimension{
   static final double borderRadius=35.r;
 

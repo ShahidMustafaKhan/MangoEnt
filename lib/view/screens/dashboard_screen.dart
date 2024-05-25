@@ -45,6 +45,8 @@ class _DashboardViewState extends State<DashboardView> {
       // HypeProfile(preferences: null, currentUser: currentUser,),
     ];
 
+    userViewModel.getFollowers();
+
     super.initState();
   }
 

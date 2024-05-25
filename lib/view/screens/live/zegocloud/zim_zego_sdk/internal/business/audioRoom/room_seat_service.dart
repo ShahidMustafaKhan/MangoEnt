@@ -1,6 +1,10 @@
 
 import 'dart:async';
 
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import '../../../../../../../../view_model/zego_controller.dart';
 import '../../../live_audio_room_manager.dart';
 import '../../../zego_sdk_manager.dart';
 import '../business_define.dart';
@@ -125,6 +129,7 @@ class RoomSeatService {
             for (final seat in seatList) {
               if (seat.seatIndex.toString() == key) {
                 seat.currentUser.value = ZEGOSDKManager.instance.getUser(value);
+                Get.find<ZegoController>().update();
                 break;
               }
             }
