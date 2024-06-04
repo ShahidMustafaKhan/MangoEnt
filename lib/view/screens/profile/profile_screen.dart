@@ -67,7 +67,6 @@ class _ProfileView extends State<ProfileView> {
               "Profile screen",
               style: TextStyle(color: Colors.white, fontSize: 30),
             )),
-        Spacer(),
       ],
     );
   }

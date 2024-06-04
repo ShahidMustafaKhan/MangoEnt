@@ -34,7 +34,7 @@ class BuildCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: ()=> LivePermissionHandler.checkPermission(LiveStreamingModel.keyTypeSingleLive, context, liveStreamingModel: liveModel),
+      onTap: ()=> LivePermissionHandler.checkPermission(liveModel.getStreamingType, context, liveStreamingModel: liveModel),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.w),

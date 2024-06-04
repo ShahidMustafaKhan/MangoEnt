@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:teego/utils/constants/typography.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
+import 'package:teego/view/screens/authentication/broadcaster.dart';
 import 'package:teego/view/widgets/appButton.dart';
 
 import '../../../generated/assets.dart';
+import '../../../parse/UserModel.dart';
 import '../../../utils/routes/app_routes.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/base_scaffold.dart';
@@ -31,7 +33,7 @@ List<String> countryImages = [
 ];
 
 class LanguageScreen extends StatefulWidget {
-  const LanguageScreen();
+  LanguageScreen();
 
   @override
   State<LanguageScreen> createState() => _LanguageScreenState();

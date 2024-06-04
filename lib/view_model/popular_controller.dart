@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/view_model/userViewModel.dart';
 
+import '../helpers/quick_help.dart';
 import '../model/popular_card_model.dart';
 import '../parse/LiveStreamingModel.dart';
 import '../parse/UserModel.dart';
@@ -23,6 +26,9 @@ class PopularViewModel extends GetxController {
   List<PopularModel> popularTrendingModelList = [];
 
   List<PopularModel> popularAllModelList = [];
+
+  LiveQuery liveQuery = LiveQuery();
+  Subscription? subscription;
 
 
 
@@ -107,8 +113,8 @@ class PopularViewModel extends GetxController {
       PopularModel popularModel = PopularModel(
                   name: liveModel.getAuthor!.getFullName!,
                   avatar: liveModel.getAuthor!.getAvatar!.url!,
-                  flag: AppImagePath.pakistanFlag,
-                  country: 'PK No.2',
+                  flag: QuickActions.getCountryFlag(liveModel.getAuthor!),
+                  country: '${QuickActions.getCountryCode(liveModel.getAuthor!)} No.2',
                   liveModel: liveModel,
                   achievementCount: liveModel.getAuthor!.getDiamondsTotal ?? 0,
                   image: liveModel.getImage!=null ? liveModel.getImage!.url! : tempImagePath);
@@ -158,19 +164,36 @@ class PopularViewModel extends GetxController {
     }
   }
 
+  subscribeLiveStreamingModel() async {
+    QueryBuilder query =
+    QueryBuilder(LiveStreamingModel());
 
+    query.includeObject([
+      LiveStreamingModel.keyAuthor,
+      LiveStreamingModel.keyBattleModel,
+    ]);
 
-  startTimer() {
-    _timer=Timer.periodic(const Duration(seconds: 10), (timer) {
+    subscription = await liveQuery.client.subscribe(query);
+
+    subscription!.on(LiveQueryEvent.update, (value) async {
+
+      if(kDebugMode){
+        print('*** livestreaming UPDATE ***');
+        print('*** livestreaming UPDATE ***');
+      }
+
       loadLive();
+
     });
   }
 
-  cancelTimer() {
-    if(_timer.isActive){
-      _timer.cancel();
+  unSubscribeLiveStreamingModel() async {
+    if (subscription != null) {
+      liveQuery.client.unSubscribe(subscription!);
     }
+    subscription = null;
   }
+
 
 
   PopularViewModel();

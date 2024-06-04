@@ -2,14 +2,26 @@ part of 'express_service.dart';
 
 extension ExpressServiceStream on ExpressService {
   Future<void> stopPlayingStream(String streamID) async {
-    final userID = streamMap[streamID];
-    final userInfo = getUser(userID ?? '');
-    if (userInfo != null) {
-      userInfo.streamID = '';
-      userInfo.videoViewNotifier.value = null;
-      userInfo.viewID = -1;
+    bool isScreenSharingStream = streamID.endsWith('_screen');
+
+    if (isScreenSharingStream) {
+      if (hostScreenViewID != null) {
+        ZegoExpressEngine.instance.destroyCanvasView(hostScreenViewID!);
+            hostScreenViewID = null;
+            hostScreenView.value = null;
+            isSharingScreen.value = false;
+        }
+      }
+    else{
+      final userID = streamMap[streamID];
+      final userInfo = getUser(userID ?? '');
+      if (userInfo != null) {
+        userInfo.streamID = '';
+        userInfo.videoViewNotifier.value = null;
+        userInfo.viewID = -1;
+      }
+      await ZegoExpressEngine.instance.stopPlayingStream(streamID);
     }
-    await ZegoExpressEngine.instance.stopPlayingStream(streamID);
   }
 
   Future<void> startPreview({viewMode = ZegoViewMode.AspectFill}) async {
@@ -35,10 +47,13 @@ extension ExpressServiceStream on ExpressService {
 
   Future<void> startPublishingStream(String streamID, {ZegoPublishChannel channel = ZegoPublishChannel.Main}) async {
     currentUser?.streamID = streamID;
+    currentUser?.coinsNotifier.value = Get.find<UserViewModel>().currentUser.getDiamondsTotal ?? 0;
 
     final extraInfo = jsonEncode({
       'mic': currentUser?.isMicOnNotifier.value ?? false ? 'on' : 'off',
       'cam': currentUser?.isCamerOnNotifier.value ?? false ? 'on' : 'off',
+      'avatar': currentUser?.avatarUrlNotifier.value ?? '',
+      'coins': Get.find<UserViewModel>().currentUser.getDiamondsTotal ?? 0,
     });
     debugPrint('startPublishingStream:$streamID');
     debugPrint('startPublishingStream:${currentUser?.isMicOnNotifier.value}');
@@ -70,9 +85,6 @@ extension ExpressServiceStream on ExpressService {
 
 
     for (final stream in streamList) {
-      print('stream ${stream.user.userName}');
-      print('stream ${stream.user.userID}');
-      print('stream ${stream.streamID}');
       if (updateType == ZegoUpdateType.Add) {
         debugPrint('onRoomStreamUpdate: ${stream.streamID}');
         streamMap[stream.streamID] = stream.user.userID;
@@ -85,29 +97,36 @@ extension ExpressServiceStream on ExpressService {
         }
         userInfo.streamID = stream.streamID;
 
-
-
         try {
           final Map<String, dynamic> extraInfoMap = convert.jsonDecode(stream.extraInfo);
           final isMicOn = extraInfoMap['mic'] == 'on';
           final isCameraOn = extraInfoMap['cam'] == 'on';
+          final avatar = extraInfoMap['avatar'];
+          final coins = extraInfoMap['coins'];
           userInfo.isCamerOnNotifier.value = isCameraOn;
           userInfo.isMicOnNotifier.value = isMicOn;
+          userInfo.avatarUrlNotifier.value = avatar;
+          userInfo.coinsNotifier.value = coins;
         } catch (e) {
           debugPrint('stream.extraInfo: ${stream.extraInfo}.');
         }
 
         startPlayingStream(stream.streamID);
       } else {
-        streamMap[stream.streamID] = '';
-        final userInfo = getUser(stream.user.userID);
-        userInfo?.streamID = '';
-        userInfo?.isCamerOnNotifier.value = false;
-        userInfo?.isMicOnNotifier.value = false;
-        stopPlayingStream(stream.streamID);
-        Get.find<LiveViewModel>().updateViewers(
-            int.parse(userInfo!.userID), ZegoUpdateType.Delete, userInfo.userName,
-            roomID);
+        if( isSharingScreen.value==true){
+          stopPlayingStream(stream.streamID);
+        }
+        else{
+          streamMap[stream.streamID] = '';
+          final userInfo = getUser(stream.user.userID);
+          userInfo?.streamID = '';
+          userInfo?.isCamerOnNotifier.value = false;
+          userInfo?.isMicOnNotifier.value = false;
+          Get.find<LiveViewModel>().updateViewers(
+              int.parse(userInfo!.userID), ZegoUpdateType.Delete, userInfo.userName,
+              roomID);
+        }
+
       }
     }
     streamListUpdateStreamCtrl.add(ZegoRoomStreamListUpdateEvent(roomID, updateType, streamList, extendedData));
@@ -156,19 +175,11 @@ extension ExpressServiceStream on ExpressService {
     await ZegoExpressEngine.instance.createCanvasView((viewID) async {
       final canvas = ZegoCanvas(viewID, viewMode: ZegoViewMode.AspectFill);
       await ZegoExpressEngine.instance.startPlayingStream(streamID, canvas: canvas).then((value){
-        print('startplayingmixerstream $streamID');
-        print('startplayingmixerstream $streamID');
-        print('startplayingmixerstream $streamID');
-        print('startplayingmixerstream $streamID');
+
       }).onError((error, stackTrace) {
-        print("startmizerstream$error");
-        print("startmizerstream$error");
-        print("startmizerstream$error");
-        print("startmizerstream$error");
+
       });
-      print("mixer stream $streamID");
-      print("mixer stream $streamID");
-      print("mixer stream $streamID");
+
     }).then((videoViewWidget) {
       mixerStreamNotifier.value = videoViewWidget;
     });

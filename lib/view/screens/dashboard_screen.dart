@@ -16,9 +16,8 @@ import 'live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 
 
 class DashboardView extends StatefulWidget {
-  UserModel currentUser;
 
-  DashboardView({Key? key, required this.currentUser}) : super(key: key);
+  DashboardView({Key? key}) : super(key: key);
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -28,21 +27,18 @@ class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 0;
   UserModel? currentUser;
   late final List<Widget> _screens;
-  late UserViewModel userViewModel;
+  late UserViewModel userViewModel = Get.find();
 
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-    userViewModel= Get.put(UserViewModel(widget.currentUser));
     currentUser = userViewModel.currentUser;
 
     _screens = [
       HomeView(currentUser: currentUser,),
       const TrendingView(),
       const ChatView(),
-      // LiveScreen(preferences: null, currentUser: currentUser,),
       const ProfileView(),
-      // HypeProfile(preferences: null, currentUser: currentUser,),
     ];
 
     userViewModel.getFollowers();
@@ -64,12 +60,8 @@ class _DashboardViewState extends State<DashboardView> {
   void goToLiveScreen(){
     Get.toNamed(AppRoutes.streamerLivePreview,  arguments: {"role":ZegoLiveRole.host})?.then((value) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-
     });
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +155,7 @@ class _DashboardViewState extends State<DashboardView> {
                               ),
                               child: CircleAvatar(
                                 backgroundImage: NetworkImage(
-                                  Get.find<UserViewModel>().currentUser.getAvatar!.url!,
+                                  currentUser!.getAvatar!.url!,
                                 )
                               ),
                             ),

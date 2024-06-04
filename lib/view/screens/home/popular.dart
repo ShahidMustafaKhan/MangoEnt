@@ -21,13 +21,13 @@ class _PopularState extends State<Popular> {
 
   @override
   void initState() {
-    // popularViewModel.startTimer();
+    popularViewModel.subscribeLiveStreamingModel();
     super.initState();
   }
 
   @override
   void dispose() {
-    // popularViewModel.cancelTimer();
+    popularViewModel.unSubscribeLiveStreamingModel();
     super.dispose();
   }
 

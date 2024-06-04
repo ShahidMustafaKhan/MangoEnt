@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/player.dart';
+import 'package:teego/view/screens/live/single_live_streaming/single_audience_live/widgets/gift_animation_view.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
 import 'package:teego/view_model/live_controller.dart';
 import '../../../../../view_model/gift_contoller.dart';
@@ -28,7 +29,10 @@ class SingleLiveAudienceScreen extends StatelessWidget {
       Future.delayed(Duration(milliseconds: 400), () {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
       });
-    }
+      SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
+        await Future.delayed(const Duration(seconds: 5));
+        SystemChrome.restoreSystemUIOverlays();
+      });    }
 
     return BaseScaffold(
       safeArea: true,
@@ -41,10 +45,7 @@ class SingleLiveAudienceScreen extends StatelessWidget {
               SingleStreamerLiveItemWidget(),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                    height: 350.h,
-                    width: double.infinity,
-                    child: SVGAImage(giftViewModel.animationController!, fit: BoxFit.cover,)),
+                child: GiftAnimationView(giftViewModel: giftViewModel,)
               ),
             ],
           ),

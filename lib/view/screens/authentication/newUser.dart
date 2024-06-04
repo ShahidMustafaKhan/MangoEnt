@@ -17,9 +17,11 @@ import '../../../utils/routes/app_routes.dart';
 import '../../../view_model/userViewModel.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/select_country.dart';
+import 'language_screen.dart';
 
 class NewUser extends StatefulWidget {
-  const NewUser({Key? key}) : super(key: key);
+  final UserModel? currentUser;
+  NewUser({Key? key, this.currentUser}) : super(key: key);
 
   @override
   State<NewUser> createState() => _NewUserState();
@@ -28,7 +30,7 @@ class NewUser extends StatefulWidget {
 class _NewUserState extends State<NewUser> {
   final GenderSelectionController genderController =
       Get.put(GenderSelectionController());
-  final UserViewModel userViewModel = Get.find();
+  late final UserViewModel userViewModel;
   var selectedGender = Gender.male.obs;
 
   void updateSelectedGender(Gender gender) {
@@ -78,7 +80,8 @@ class _NewUserState extends State<NewUser> {
 
   @override
   void initState() {
-    currentUser=userViewModel.currentUser;
+    userViewModel = Get.put(UserViewModel(widget.currentUser!));
+    currentUser=widget.currentUser!;
     _getUser();
     // TODO: implement initState
     super.initState();
@@ -248,7 +251,7 @@ class _NewUserState extends State<NewUser> {
                                   else{
                                     String gender=genderController.selectedGender.value==Gender.male ? UserModel.keyGenderMale : genderController.selectedGender.value==Gender.female ? UserModel.keyGenderFemale : UserModel.keyGenderOther;
                                     userViewModel.updateUserDetails(name.text, gender, selectedCountry ?? "Pakistan", dateOfBirth.text, context)
-                                        .then((value) => Get.toNamed(AppRoutes.languageScreen, arguments: {"currentUser" : currentUser}));
+                                        .then((value) => Get.toNamed(AppRoutes.languageScreen));
                                   }
                                 } else {
                                   isFormDirty.value = true;

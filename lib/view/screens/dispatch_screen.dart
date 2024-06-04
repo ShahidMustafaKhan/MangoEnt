@@ -32,8 +32,11 @@ class DispatchScreen extends StatefulWidget {
 
 class _DispatchScreenState extends State<DispatchScreen> {
 
+  late UserViewModel userViewModel;
+
   @override
   void initState() {
+    userViewModel = Get.put(UserViewModel(widget.currentUser!));
     super.initState();
   }
 
@@ -48,7 +51,7 @@ class _DispatchScreenState extends State<DispatchScreen> {
           || widget.currentUser!.getGender == null
           || widget.currentUser!.getBirthday == null){
 
-        return NewUser();
+        return NewUser(currentUser: widget.currentUser,);
 
       } else {
             PushService(
@@ -57,7 +60,7 @@ class _DispatchScreenState extends State<DispatchScreen> {
           preferences: widget.preferences,
         ).initialise();
 
-        return DashboardView(currentUser: widget.currentUser!);
+        return DashboardView();
       }
 
     } else {
@@ -88,7 +91,7 @@ class _DispatchScreenState extends State<DispatchScreen> {
             if(snapshot.hasData){
               PermissionStatus permissionStatus = snapshot.data as PermissionStatus;
               if (permissionStatus == PermissionStatus.granted || permissionStatus == PermissionStatus.grantedLimited) {
-                return DashboardView(currentUser: widget.currentUser!,);
+                return DashboardView();
               } else {
                 return LocationScreen(currentUser: widget.currentUser,);
               }

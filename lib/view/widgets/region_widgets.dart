@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../utils/constants/typography.dart';
 import '../../view_model/region_controller.dart';
+import 'more_regions.dart';
 
 
 class RegionWidget extends StatelessWidget {
@@ -29,9 +30,14 @@ class RegionWidget extends StatelessWidget {
                     style: sfProDisplayMedium.copyWith(color: Colors.white, fontSize: 16.sp),
                   ),
                 ),
-                Text(
-                  "More",
-                  style: sfProDisplayRegular.copyWith(color: Colors.grey, fontSize: 16.sp),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => MoreRegionWidget());
+                  },
+                  child: Text(
+                    "More",
+                    style: sfProDisplayRegular.copyWith(color: Colors.grey, fontSize: 16.sp),
+                  ),
                 ),
                 SizedBox(
                   width: 5.w,

@@ -17,6 +17,8 @@ import '../parse/UserModel.dart';
 import '../utils/routes/app_routes.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/internal_defines.dart';
+import '../view/screens/live/zegocloud/zim_zego_sdk/zego_live_streaming_manager.dart';
+import 'multi_guest_grid_controller.dart';
 
 
 class LiveViewModel extends GetxController {
@@ -37,6 +39,7 @@ class LiveViewModel extends GetxController {
   int gameLiveIndex=3;
 
   final RxInt nineMemberIndex = 0.obs;
+  final RxString selectedGuestSeat = "4P".obs;
   //--------------------
 
   RxString title = ''.obs;
@@ -59,6 +62,12 @@ class LiveViewModel extends GetxController {
   //------ people who are live list
   List<UserModel> friendsList=[];
 
+  Widget? video;
+
+  List<UserModel> multiGuestCoHostList=[];
+  List<UserModel> audioCoHostList=[];
+
+
 
 
   bool get isSingleLive {
@@ -72,6 +81,23 @@ class LiveViewModel extends GetxController {
   bool get isMultiGuest{
     return liveStreamingModel.getStreamingType == LiveStreamingModel.keyTypeMultiGuestLive;
   }
+
+  bool get isMultiSeat3{
+    return liveStreamingModel.getMultiSeats == LiveStreamingModel.keyTypeMultiThreeSeat;
+  }
+  bool get isMultiSeat4{
+    return liveStreamingModel.getMultiSeats == LiveStreamingModel.keyTypeMultiFourSeat;
+  }
+  bool get isMultiSeat6{
+    return liveStreamingModel.getMultiSeats == LiveStreamingModel.keyTypeMultiSixSeat;
+  }
+  bool get isMultiSeat9{
+    return liveStreamingModel.getMultiSeats == LiveStreamingModel.keyTypeMultiNineSeat;
+  }
+  bool get isMultiSeat12{
+    return liveStreamingModel.getMultiSeats == LiveStreamingModel.keyTypeMultiTwelveSeat;
+  }
+
 
 
   addParseFile(ParseFileBase? file){
@@ -121,6 +147,7 @@ class LiveViewModel extends GetxController {
       update();
 
       updateViewersList(value.getViewersId ?? []);
+      isExpandedFeatureActive();
 
       if(value.getStreaming==false && role==ZegoLiveRole.audience){
         closeAlert(Get.context!, forceEnded: true);
@@ -158,6 +185,9 @@ class LiveViewModel extends GetxController {
 
     if(selectedLiveType.value == bottomTab[audioLiveIndex])
     liveStreamingModel.setAudioSeats= nineMemberIndex.value == 0 ? 8 : 11;
+
+    if(selectedLiveType.value == bottomTab[multiLiveIndex])
+      liveStreamingModel.setMultiSeats= selectedGuestSeat.value;
 
     liveStreamingModel.save().then((value){
       if (value.success) {
@@ -403,6 +433,96 @@ class LiveViewModel extends GetxController {
     friendsList=temp;
     update();
   }
+
+  // ----------- multi Guest------------
+
+  void isExpandedFeatureActive(){
+    if(role == ZegoLiveRole.audience && isMultiGuest){
+      Get.find<GridController>().isExpanded.value= liveStreamingModel.getExpandedFeatureActive ?? false;
+      Get.find<GridController>().seat= liveStreamingModel.getExpandedFeatureIndex;
+      update();}
+  }
+
+  void setExpandedFeature(bool value, int? seat){
+    liveStreamingModel.setExpandedFeatureActive = value ;
+    if(seat != null)
+    liveStreamingModel.setExpandedFeatureIndex = seat ;
+    liveStreamingModel.save();
+  }
+
+  void setYoutube(bool value, String? id){
+    liveStreamingModel.setYoutube = value;
+    if(id != null)
+      liveStreamingModel.setYoutubeVideoId = id;
+
+    liveStreamingModel.save();
+    update();
+  }
+
+  void changeMultiGuestSeatView(int seat){
+    liveStreamingModel.setYoutube = false;
+    Get.find<GridController>().isExpanded.value=false;
+    setExpandedFeature(false,seat);
+    if(seat == 3)
+    liveStreamingModel.setMultiSeats = LiveStreamingModel.keyTypeMultiThreeSeat;
+    else if(seat == 4)
+      liveStreamingModel.setMultiSeats = LiveStreamingModel.keyTypeMultiFourSeat;
+    else if(seat == 6)
+      liveStreamingModel.setMultiSeats = LiveStreamingModel.keyTypeMultiSixSeat;
+    else if(seat == 9)
+      liveStreamingModel.setMultiSeats = LiveStreamingModel.keyTypeMultiNineSeat;
+    else if(seat == 12)
+      liveStreamingModel.setMultiSeats = LiveStreamingModel.keyTypeMultiTwelveSeat;
+    Get.back();
+    liveStreamingModel.save();
+    update();
+  }
+
+  Future<void> addMultiHostUserModel(List<ZegoSDKUser> coHostList) async {
+    List<int> userIDs = [];
+
+    // Iterate through coHostList and extract userID from each item
+    for (var item in coHostList) {
+      userIDs.add(int.parse(item.userID));
+    }
+
+    QueryBuilder<UserModel> queryUsers = QueryBuilder(UserModel.forQuery());
+    queryUsers.whereContainedIn(UserModel.keyUid, userIDs);
+
+
+    ParseResponse response = await queryUsers.query();
+    if(response.success){
+      if(response.results!=null){
+        for (var item in response.results!) {
+          multiGuestCoHostList.add(item as UserModel);
+        }
+        update();
+      }
+      else{
+        multiGuestCoHostList=[];
+        update();
+      }
+    }
+    else{
+      multiGuestCoHostList=[];
+      update();
+    }
+    }
+
+
+  void changeAudioSeatView(int seat){
+
+    if(seat == 9)
+      liveStreamingModel.setAudioSeats = 8;
+    else if(seat == 12)
+      liveStreamingModel.setAudioSeats = 11;
+    Get.back();
+    liveStreamingModel.save();
+    update();
+  }
+
+
+  //----------------------
 
 
   LiveViewModel(this.role, this.liveModel);

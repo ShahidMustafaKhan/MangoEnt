@@ -10,6 +10,7 @@ import '../../../../../widgets/base_scaffold.dart';
 import '../../../widgets/for_you_widget.dart';
 import '../../../zegocloud/widgets/zegocloud_preview.dart';
 import '../../../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
+import '../../single_audience_live/widgets/gift_animation_view.dart';
 
 
 class SingleLiveScreen extends StatefulWidget  {
@@ -52,11 +53,8 @@ class _SingleLiveScreenState extends State<SingleLiveScreen> with WidgetsBinding
                         ZegoCloudPreview(role:ZegoLiveRole.host),
                         SingleStreamerLiveItemWidget(),
                       Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                            height: 350.h,
-                            width: double.infinity,
-                            child: SVGAImage(giftViewModel.animationController!, fit: BoxFit.cover,)),
+                          alignment: Alignment.bottomCenter,
+                          child: GiftAnimationView(giftViewModel: giftViewModel,)
                       ),
                     ],
                   ),

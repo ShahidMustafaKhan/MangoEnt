@@ -20,6 +20,7 @@ class RoomCommandType {
     static const int muteSpeaker = 20000;
     static const int unMuteSpeaker = 20001;
     static const int kickOutRoom = 20002;
+    static const int requestCameraOff = 20003;
 }
 
 enum ZegoLiveRole {

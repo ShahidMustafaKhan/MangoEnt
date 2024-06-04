@@ -110,6 +110,12 @@ class UserViewModel extends GetxController {
 
   UserViewModel(this.currentUser);
 
+  @override
+  void onInit() {
+    currentUser = this.currentUser;
+    super.onInit();
+  }
+
 
 }
 

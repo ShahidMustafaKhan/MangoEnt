@@ -25,14 +25,14 @@ class _TrendingWidgetState extends State<TrendingWidget> {
   @override
   void initState() {
     trendingViewModel.loadLive();
-    // trendingViewModel.startTimer();
+    trendingViewModel.subscribeLiveStreamingModel();
     // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    // trendingViewModel.cancelTimer();
+    trendingViewModel.unSubscribeLiveStreamingModel();
     // TODO: implement dispose
     super.dispose();
   }

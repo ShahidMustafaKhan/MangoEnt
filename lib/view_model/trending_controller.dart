@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:teego/model/trending_card_model.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/view_model/userViewModel.dart';
 
+import '../helpers/quick_actions.dart';
 import '../parse/LiveStreamingModel.dart';
 import '../parse/UserModel.dart';
 import '../utils/constants/status.dart';
@@ -20,7 +22,8 @@ class TrendingViewModel extends GetxController {
 
   String tempImagePath='https://wallpapers.com/images/featured/hd-a5u9zq0a0ymy2dug.jpg';
 
-
+  LiveQuery liveQuery = LiveQuery();
+  Subscription? subscription;
 
 
   Future<void> loadLive() async {
@@ -73,8 +76,8 @@ class TrendingViewModel extends GetxController {
       TrendingModel trendingModel = TrendingModel(
           name: liveModel.getAuthor!.getFullName!,
           avatar: liveModel.getAuthor!.getAvatar!.url!,
-          flag: AppImagePath.pakistanFlag,
-          country: 'PK No.2',
+          flag: QuickActions.getCountryFlag(liveModel.getAuthor!),
+          country: '${QuickActions.getCountryCode(liveModel.getAuthor!)} No.2',
           liveModel: liveModel,
           achievementCount: liveModel.getAuthor!.getDiamondsTotal ?? 0,
           image: liveModel.getImage!=null ? liveModel.getImage!.url! : tempImagePath);
@@ -86,17 +89,34 @@ class TrendingViewModel extends GetxController {
 
   }
 
-  startTimer() {
-    _timer=Timer.periodic(const Duration(seconds: 10), (timer) {
-      print("timer : 10");
+  subscribeLiveStreamingModel() async {
+    QueryBuilder query =
+    QueryBuilder(LiveStreamingModel());
+
+    query.includeObject([
+      LiveStreamingModel.keyAuthor,
+      LiveStreamingModel.keyBattleModel,
+    ]);
+
+    subscription = await liveQuery.client.subscribe(query);
+
+    subscription!.on(LiveQueryEvent.update, (value) async {
+
+      if(kDebugMode){
+        print('*** livestreaming UPDATE ***');
+        print('*** livestreaming UPDATE ***');
+      }
+
       loadLive();
+
     });
   }
 
-  cancelTimer() {
-    if(_timer.isActive){
-      _timer.cancel();
+  unSubscribeLiveStreamingModel() async {
+    if (subscription != null) {
+      liveQuery.client.unSubscribe(subscription!);
     }
+    subscription = null;
   }
 
 

@@ -165,6 +165,7 @@ dependencies:
   camera: ^0.10.5+5
   flutter_cache_manager: ^3.3.1
   flutter_animation_progress_bar:
+  youtube_player_flutter:
 
 
   confetti:
@@ -197,8 +198,14 @@ flutter:
     - assets/audios/
     - assets/png/audience/
     - assets/png/audience/gifts/
+    - assets/png/game/
     - assets/animations/
     - assets/animations/battle/
+    - assets/home/
+    - assets/svg/America_Region_Flags/
+    - assets/svg/Asia_Region_Flags/
+    - assets/svg/Europe_Region_Flags/
+    - assets/svg/Middle_East_Region_Flags/
 
 
   fonts:

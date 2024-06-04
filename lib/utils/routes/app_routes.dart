@@ -94,15 +94,15 @@ class AppRoutes {
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ThemeController());
         })),
-    GetPage(
-        name: newUser,
-        page: () => const NewUser(),
-        binding: BindingsBuilder(() {
-          Get.lazyPut(() => ThemeController());
-        })),
+    // GetPage(
+    //     name: newUser,
+    //     page: () => NewUser(),
+    //     binding: BindingsBuilder(() {
+    //       Get.lazyPut(() => ThemeController());
+    //     })),
     GetPage(
         name: languageScreen,
-        page: () => const LanguageScreen(),
+        page: () => LanguageScreen(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ThemeController());
         })),
@@ -114,7 +114,7 @@ class AppRoutes {
         })),
     GetPage(
         name: dashboardScreen,
-        page: () => DashboardView(currentUser: Get.arguments['currentUser'],),
+        page: () => DashboardView(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => ThemeController());
         })),

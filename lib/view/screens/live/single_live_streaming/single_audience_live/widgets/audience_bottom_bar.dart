@@ -24,6 +24,18 @@ class AudienceBottomBar extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
+            child: CircleAvatar(
+              backgroundColor: Colors.black.withOpacity(0.5),
+              child: Image.asset(AppImagePath.subscriber, width: 25, height: 25),
+            ),
+          ),
+          const SizedBox(width: 8),
+          CircleAvatar(
+            backgroundColor: Colors.black.withOpacity(0.5),
+            child: Image.asset(AppImagePath.chat, width: 22, height: 22),
+          ),
+          const SizedBox(width: 8),
+          GestureDetector(
             onTap: (){
               showModalBottomSheet(
                 context: context,
@@ -39,18 +51,8 @@ class AudienceBottomBar extends StatelessWidget {
             },
             child: CircleAvatar(
               backgroundColor: Colors.black.withOpacity(0.5),
-              child: Image.asset(AppImagePath.subscriber, width: 25, height: 25),
+              child: Image.asset(AppImagePath.menu, width: 25, height: 25),
             ),
-          ),
-          const SizedBox(width: 8),
-          CircleAvatar(
-            backgroundColor: Colors.black.withOpacity(0.5),
-            child: Image.asset(AppImagePath.chat, width: 22, height: 22),
-          ),
-          const SizedBox(width: 8),
-          CircleAvatar(
-            backgroundColor: Colors.black.withOpacity(0.5),
-            child: Image.asset(AppImagePath.menu, width: 25, height: 25),
           ),
           const SizedBox(width: 8),
           GestureDetector(

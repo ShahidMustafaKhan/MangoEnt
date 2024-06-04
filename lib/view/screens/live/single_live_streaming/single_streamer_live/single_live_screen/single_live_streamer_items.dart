@@ -47,15 +47,6 @@ class SingleStreamerLiveItemWidget extends StatelessWidget {
                         topRight: Radius.circular(20.r),
                       ),
                       child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.grey500,
-                          border: Border(
-                            top: BorderSide(color: AppColors.grey300),
-                            // left: BorderSide(color: AppColors.grey300),
-                            // right: BorderSide(color: AppColors.grey300),
-                            bottom: BorderSide(color: Colors.transparent),
-                          ),
-                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -78,7 +69,7 @@ class SingleStreamerLiveItemWidget extends StatelessWidget {
                                 const Spacer(),
                                 Padding(
                                   padding: EdgeInsets.only(top:15.h),
-                                  child: Image.asset(AppImagePath.shopIcon, height: 115.h, width: 100.w),
+                                  child: Image.asset(AppImagePath.shopIcon, height: 125.h, width: 105.w),
                                 ),
                                 SizedBox(width: Get.width*0.04),
                               ],

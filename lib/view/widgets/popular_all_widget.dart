@@ -37,6 +37,12 @@ class _PopularAllWidgetState extends State<PopularAllWidget> {
       mainAxisAlignment: popularViewModel.popularAllModelList.isNotEmpty ? MainAxisAlignment.start : MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (popularViewModel.popularAllModelList.isNotEmpty)
+          Image.asset(
+            AppImagePath.popularBadge,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
         if(popularViewModel.popularAllModelList.isNotEmpty)
         Padding(
           padding: EdgeInsets.symmetric(vertical: 12.h),

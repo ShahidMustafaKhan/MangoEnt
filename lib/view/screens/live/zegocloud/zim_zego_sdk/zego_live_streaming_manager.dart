@@ -135,6 +135,17 @@ class ZegoLiveStreamingManager {
     return result;
   }
 
+  Future<ZIMMessageSentResult> requestCameraOff(String userID) async {
+    final commandMap = {
+      'room_command_type': RoomCommandType.requestCameraOff,
+      'receiver_id': userID
+    };
+    final result = await ZEGOSDKManager()
+        .zimService
+        .sendRoomCommand(jsonEncode(commandMap));
+    return result;
+  }
+
   // void leaveRoom() {
   //   ZEGOSDKManager.instance.logoutRoom();
   //   clear();
@@ -221,7 +232,6 @@ class ZegoLiveStreamingManager {
   void muteAnotherHostAudio(bool mute) {
     pkService!.muteAnotherHostAudio(mute);
   }
-
 
 
   bool isLocalUserHost() {

@@ -167,12 +167,22 @@ class AppImagePath {
       "assets/png/streamer/multiGuestNumber.png";
   static const multiGuestNumberIcon2 =
       "assets/png/streamer/multiGuestNumberIcon2.png";
-  static const deleteUser1 = "assets/png/streamer/deleteUser1.png";
+  static const deleteUser1 = "assets/png/streamer/deleteUser.png";
   static const guestCameraIcon = "assets/png/streamer/guestCameraIcon.png";
   static const guestGiftIcon = "assets/png/streamer/guestGiftIcon.png";
   static const youtube = "assets/png/streamer/youtube.png";
   static const boostIcon = "assets/png/streamer/boostIcon.png";
+  static const boost = "assets/png/streamer/boost.png";
   static const whippersIcons = "assets/png/streamer/whippersIcon.png";
+  static const muteIcon = "assets/png/mute.png";
+  static const youtubeImage = "assets/png/streamer/Disney+.png";
+  static const multiGuestBlur = "assets/png/streamer/multiGuestBlur.png";
+  static const onTop = "assets/png/streamer/onTop.png";
+  static const multiGuestExpandIcon =
+      "assets/png/streamer/multiGuestExpandIcon.png";
+  static const screenShareIcon = "assets/png/streamer/screenShareIcon.png";
+  static const screenShare = "assets/png/streamer/screen_share.png";
+  static const sofa = "assets/png/streamer/sofa.png";
 
   // audio live
   static const gemStone1 = "assets/png/streamer/gemstone_badge.png";
@@ -182,6 +192,57 @@ class AppImagePath {
   static const mic_off = "assets/png/streamer/mic_off.png";
   static const hand_wave = "assets/png/streamer/hand_wave.png";
   static const end_call = "assets/png/audience/end_call.png";
+
+  // Game View Images
+
+  static const mobileIcon = "assets/png/game/mobileIcon.png";
+  static const pcIcon = "assets/png/game/pcIcon.png";
+  static const verticalDisplay = "assets/png/game/verticalDisplay.png";
+  static const horizontalDisplay = "assets/png/game/horizontalDisplay.png";
+
+  // popular screen images
+
+  static const popularBadge = "assets/home/popularBadge.png";
+  static const trendPic = "assets/home/trend-pic.png";
+  static const battleIcon = "assets/svg/battleIcon.svg";
+
+  // America Region Flags
+  static const USA = "assets/svg/America_Region_Flags/USA.svg";
+  static const Argentina = "assets/svg/America_Region_Flags/Argentina.svg";
+  static const Bolivia = "assets/svg/America_Region_Flags/Bolivia.svg";
+  static const Brazil = "assets/svg/America_Region_Flags/Brazil.svg";
+  static const Canada = "assets/svg/America_Region_Flags/Canada.svg";
+  static const Chile = "assets/svg/America_Region_Flags/Chile.svg";
+  static const Colombia = "assets/svg/America_Region_Flags/Colombia.svg";
+  static const Costa_Rico = "assets/svg/America_Region_Flags/Costa_Rico.svg";
+  static const Ecuador = "assets/svg/America_Region_Flags/Ecuador.svg";
+  static const EL_Salvador = "assets/svg/America_Region_Flags/EL_Salvador.svg";
+  static const Mexico = "assets/svg/America_Region_Flags/Mexico.svg";
+  static const Nigeria = "assets/svg/America_Region_Flags/Nigeria.svg";
+  static const Panama = "assets/svg/America_Region_Flags/Panama.svg";
+  static const Peru = "assets/svg/America_Region_Flags/Peru.svg";
+  static const Uruguay = "assets/svg/America_Region_Flags/Uruguay.svg";
+  static const Venezuela = "assets/svg/America_Region_Flags/Venezuela.svg";
+
+  // Asia region flags
+
+  static const Pakistan = "assets/svg/Asia_Region_Flags/Pakistan.svg";
+  static const China = "assets/svg/Asia_Region_Flags/China.svg";
+  static const Bangladesh = "assets/svg/Asia_Region_Flags/Bangladesh.svg";
+  static const India = "assets/svg/Asia_Region_Flags/India.svg";
+
+  // Europe region flags
+  static const France = "assets/svg/Europe_Region_Flags/France.svg";
+  static const Germany = "assets/svg/Europe_Region_Flags/Germany.svg";
+  static const Italy = "assets/svg/Europe_Region_Flags/Italy.svg";
+  static const UK = "assets/svg/Europe_Region_Flags/UK.svg";
+
+  // Middle east region flags
+
+  static const Israel = "assets/svg/Middle_East_Region_Flags/Israel.svg";
+  static const Qatar = "assets/svg/Middle_East_Region_Flags/Qatar.svg";
+  static const Turkey = "assets/svg/Middle_East_Region_Flags/Turkey.svg";
+  static const UAE = "assets/svg/Middle_East_Region_Flags/UAE.svg";
 
 
 }

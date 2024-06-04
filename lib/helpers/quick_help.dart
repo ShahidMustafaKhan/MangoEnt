@@ -59,6 +59,7 @@ class QuickHelp {
   static const String pageTypeCashOut = "/cashOut";
 
   static String dateFormatDmy = "dd/MM/yyyy";
+  static String dateFormatYmd = "yyyy/MM/dd";
   static String dateFormatFacebook = "MM/dd/yyyy";
   static String dateFormatForFeed = "dd MMM, yyyy - HH:mm";
 
@@ -994,8 +995,14 @@ class QuickHelp {
       return '${difference.inMinutes} minutes ago';
     } else if (difference.inHours < 24) {
       return '${difference.inHours} hours ago';
-    } else {
+    } else if (difference.inDays < 30) {
       return '${difference.inDays} days ago';
+    } else if (difference.inDays < 365) {
+      int months = (difference.inDays / 30).floor();
+      return '${months == 1 ? '30 days' : '$months months'} ago';
+    } else {
+      int years = (difference.inDays / 365).floor();
+      return '$years ${years == 1 ? 'year' : 'years'} ago';
     }
   }
 

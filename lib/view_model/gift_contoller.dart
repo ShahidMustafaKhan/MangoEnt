@@ -4,10 +4,16 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
+import '../utils/constants/app_constants.dart';
+
 class GiftViewModel extends GetxController with GetTickerProviderStateMixin {
   String _giftToShow = "";
   SVGAAnimationController? animationController;
   bool playing=false;
+  RxString selectedPath=''.obs;
+
+  List path=[AppImagePath.lamborghini, AppImagePath.bearCastle , AppImagePath.yachtIsland,
+    AppImagePath.babyDragon, AppImagePath.hearts, AppImagePath.kissingGift , AppImagePath.motorCycleEntry ];
 
   String get giftToShow => _giftToShow;
 
@@ -22,10 +28,7 @@ class GiftViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   void loadAnimation(String path, String audioPath) async {
-    if(playing==true){
-      return;
-    }
-    playing=true;
+    selectedPath.value = path ;
     final videoItem = await SVGAParser.shared.decodeFromAssets(path);
     playAudio(audioPath);
     animationController!.videoItem = videoItem;
@@ -42,6 +45,34 @@ class GiftViewModel extends GetxController with GetTickerProviderStateMixin {
     } catch (t) {
       log(t.toString());
     }
+  }
+
+  bool get lamborghiniAnimation{
+    return selectedPath.value == path[0];
+  }
+
+  bool get bearCastle{
+    return selectedPath.value == path[1];
+  }
+
+  bool get yachtIsland{
+    return selectedPath.value == path[2];
+  }
+
+  bool get babyDragon{
+    return selectedPath.value == path[3];
+  }
+
+  bool get hearts{
+    return selectedPath.value == path[4];
+  }
+
+  bool get kissingGift{
+    return selectedPath.value == path[5];
+  }
+
+  bool get motorCycleEntry{
+    return selectedPath.value == path[6];
   }
 
   GiftViewModel();

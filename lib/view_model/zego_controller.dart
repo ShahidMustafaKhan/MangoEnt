@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:teego/parse/BattleStreamingModel.dart';
 import 'package:teego/parse/LiveStreamingModel.dart';
@@ -12,6 +13,7 @@ import '../helpers/quick_help.dart';
 import '../parse/UserModel.dart';
 import '../utils/Utils.dart';
 import '../utils/theme/colors_constant.dart';
+import '../view/screens/live/multi_live_streaming/widgets/multi_guest_grid_settings.dart';
 import '../view/screens/live/single_live_streaming/single_audience_live/widgets/invitation_dialog.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/audioRoom/layout_config.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/audioRoom/live_audio_room_seat.dart';
@@ -21,6 +23,7 @@ import '../view/screens/live/zegocloud/zim_zego_sdk/live_audio_room_manager.dart
 import '../view/screens/live/zegocloud/zim_zego_sdk/zego_live_streaming_manager.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/zego_sdk_manager.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/zegocloud_sdk.dart';
+import '../view/widgets/custom_buttons.dart';
 
 
 
@@ -30,20 +33,17 @@ class ZegoController extends GetxController {
 
   UserModel currentUser = Get.find<UserViewModel>().currentUser;
   final liveStreamingManager = ZegoLiveStreamingManager();
+  final expressService = ZEGOSDKManager().expressService;
   List<StreamSubscription> subscriptions = [];
   bool showingPKDialog = false;
   ZegoScreenCaptureSource? screenSharingSource;
-  Widget? hostScreenView;
-  int? hostScreenViewID;
   final liveAudioRoomManager = ZegoLiveAudioRoomManager.instance;
   ValueNotifier<bool> isApplyStateNoti = ValueNotifier(false);
   String? currentRequestID;
-
-
+  RoomRequest? myRoomRequest;
 
 
   bool isCameraEnabled = true;
-  bool isSharingScreen = false;
 
 
   bool isCurrentUserHost(){
@@ -54,6 +54,9 @@ class ZegoController extends GetxController {
       createEngine(currentUser.getUid.toString(), currentUser.getFullName.toString(), currentUser.getAvatar!.url.toString()).then((value){
         update();
         liveStreamingManager.currentUserRoleNoti.value = ZegoLiveRole.audience;
+        expressService.useFrontCamera(true);
+        if(expressService.currentUser!=null)
+        expressService.currentUser!.isCameraFront.value=true;
         ZEGOSDKManager.instance.loginRoom(Get.find<LiveViewModel>().liveStreamingModel.getAuthor!.getUid.toString(), ZegoScenario.Broadcast).then(
               (value) {
                 update();
@@ -69,6 +72,10 @@ class ZegoController extends GetxController {
       createEngine(currentUser.getUid.toString(), currentUser.getFullName.toString(), currentUser.getAvatar!.url.toString()).then((value){
         update();
         liveStreamingManager.hostNoti.value = ZEGOSDKManager.instance.currentUser;
+        expressService.useFrontCamera(true);
+        if(expressService.currentUser!=null)
+          expressService.currentUser!.isCameraFront.value=true;
+        ZEGOSDKManager.instance.currentUser?.coinsNotifier.value = Get.find<UserViewModel>().currentUser.getDiamondsTotal ?? 0;
         ZegoLiveStreamingManager().currentUserRoleNoti.value = ZegoLiveRole.host;
         ZEGOSDKManager.instance.expressService.turnCameraOn(true);
         ZEGOSDKManager.instance.expressService.turnMicrophoneOn(true);
@@ -209,15 +216,86 @@ class ZegoController extends GetxController {
       final receiverID = messageMap['receiver_id'];
       if (receiverID == ZEGOSDKManager().currentUser?.userID) {
         if (type == RoomCommandType.muteSpeaker) {
-          QuickHelp.showAppNotificationAdvanced(title: 'You have been muted by the host.', context: Get.context!);
+          QuickHelp.showSnackBar(title: '  You have been muted by the host.  ');
           ZEGOSDKManager().expressService.turnMicrophoneOn(false);
         } else if (type == RoomCommandType.unMuteSpeaker) {
-          QuickHelp.showAppNotificationAdvanced(title: 'The host has enabled your microphone.', context: Get.context!);
           ZEGOSDKManager().expressService.turnMicrophoneOn(true);
         } else if (type == RoomCommandType.kickOutRoom) {
+          if(streamingType == LiveStreamingModel.keyTypeMultiGuestLive)
+            liveStreamingManager.endCoHost();
+          if(streamingType == LiveStreamingModel.keyTypeAudioLive){
           liveAudioRoomManager.leaveRoom();
-          Navigator.pop(Get.context!);
-          QuickHelp.showAppNotificationAdvanced(title: 'You have been kick out of the room by the host', context: Get.context!);
+          Navigator.pop(Get.context!);}
+          QuickHelp.showSnackBar(title: '  The host has removed you from co-hosting.  ');
+        }
+        else if (type == RoomCommandType.requestCameraOff) {
+          if(streamingType == LiveStreamingModel.keyTypeMultiGuestLive)
+            showDialog(
+              context: Get.context!,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Color(0xFF494848),
+                  elevation: 2,
+                  clipBehavior: Clip.hardEdge,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(10.0))),
+                  title: Text(
+                    'Host want you to enable your camera',
+                    style: TextStyle(
+                        color: AppColors.white, fontSize: 14),
+                  ),
+                  actions: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: PrimaryButton(
+                            title: "No",
+                            textColor: AppColors.black,
+                            borderRadius: 35,
+                            borderColor:
+                            AppColors.yellowBtnColor,
+                            onTap: () {
+                              Get.back();
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Expanded(
+                          child: PrimaryButton(
+                            title: "Yes",
+                            textColor: AppColors.black,
+                            borderRadius: 35,
+                            bgColor: AppColors.yellowBtnColor,
+                            onTap: () {
+                              Get.back();
+                              showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                ),
+                                isScrollControlled: true,
+                                backgroundColor: AppColors.grey500,
+                                builder: (context) => Wrap(
+                                  children: [
+                                      MultiGuestGridSettings(ZEGOSDKManager.instance.expressService.currentUser),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
         }
       }
     }
@@ -230,6 +308,43 @@ class ZegoController extends GetxController {
 
   //----------------- Audio Live Section------------------
 
+
+  //------------Multi Live Section started------------------------
+  Future<void> applyCoHost() async {
+    final signaling = jsonEncode({
+      'room_request_type': RoomRequestType.audienceApplyToBecomeCoHost,
+    });
+    ZEGOSDKManager.instance.zimService
+        .sendRoomRequest(ZegoLiveStreamingManager.instance.hostNoti.value?.userID ?? '', signaling)
+        .then((value) {
+      isApplyStateNoti.value = true;
+      myRoomRequest = ZEGOSDKManager.instance.zimService
+          .roomRequestMapNoti.value[value.requestID];
+
+    }).catchError((error) {
+      QuickHelp.showAppNotificationAdvanced(title: 'apply to co-host failed!', context: Get.context!);
+
+    });
+  }
+
+  Future<void> cancelCoHostApplication(RoomRequest? myRoomRequest, ValueNotifier<bool> applying)async {
+    ZEGOSDKManager.instance.zimService
+        .cancelRoomRequest(myRoomRequest?.requestID ?? '')
+        .then((value) {
+      applying.value = false;
+    }).catchError((error) {
+      QuickHelp.showAppNotificationAdvanced(title: 'Cancel the application failed!', context: Get.context!);
+
+    });
+
+  }
+
+  Future<void> endCoHost() async {
+    ZegoLiveStreamingManager.instance.endCoHost();
+
+  }
+
+  //------------Multi Live Section ended--------------------------
 
 
   void startLive() {
@@ -269,6 +384,8 @@ class ZegoController extends GetxController {
   void subscribeZegoService(){
     liveStreamingManager.init();
     final zimService = ZEGOSDKManager().zimService;
+    final expressService = ZEGOSDKManager().expressService;
+
     subscriptions.addAll([
       liveStreamingManager.incomingPKRequestStreamCtrl.stream.listen(onIncomingPKRequestReceived),
       liveStreamingManager.incomingPKRequestCancelStreamCtrl.stream.listen(onIncomingPKRequestCancelled),
@@ -277,6 +394,7 @@ class ZegoController extends GetxController {
       liveStreamingManager.incomingPKRequestTimeoutStreamCtrl.stream.listen(onIncomingPKRequestTimeout),
       zimService.onOutgoingRoomRequestAcceptedStreamCtrl.stream.listen(onOutgoingRoomRequestAccepted),
       zimService.onOutgoingRoomRequestRejectedStreamCtrl.stream.listen(onOutgoingRoomRequestRejected),
+      zimService.onRoomCommandReceivedEventStreamCtrl.stream.listen(onAudioRoomCommandReceived),
       if(streamingType != LiveStreamingModel.keyTypeMultiGuestLive)
       liveStreamingManager.onPKStartStreamCtrl.stream.listen(onPKStart),
       if(streamingType != LiveStreamingModel.keyTypeMultiGuestLive)
@@ -285,7 +403,7 @@ class ZegoController extends GetxController {
   }
 
   void unSubscribeZegoService(){
-    if(streamingType==LiveStreamingModel.keyTypeSingleLive) {
+    if(streamingType==LiveStreamingModel.keyTypeSingleLive || streamingType==LiveStreamingModel.keyTypeMultiGuestLive) {
       ZEGOSDKManager()
           .expressService
           .stopPlayingStream(
@@ -399,25 +517,27 @@ class ZegoController extends GetxController {
       channel: ZegoPublishChannel.Aux,
     );
     await ZegoExpressEngine.instance.setVideoSource(ZegoVideoSourceType.ScreenCapture, channel: ZegoPublishChannel.Aux);
-    await screenSharingSource!.startCapture();
-    // String streamID = '${widget.roomID}_${widget.localUserID}_screen';
-    // await ZegoExpressEngine.instance.startPublishingStream(streamID, channel: ZegoPublishChannel.Aux);
-    // await ZegoExpressEngine.instance.stopPublishingStream(channel: ZegoPublishChannel.Aux);
-    // await ZegoExpressEngine.instance.startPublishingStream(streamID, channel: ZegoPublishChannel.Aux);
-    isSharingScreen = true;
-    update();
+    screenSharingSource!.startCapture().then((value) async {
+      String streamID = '${ZEGOSDKManager().expressService.currentRoomID}_${ZEGOSDKManager().currentUser?.userID ?? ''}_screen';
+      await ZegoExpressEngine.instance.startPublishingStream(streamID, channel: ZegoPublishChannel.Aux);
+      expressService.isSharingScreen.value = true;
+      update();
 
-    bool needPreview = false;
-    // ignore: dead_code
-    if (needPreview && (hostScreenViewID == null)) {
-      await ZegoExpressEngine.instance.createCanvasView((viewID) async {
-        hostScreenViewID = viewID;
-        ZegoCanvas previewCanvas = ZegoCanvas(viewID, viewMode: ZegoViewMode.AspectFit);
-        ZegoExpressEngine.instance.startPreview(canvas: previewCanvas, channel: ZegoPublishChannel.Aux);
-      }).then((canvasViewWidget) {
-        // use this canvasViewWidget to preview the screensharing
-     hostScreenView = canvasViewWidget;
-      });
+    });
+  }
+
+  Future<void> stopScreenSharing() async {
+    await screenSharingSource?.stopCapture();
+    await ZegoExpressEngine.instance.stopPreview(channel: ZegoPublishChannel.Aux);
+    if(role == ZegoLiveRole.host){
+    await ZegoExpressEngine.instance.stopPublishingStream(channel: ZegoPublishChannel.Aux);
+    await ZegoExpressEngine.instance.setVideoSource(ZegoVideoSourceType.None, channel: ZegoPublishChannel.Aux);}
+
+    expressService.isSharingScreen.value = false;
+    if ( expressService.hostScreenViewID != null) {
+      await ZegoExpressEngine.instance.destroyCanvasView(expressService.hostScreenViewID!);
+      expressService.hostScreenViewID = null;
+      expressService.hostScreenView.value = null;
     }
   }
 
@@ -452,6 +572,7 @@ class ZegoController extends GetxController {
   @override
   void onClose() {
     unSubscribeZegoService();
+    stopScreenSharing();
     super.onClose();
   }
 

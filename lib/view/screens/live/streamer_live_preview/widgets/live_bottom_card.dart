@@ -23,8 +23,10 @@ class LiveBottomCard extends StatelessWidget {
           Row(
             children: [
               const SizedBox(width: 20),
+              if(liveViewModel.selectedLiveType.value != liveViewModel.bottomTab[liveViewModel.gameLiveIndex] && liveViewModel.selectedLiveType.value != liveViewModel.bottomTab[liveViewModel.audioLiveIndex])
               Image.asset(AppImagePath.makeup, width: 30, height: 30),
-              const SizedBox(width: 40),
+              if(liveViewModel.selectedLiveType.value != liveViewModel.bottomTab[liveViewModel.gameLiveIndex] && liveViewModel.selectedLiveType.value != liveViewModel.bottomTab[liveViewModel.audioLiveIndex])
+                const SizedBox(width: 40),
               Expanded(
                 child: PrimaryButton(
                   title: 'Go Live',

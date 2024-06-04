@@ -11,6 +11,7 @@ import 'package:teego/parse/LiveStreamingModel.dart';
 
 
 import '../../../../../../../../view_model/live_controller.dart';
+import '../../../../../../../../view_model/userViewModel.dart';
 import '../../../zego_sdk_manager.dart';
 import '../../internal_defines.dart';
 import 'express_service.dart';
@@ -35,8 +36,10 @@ class ExpressService {
   List<ZegoSDKUser> userInfoList = [];
 
   // LiveStreamingModel liveStreamingModelTemp= LiveStreamingModel();
-  ValueNotifier<LiveStreamingModel> liveStreamingModel = ValueNotifier(
-      LiveStreamingModel());
+  ValueNotifier<Widget?> hostScreenView = ValueNotifier(null);
+  ValueNotifier<bool> isSharingScreen = ValueNotifier(false);
+  int? hostScreenViewID;
+
 
   // ValueNotifier<LiveStreamingModel?> savedLiveStreamingModel= ValueNotifier(null) ;
   Map<String, String> streamMap = {};
@@ -187,16 +190,13 @@ class ExpressService {
           .AspectFill, ZegoPlayerConfig? config}) async {
     final userID = streamMap[streamID];
     final userInfo = getUser(userID ?? '');
+    bool isScreenSharingStream = streamID.endsWith('_screen');
     if (currentScenario == ZegoScenario.HighQualityChatroom ||
         currentScenario == ZegoScenario.StandardChatroom ||
         currentScenario == ZegoScenario.StandardVideoCall ||
         currentScenario == ZegoScenario.StandardVoiceCall ||
         currentScenario == ZegoScenario.HighQualityVideoCall) {
-      // if (config == null) {
-      //   config = ZegoPlayerConfig.defaultConfig()..resourceMode = ZegoStreamResourceMode.OnlyL3;
-      // } else {
-      //   config.resourceMode = ZegoStreamResourceMode.OnlyL3;
-      // }
+
       if (config == null) {
         config = ZegoPlayerConfig.defaultConfig()
           ..resourceMode = ZegoStreamResourceMode.OnlyRTC;
@@ -206,13 +206,27 @@ class ExpressService {
     }
     if (userInfo != null) {
       await ZegoExpressEngine.instance.createCanvasView((viewID) async {
-        userInfo.viewID = viewID;
-        final canvas = ZegoCanvas(
-            userInfo.viewID, viewMode: ZegoViewMode.AspectFill);
+        final canvas ;
+        if (isScreenSharingStream) {
+          hostScreenViewID = viewID;
+          canvas = ZegoCanvas(
+              hostScreenViewID!, viewMode: ZegoViewMode.AspectFill);
+        } else {
+          userInfo.viewID = viewID;
+          canvas = ZegoCanvas(
+              userInfo.viewID, viewMode: ZegoViewMode.AspectFill);
+        }
+
         await ZegoExpressEngine.instance.startPlayingStream(
             streamID, canvas: canvas, config: config);
       }).then((videoViewWidget) {
-        userInfo.videoViewNotifier.value = videoViewWidget;
+        if (isScreenSharingStream) {
+          hostScreenView.value = videoViewWidget;
+          isSharingScreen.value = true;
+        } else {
+          userInfo.videoViewNotifier.value = videoViewWidget;
+        }
+
       });
     }
   }

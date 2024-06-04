@@ -12,7 +12,9 @@ import '../../../../utils/theme/colors_constant.dart';
 import '../../../../view_model/live_controller.dart';
 import '../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import 'audio_live/audio_preview.dart';
-import 'multiguest/widgets/three_live_widget.dart';
+import 'game/game_live_preview_screen.dart';
+import 'multiguest/widgets/multi_live_preview.dart';
+import 'multiguest/widgets/three_multi_guest_preview.dart';
 
 class LivePreviewScreen extends StatelessWidget {
 
@@ -32,6 +34,7 @@ class LivePreviewScreen extends StatelessWidget {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
       SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
@@ -50,12 +53,20 @@ class LivePreviewScreen extends StatelessWidget {
           return !cameraReady.value ?  SplashScreen() : Container(
             child: Stack(
               children: [
-                if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex])
-                  Positioned.fill(top:0, bottom:0, child: Container(color: AppColors.darkPurple,)),
+                if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex] || liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.gameLiveIndex])
+                  Positioned.fill(top:0, bottom:0, child: Container(decoration: BoxDecoration( gradient: LinearGradient(
+                    begin: Alignment(-1.656, -6.337),
+                    end: Alignment(-0.583, -1.589),
+                    colors: <Color>[Color(0xFFA036FF), Color(0xFF3B0073)],
+                    stops: <double>[0, 1],
+                  ),),)),
                 if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.audioLiveIndex])
                   Positioned.fill(top:0, bottom:0, child: Container(color: Color(0xFF12323A),)),
                   if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                 Positioned(top:0, bottom:0, child: CameraPreview(cameraController)),
+                if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.gameLiveIndex])
+                  GameLivePreviewScreen(),
+                if(liveViewModel.selectedLiveType.value!=liveViewModel.bottomTab[liveViewModel.gameLiveIndex])
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Column(
@@ -72,7 +83,7 @@ class LivePreviewScreen extends StatelessWidget {
                       if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                         Spacer(),
                       if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex])
-                        Expanded(child: ThreeLiveWidget(cameraController: cameraController,)),
+                        Expanded(child: MultiGuestPreview(cameraController: cameraController,)),
                       LiveBottomCard(liveViewModel),
                       const SizedBox(height: 16),
                     ],

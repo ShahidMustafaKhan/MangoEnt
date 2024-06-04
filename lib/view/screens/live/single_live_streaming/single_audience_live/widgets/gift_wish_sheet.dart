@@ -139,14 +139,14 @@ class GiftWishSheet extends StatelessWidget {
                   const SizedBox(width: 11),
                   Expanded(
                     child: GiftCard(
-                      giftImage: AppImagePath.flyingPhoenixImage,
-                      giftName: 'Flying Phoenix',
+                      giftImage: AppImagePath.kissingImage,
+                      giftName: 'Kissing',
                       coins: '130',
                       score: '4/5',
                       progress: 0.7,
                       onSend: () {
                         Get.back();
-                        Get.find<LiveViewModel>().liveStreamingModel.setGift={"gift": AppImagePath.flyingPhoenix, "audio" : AppImagePath.flyingPhoenixMp3 };
+                        Get.find<LiveViewModel>().liveStreamingModel.setGift={"gift": AppImagePath.kissingGift, "audio" : AppImagePath.kissingGiftMp3 };
                         Get.find<LiveViewModel>().liveStreamingModel.save();
                       },
                     ),

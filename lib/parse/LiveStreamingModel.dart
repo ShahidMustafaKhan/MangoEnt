@@ -35,6 +35,12 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   static String keyTypeGameLive = "Game Live";
   static String keyTypeAudioLive = "Audio Live";
 
+  static String keyTypeMultiThreeSeat = "3P";
+  static String keyTypeMultiFourSeat = "4P";
+  static String keyTypeMultiSixSeat = "6P";
+  static String keyTypeMultiNineSeat = "9P";
+  static String keyTypeMultiTwelveSeat = "12P";
+
   static final String keyPKCoHostUid = "PKCoHostUid";
   static final String keyPKCoHost = "PKCoHost";
   static final String keyPKCoHostLiveObject = "PKCoHostLive";
@@ -103,6 +109,7 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
 
   static final String keyCoHostView = "coHostView";
   static final String keyAudioSeats = "audioSeats";
+  static final String keyMultiSeats = "multiSeats";
 
   static final String keyGiftSenders = "giftSenders";
   static final String keyGiftSendersAuthor = "giftSenders.author";
@@ -155,6 +162,12 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
 
 
   static final String keyBattleModel='battleModel';
+
+  static final String keyExpandedFeatureActive='expandedFeatureActive';
+  static final String keyExpandedFeatureIndex='expandedFeatureIndex';
+
+  static final String keyYoutube='youtube';
+  static final String keyYoutubeVideoId='youtubeVideoId';
 
 
 
@@ -214,6 +227,9 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
 
   int? get getAudioSeats=> get<int>(keyAudioSeats);
   set setAudioSeats(int seats) => set<int>(keyAudioSeats, seats);
+
+  String? get getMultiSeats=> get<String>(keyMultiSeats);
+  set setMultiSeats(String seats) => set<String>(keyMultiSeats, seats);
 
   String? get getAuthorId => get<String>(keyAuthorId);
   set setAuthorId(String authorId) => set<String>(keyAuthorId, authorId);
@@ -736,6 +752,18 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
 
   String? get getRoomAnnouncement => get<String>(keyRoomAnnouncement);
   set setRoomAnnouncement (String text) => set<String>(keyRoomAnnouncement, text);
+
+  bool? get getExpandedFeatureActive => get<bool>(keyExpandedFeatureActive);
+  set setExpandedFeatureActive (bool isOn) => set<bool>(keyExpandedFeatureActive, isOn);
+
+  int? get getExpandedFeatureIndex=> get<int>(keyExpandedFeatureIndex);
+  set setExpandedFeatureIndex(int index) => set<int>(keyExpandedFeatureIndex, index);
+
+  bool? get getYoutube => get<bool>(keyYoutube);
+  set setYoutube (bool view) => set<bool>(keyYoutube, view);
+
+  String? get getYoutubeVideoId => get<String>(keyYoutubeVideoId);
+  set setYoutubeVideoId (String id) => set<String>(keyYoutubeVideoId, id);
 
 }
 

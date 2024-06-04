@@ -12,17 +12,11 @@ import 'package:teego/view/widgets/broadcasters.dart';
 
 import '../../../parse/UserModel.dart';
 
-class TrendingBroadcastersScreen extends StatefulWidget {
+class TrendingBroadcastersScreen extends StatelessWidget {
   const TrendingBroadcastersScreen({Key? key}) : super(key: key);
 
   @override
-  State<TrendingBroadcastersScreen> createState() => _TrendingBroadcastersScreenState();
-}
-
-class _TrendingBroadcastersScreenState extends State<TrendingBroadcastersScreen> {
-  @override
   Widget build(BuildContext context) {
-    UserModel currentUser = Get.arguments["currentUser"];
     return BaseScaffold(
         body: Stack(
           children: [
@@ -74,7 +68,7 @@ class _TrendingBroadcastersScreenState extends State<TrendingBroadcastersScreen>
                 child: AppButton(
                     context,
                     "Done",
-                        () => Get.offAndToNamed(AppRoutes.dashboardScreen, arguments: {"currentUser" : currentUser}),
+                        () => Get.toNamed(AppRoutes.dashboardScreen),
               ),
             ))
           ],

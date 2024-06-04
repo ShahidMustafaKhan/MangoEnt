@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 import '../../../../../../../../parse/LiveStreamingModel.dart';
+import '../../../../../../../../view_model/live_controller.dart';
 import '../../../zego_live_streaming_manager.dart';
 import '../../../zego_sdk_manager.dart';
 import '../../sdk/basic/zego_sdk_user.dart';
@@ -66,12 +69,14 @@ class CoHostService {
     print('currentUser${ZEGOSDKManager().currentUser}');
 
     coHostUserListNoti.add(ZEGOSDKManager().currentUser!);
+
   }
 
   void endCoHost() {
     coHostUserListNoti.removeWhere((element) {
       return element.userID == ZEGOSDKManager().currentUser?.userID;
     });
+
   }
 
   void onStreamListUpdate(ZegoRoomStreamListUpdateEvent event) {
@@ -85,9 +90,6 @@ class CoHostService {
           final cohostUser = ZEGOSDKManager().getUser(element.user.userID);
           if (cohostUser != null) {
             coHostUserListNoti.add(cohostUser);
-            if(coHostUserListNoti.length!=0){
-              isMultiGuesting();
-            }
 
           }
         }
@@ -117,7 +119,7 @@ class CoHostService {
     }
   }
 
-  Future<void> isMultiGuesting( ) async {
+  Future<void> addMultiHostUserModel( ) async {
     if( ZegoLiveStreamingManager().currentUserRoleNoti.value == ZegoLiveRole.host){
 
       final query = QueryBuilder(LiveStreamingModel())

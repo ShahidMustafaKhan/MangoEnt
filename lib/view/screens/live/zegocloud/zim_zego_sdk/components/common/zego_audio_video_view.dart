@@ -147,13 +147,7 @@ class _ZegoAudioVideoViewState extends State<ZegoAudioVideoView> {
         Container(
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration (
-            color: Color(0xffffffff),
-            gradient: LinearGradient (
-              begin: Alignment(-5.689, 1.344),
-              end: Alignment(-1, 3.344),
-              colors: <Color>[Color(0xff1659b0), Color(0xff380f5f)],
-              stops: <double>[0, 1],
-            ),
+
           ),
         ),
         Center(
@@ -164,9 +158,17 @@ class _ZegoAudioVideoViewState extends State<ZegoAudioVideoView> {
               child: Container(
                 width: 90,
                 height: 90,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                 ),
-                // child: Image.network(widget.liveStreamingModel!.getImage!.url!),
+                child: ValueListenableBuilder<String?>(
+                    valueListenable: widget.userInfo.avatarUrlNotifier,
+                    builder: (context, url, _) {
+                      if(url != null)
+                      return  Image.network(url);
+                      else
+                        return SizedBox();
+                  }
+                ),
               ),
             ),
           ),
