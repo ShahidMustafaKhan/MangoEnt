@@ -7,6 +7,7 @@ import 'package:teego/view/screens/live/zegocloud/zim_zego_sdk/internal/business
 import 'package:teego/view_model/live_controller.dart';
 import '../../../../../../../view_model/gift_contoller.dart';
 import '../../../../../../../view_model/battle_controller.dart';
+import '../../../../../view_model/live_messages_controller.dart';
 import '../../../../../view_model/zego_controller.dart';
 import '../../../../widgets/base_scaffold.dart';
 import '../../single_live_streaming/single_audience_live/widgets/gift_animation_view.dart';
@@ -20,6 +21,8 @@ class StreamerAudioLive extends StatelessWidget  {
   Widget build(BuildContext context) {
     final GiftViewModel giftViewModel = Get.put(GiftViewModel());
     ZegoController zegoController = Get.put(ZegoController(ZegoLiveRole.host, LiveStreamingModel.keyTypeAudioLive));
+    final LiveMessagesViewModel liveMessagesViewModel = Get.put(LiveMessagesViewModel(Get.find<LiveViewModel>()));
+
     return WillPopScope(
       onWillPop: () => Get.find<LiveViewModel>().closeAlert(context),
       child: BaseScaffold(

@@ -15,6 +15,7 @@ class PrimaryButton extends StatelessWidget {
   final double width;
   final double height;
   final double borderRadius;
+  final double fontSize;
 
   const PrimaryButton({
     this.title,
@@ -29,6 +30,7 @@ class PrimaryButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 50,
     this.borderRadius = 8,
+    this.fontSize = 20,
   });
 
   @override

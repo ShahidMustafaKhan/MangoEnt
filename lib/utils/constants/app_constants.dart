@@ -172,7 +172,7 @@ class AppImagePath {
   static const guestGiftIcon = "assets/png/streamer/guestGiftIcon.png";
   static const youtube = "assets/png/streamer/youtube.png";
   static const boostIcon = "assets/png/streamer/boostIcon.png";
-  static const boost = "assets/png/streamer/boost.png";
+  // static const boost = "assets/png/streamer/boost.png";
   static const whippersIcons = "assets/png/streamer/whippersIcon.png";
   static const muteIcon = "assets/png/mute.png";
   static const youtubeImage = "assets/png/streamer/Disney+.png";
@@ -202,8 +202,8 @@ class AppImagePath {
 
   // popular screen images
 
-  static const popularBadge = "assets/home/popularBadge.png";
-  static const trendPic = "assets/home/trend-pic.png";
+  static const popularBadge = "assets/png/home/popularBadge.png";
+  static const trendPic = "assets/png/home/trend-pic.png";
   static const battleIcon = "assets/svg/battleIcon.svg";
 
   // America Region Flags
@@ -243,6 +243,138 @@ class AppImagePath {
   static const Qatar = "assets/svg/Middle_East_Region_Flags/Qatar.svg";
   static const Turkey = "assets/svg/Middle_East_Region_Flags/Turkey.svg";
   static const UAE = "assets/svg/Middle_East_Region_Flags/UAE.svg";
+
+  // top streams images
+  static const red_redemption = "assets/png/top_streams/red_redemption.png";
+  static const bravery = "assets/png/top_streams/bravery.png";
+  static const just_chatting = "assets/png/top_streams/just_chatting.png";
+  static const world_of_war = "assets/png/top_streams/world_of_war.png";
+  static const baldurs = "assets/png/top_streams/baldurs.png";
+
+  // game view images
+  static const category1 = "assets/png/home/category1.png";
+  static const category2 = "assets/png/home/category2.png";
+  static const heart_image = "assets/png/home/heart_image.png";
+
+  // Trophy screen images
+
+  static const rankPerson1 = "assets/png/home/rankPerson1.png";
+  static const rankPerson2 = "assets/png/home/rankPerson2.png";
+  static const rankPerson3 = "assets/png/home/rankPerson3.png";
+  static const rankTrophy1 = "assets/png/home/rankTrophy1.png";
+  static const gemstones = "assets/png/home/gemstones.png";
+  static const trophyGlobalIcon = "assets/png/home/trophyGlobalIcon.png";
+
+  // Trending screen images
+
+  static const post = "assets/png/trending/post.png";
+  static const notification = "assets/png/trending/notification.png";
+  static const post_img = "assets/png/trending/post-img.png";
+  static const ic_heart = "assets/png/trending/ic_heart.png";
+  static const ic_comment = "assets/png/trending/ic_comment.png";
+  static const ic_send = "assets/png/trending/ic_send.png";
+
+  //  single live create sticker sheet images
+
+  static const sticker1 = "assets/png/streamer/liveCreate/sticker1.png";
+  static const sticker2 = "assets/png/streamer/liveCreate/sticker2.png";
+  static const sticker3 = "assets/png/streamer/liveCreate/sticker3.png";
+  static const sticker4 = "assets/png/streamer/liveCreate/sticker4.png";
+  static const sticker5 = "assets/png/streamer/liveCreate/sticker5.png";
+  static const sticker6 = "assets/png/streamer/liveCreate/sticker6.png";
+  static const sticker7 = "assets/png/streamer/liveCreate/sticker7.png";
+  static const sticker8 = "assets/png/streamer/liveCreate/sticker8.png";
+  static const sticker9 = "assets/png/streamer/liveCreate/sticker9.png";
+  static const sticker10 = "assets/png/streamer/liveCreate/sticker10.png";
+  static const sticker11 = "assets/png/streamer/liveCreate/sticker11.png";
+  static const sticker12 = "assets/png/streamer/liveCreate/sticker12.png";
+  static const sticker13 = "assets/png/streamer/liveCreate/sticker13.png";
+  static const sticker14 = "assets/png/streamer/liveCreate/sticker14.png";
+  static const sticker15 = "assets/png/streamer/liveCreate/sticker15.png";
+  static const arrowDown = "assets/png/streamer/liveCreate/arrowDown.png";
+
+  // single live create background image:
+
+  static const background1 = "assets/png/streamer/liveCreate/background1.png";
+  static const background2 = "assets/png/streamer/liveCreate/background2.png";
+  static const background3 = "assets/png/streamer/liveCreate/background3.png";
+  static const background4 = "assets/png/streamer/liveCreate/background4.png";
+  static const background5 = "assets/png/streamer/liveCreate/background5.png";
+  static const background6 = "assets/png/streamer/liveCreate/background6.png";
+  static const background7 = "assets/png/streamer/liveCreate/background7.png";
+  static const background8 = "assets/png/streamer/liveCreate/background8.png";
+  static const background9 = "assets/png/streamer/liveCreate/background9.png";
+  static const background10 = "assets/png/streamer/liveCreate/background10.png";
+  static const background11 = "assets/png/streamer/liveCreate/background11.png";
+  static const background12 = "assets/png/streamer/liveCreate/background12.png";
+  static const background13 = "assets/png/streamer/liveCreate/background13.png";
+  static const background14 = "assets/png/streamer/liveCreate/background14.png";
+
+  // filter screen images
+
+  static const filter1 = "assets/png/streamer/liveCreate/filter1.png";
+  static const filter2 = "assets/png/streamer/liveCreate/filter2.png";
+  static const filter3 = "assets/png/streamer/liveCreate/filter3.png";
+  static const filter4 = "assets/png/streamer/liveCreate/filter4.png";
+  static const filter5 = "assets/png/streamer/liveCreate/filter5.png";
+  static const filter6 = "assets/png/streamer/liveCreate/filter6.png";
+  static const filter7 = "assets/png/streamer/liveCreate/filter7.png";
+  static const filter8 = "assets/png/streamer/liveCreate/filter8.png";
+  static const filter9 = "assets/png/streamer/liveCreate/filter9.png";
+  static const filter10 = "assets/png/streamer/liveCreate/filter10.png";
+  static const filter11 = "assets/png/streamer/liveCreate/filter11.png";
+  static const filter12 = "assets/png/streamer/liveCreate/filter12.png";
+  static const filter13 = "assets/png/streamer/liveCreate/filter13.png";
+  static const filter14 = "assets/png/streamer/liveCreate/filter14.png";
+
+  // beauty screen images
+
+  static const facey = "assets/png/streamer/liveCreate/facey.png";
+  static const eyes = "assets/png/streamer/liveCreate/eyes.png";
+  static const touchup = "assets/png/streamer/liveCreate/touchup.png";
+  static const buffering = "assets/png/streamer/liveCreate/buffering.png";
+
+  // filter word sheet
+
+  static const deleteIcon = "assets/png/streamer/liveStreamer/deleteIcon.png";
+  static const musicIcon = "assets/png/streamer/liveStreamer/musicIcon.png";
+
+  // data sheet
+  static const graph = "assets/png/streamer/liveStreamer/graph.png";
+  static const views = "assets/png/streamer/liveStreamer/views.png";
+
+  // screen sharing sheet
+
+  static const whatsApp = "assets/png/streamer/liveStreamer/whatsApp.png";
+  static const Facebook = "assets/png/streamer/liveStreamer/facebook.png";
+  static const twitter = "assets/png/streamer/liveStreamer/twitter.png";
+  static const messenger = "assets/png/streamer/liveStreamer/messenger.png";
+  static const Instagram = "assets/png/streamer/liveStreamer/instagram.png";
+  static const telegram = "assets/png/streamer/liveStreamer/telegram.png";
+  static const contacts = "assets/png/streamer/liveStreamer/contacts.png";
+  static const others = "assets/png/streamer/liveStreamer/others.png";
+  static const download = "assets/png/streamer/liveStreamer/download.png";
+  static const dislike = "assets/png/streamer/liveStreamer/dislike.png";
+  static const report = "assets/png/streamer/liveStreamer/report.png";
+
+  // end screen images
+
+  static const twIcon = "assets/png/streamer/liveStreamer/twIcon.png";
+  static const tIcon = "assets/png/streamer/liveStreamer/tIcon.png";
+  static const fIcon = "assets/png/streamer/liveStreamer/fIcon.png";
+
+  // multi guest streamer extra sheet images
+
+  static const boost = "assets/png/streamer/multiGuestStreamer/boostIcon.png";
+
+  // chat screen images
+
+  static const chatScreenIcon = "assets/png/Chat/chatScreenIcon.png";
+  static const deleteCrossIcon = "assets/png/Chat/deleteCrossIcon.png";
+  static const star = "assets/png/Chat/star.png";
+  static const chatCamera = "assets/png/Chat/chatCamera.png";
+  static const chatPhoto = "assets/png/Chat/chatPhoto.png";
+  static const chatMic = "assets/png/Chat/chatMic.png";
 
 
 }

@@ -7,6 +7,7 @@ import 'package:teego/view/widgets/base_scaffold.dart';
 import 'package:teego/view_model/live_controller.dart';
 import '../../../../../parse/LiveStreamingModel.dart';
 import '../../../../../view_model/gift_contoller.dart';
+import '../../../../../view_model/live_messages_controller.dart';
 import '../../../../../view_model/zego_controller.dart';
 import '../../single_live_streaming/single_audience_live/widgets/gift_animation_view.dart';
 import '../../widgets/for_you_widget.dart';
@@ -24,6 +25,7 @@ class AudienceAudioLive extends StatelessWidget {
     final LiveViewModel liveViewModel = Get.put(LiveViewModel(ZegoLiveRole.audience, Get.arguments));
     final GiftViewModel giftViewModel = Get.put(GiftViewModel());
     ZegoController zegoController = Get.put(ZegoController(ZegoLiveRole.audience, LiveStreamingModel.keyTypeAudioLive));
+    final LiveMessagesViewModel liveMessagesViewModel = Get.put(LiveMessagesViewModel(liveViewModel));
     if(hideNav==false){
       hideNav=true;
       Future.delayed(Duration(milliseconds: 400), () {

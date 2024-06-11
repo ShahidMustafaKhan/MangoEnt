@@ -11,6 +11,7 @@ import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/constants/typography.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
 import '../../../../../widgets/custom_buttons.dart';
+import 'audience_detail_sheet.dart';
 
 class AudienceListSheet extends StatelessWidget {
 
@@ -107,7 +108,19 @@ class AudienceListSheet extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       UserModel user = liveViewModel.viewerList[index] as UserModel;
                       return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                            ),
+                            backgroundColor: AppColors.grey500,
+                            builder: (context) => AudienceDetailSheet(user),
+                          );
+                        },
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 18),
                           child: Row(

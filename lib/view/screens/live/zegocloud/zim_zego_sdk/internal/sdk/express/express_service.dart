@@ -8,8 +8,10 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:teego/parse/LiveStreamingModel.dart';
+import 'package:teego/view_model/live_messages_controller.dart';
 
 
+import '../../../../../../../../parse/LiveMessagesModel.dart';
 import '../../../../../../../../view_model/live_controller.dart';
 import '../../../../../../../../view_model/userViewModel.dart';
 import '../../../zego_sdk_manager.dart';
@@ -303,15 +305,22 @@ class ExpressService {
         }
         Get.find<LiveViewModel>().updateViewers(
             int.parse(user.userID), ZegoUpdateType.Add, user.userName, roomID);
+        Get.find<LiveMessagesViewModel>().sendMessageJoinOrLeft(
+          LiveMessagesModel.messageTypeJoin ,'join the Live',
+             senderName: user.userName, uid: int.parse(user.userID));
       }
     } else {
       for (final user in userList) {
+        final userInfo = getUser(user.userID);
         userInfoList.removeWhere((element) {
           return element.userID == user.userID;
         });
         Get.find<LiveViewModel>().updateViewers(
             int.parse(user.userID), ZegoUpdateType.Delete, user.userName,
             roomID);
+        Get.find<LiveMessagesViewModel>().sendMessageJoinOrLeft(
+            LiveMessagesModel.messageTypeLeft ,'left',
+            senderName: user.userName, uid: int.parse(user.userID));
       }
     }
     roomUserListUpdateStreamCtrl.add(

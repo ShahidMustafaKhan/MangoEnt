@@ -6,11 +6,14 @@ import 'package:teego/utils/routes/app_routes.dart';
 import 'package:teego/view/screens/profile/profile_screen.dart';
 import 'package:teego/view/screens/trending/trending_screen.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
+import 'package:teego/view_model/ranking_controller.dart';
 import 'package:teego/view_model/userViewModel.dart';
 import '../../parse/UserModel.dart';
 import '../../utils/constants/app_constants.dart';
+import '../../view_model/chat_list_controller.dart';
+import 'chat/chat_display_screen.dart';
 import 'chat/chat_screen.dart';
-import 'home/home_screen.dart';
+import 'home/home_screen/home_screen.dart';
 import 'live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 
 
@@ -28,6 +31,9 @@ class _DashboardViewState extends State<DashboardView> {
   UserModel? currentUser;
   late final List<Widget> _screens;
   late UserViewModel userViewModel = Get.find();
+  RankingViewModel rankingViewModel = Get.put(RankingViewModel());
+  ChatListViewModel chatListViewModel = Get.put(ChatListViewModel());
+
 
   @override
   void initState() {
@@ -36,7 +42,7 @@ class _DashboardViewState extends State<DashboardView> {
 
     _screens = [
       HomeView(currentUser: currentUser,),
-      const TrendingView(),
+      TrendingView(),
       const ChatView(),
       const ProfileView(),
     ];

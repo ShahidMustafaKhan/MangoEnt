@@ -1,5 +1,6 @@
 import 'package:get/get.dart' hide Trans;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:teego/parse/LiveStreamingModel.dart';
 import 'package:teego/parse/UserModel.dart';
 import 'package:teego/view_model/userViewModel.dart';
 import '../parse/GiftsSentModel.dart';
@@ -9,7 +10,8 @@ import 'live_controller.dart';
 
 
 class LiveMessagesViewModel extends GetxController {
-  final ZegoLiveRole role = Get.find<LiveViewModel>().role;
+  late LiveViewModel liveViewModel;
+  late ZegoLiveRole role;
 
   List<LiveMessagesModel> liveMessagesModelList=[];
   LiveQuery liveQuery = LiveQuery();
@@ -32,7 +34,7 @@ class LiveMessagesViewModel extends GetxController {
     QueryBuilder<LiveMessagesModel> queryBuilder = QueryBuilder<LiveMessagesModel>(LiveMessagesModel());
 
     queryBuilder.whereEqualTo(LiveMessagesModel.keyLiveStreamingId,
-        Get.find<LiveViewModel>().liveStreamingModel.objectId);
+        liveViewModel.liveStreamingModel.objectId);
     queryBuilder.orderByDescending(LiveMessagesModel.keyCreatedAt);
 
 
@@ -48,19 +50,18 @@ class LiveMessagesViewModel extends GetxController {
     subscription!.on(LiveQueryEvent.create, (liveMessage) async {
       print('*** enter ***setupLiveMessage');
 
-      liveMessagesModelList.add(liveMessage as LiveMessagesModel);
+      liveMessagesModelList.insert(0,liveMessage as LiveMessagesModel);
       update();
-
     });
-
   }
 
-  updateLiveMessages() async {
+  updateLiveMessages({LiveStreamingModel? liveStreamingModel}) async {
+    liveMessagesModelList=[];
     QueryBuilder<LiveMessagesModel> queryBuilder = QueryBuilder<LiveMessagesModel>(LiveMessagesModel());
 
     queryBuilder.whereEqualTo(LiveMessagesModel.keyLiveStreamingId,
-        Get.find<LiveViewModel>().liveStreamingModel.objectId);
-    queryBuilder.orderByDescending(LiveMessagesModel.keyCreatedAt);
+        liveStreamingModel!=null ? liveStreamingModel.objectId : liveViewModel.liveStreamingModel.objectId);
+    queryBuilder.orderByAscending(LiveMessagesModel.keyCreatedAt);
 
 
     queryBuilder.includeObject([
@@ -75,7 +76,7 @@ class LiveMessagesViewModel extends GetxController {
       if(response.results!=null && response.results!.isNotEmpty){
         for (var result in response.results!) {
           // Assuming result is a Map with a 'message' key
-          liveMessagesModelList.add(result as LiveMessagesModel);
+          liveMessagesModelList.insert(0,result as LiveMessagesModel);
           update();
         }
       }
@@ -84,6 +85,7 @@ class LiveMessagesViewModel extends GetxController {
 
 
   unSubscribeLiveMessageModels() async {
+    liveMessagesModelList=[];
     if (subscription != null) {
       liveQuery.client.unSubscribe(subscription!);
     }
@@ -105,39 +107,47 @@ class LiveMessagesViewModel extends GetxController {
 
      liveMessagesModel.setAuthorId = uid.toString();
 
-    if(messageType==LiveMessagesModel.messageTypeJoin || messageType==LiveMessagesModel.messageTypeComment ){
-      liveMessagesModel.setJoinUserName= senderName;
-    }
     liveMessagesModel.setAuthorAvatarUrl= senderAvatarUrl ?? '';
 
-    if(messageType==LiveMessagesModel.messageTypeGift){
-      liveMessagesModel.setSenderName = senderName;
-      liveMessagesModel.setImagePath = imagePath!;
-    }
+    liveMessagesModel.setSenderName = senderName;
 
-    liveMessagesModel.setLiveStreaming = Get.find<LiveViewModel>().liveStreamingModel;
+    liveMessagesModel.setLiveStreaming = liveViewModel.liveStreamingModel;
     liveMessagesModel.setLiveStreamingId =
-    Get.find<LiveViewModel>().liveStreamingModel.objectId!;
+    liveViewModel.liveStreamingModel.objectId!;
 
-    if (giftsSent != null) {
-      liveMessagesModel.setGiftSent = giftsSent;
-      liveMessagesModel.setGiftSentId = giftsSent.objectId!;
-      liveMessagesModel.setGiftId = giftsSent.getGiftId!;
-    }
 
     liveMessagesModel.setMessage = message;
     liveMessagesModel.setMessageType = messageType;
     await liveMessagesModel.save();
   }
 
+  sendMessageJoinOrLeft(
+  String messageType,
+  String message,{
+  required String senderName,
+  required int uid}) async {
+    UserModel user;
+    if(role == ZegoLiveRole.host) {
+      QueryBuilder<UserModel> queryUsers = QueryBuilder(UserModel.forQuery());
+      queryUsers.whereEqualTo(UserModel.keyUid, uid);
+
+      ParseResponse response = await queryUsers.query();
+      if (response.success && response.results != null) {
+        user = response.results!.first as UserModel;
+
+        sendMessage(messageType, message, senderName: senderName,
+            uid: uid,
+            senderAvatarUrl: user.getAvatar!.url!);
+      }
+    }
+  }
+
   Future delayedFunctions() async {
-    Future.delayed(Duration(seconds: 6), () {
-      setDisclaimerMessageValue=false;
       if(role==ZegoLiveRole.host) {
         Future.delayed(Duration(seconds: 2), () {
           sendMessage(
             LiveMessagesModel.messageTypeSystem,
-            "The broadcaster invites you to join PK",
+            "The broadcaster has started live streaming",
             senderName: Get
                 .find<UserViewModel>()
                 .currentUser
@@ -154,15 +164,17 @@ class LiveMessagesViewModel extends GetxController {
           );
         });
       }
-    });
+
   }
 
 
 
-  LiveMessagesViewModel();
+  LiveMessagesViewModel(this.liveViewModel);
 
   @override
   void onInit() {
+    liveViewModel = this.liveViewModel;
+    role = liveViewModel.role;
     setupLiveMessages();
     delayedFunctions();
     if(role==ZegoLiveRole.audience)

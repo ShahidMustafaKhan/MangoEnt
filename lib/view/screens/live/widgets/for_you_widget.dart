@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:teego/utils/constants/typography.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
+import 'package:teego/view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
+import 'package:teego/view_model/live_messages_controller.dart';
+import 'package:teego/view_model/popular_controller.dart';
 
+import '../../../../parse/LiveStreamingModel.dart';
 import '../../../../utils/constants/app_constants.dart';
+import '../../../../utils/routes/app_routes.dart';
+import '../../../../view_model/live_controller.dart';
 
 
 class ForYou extends StatelessWidget {
@@ -10,6 +19,9 @@ class ForYou extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PopularViewModel popularViewModel = Get.find();
+    RxBool isEmpty = false.obs;
+    isEmpty.value = checkStreamingTypeMismatch(popularViewModel);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -46,70 +58,104 @@ class ForYou extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                ...List.generate(
-                  10,
-                      (index) => Container(
-                    height: 125,
-                    width: 125,
-                    margin: const EdgeInsets.only(bottom: 20),
-                    decoration: BoxDecoration(
-                      image:  DecorationImage(
-                        image: AssetImage(AppImagePath.singleLiveBgImage),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  ...List.generate(
+                  popularViewModel.popularAllModelList.length,
+                      (index) {
+                    if(popularViewModel.popularAllModelList[index].liveModel.getStreamingType == Get.find<LiveViewModel>().liveStreamingModel.getStreamingType)
+                          return GestureDetector(
+                        onTap: (){
+                          Get.back();
+                          Get.find<LiveViewModel>().unSubscribeLiveStreamingModel();
+                          Get.find<LiveMessagesViewModel>().unSubscribeLiveMessageModels();
+                          if(Get.find<LiveViewModel>().role==ZegoLiveRole.host)
+                            Get.find<LiveViewModel>().endLiveStreamingAndJoinOtherSession(context, popularViewModel.popularAllModelList[index].liveModel);
+                          else
+                          Get.find<LiveViewModel>().joinOtherStreamerLiveSession(popularViewModel.popularAllModelList[index].liveModel);
+                        },
+                        child: Container(
+                          height: 125,
+                          width: 125,
+                          margin: const EdgeInsets.only(bottom: 20),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
+                            image:  DecorationImage(
+                              image: NetworkImage(popularViewModel.popularAllModelList[index].image),
+                              fit: BoxFit.cover,
                             ),
-                            color: AppColors.black.withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 20),
-                                Text(
-                                  'Kyle',
-                                  style: sfProDisplaySemiBold.copyWith(fontSize: 12),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                  color: AppColors.black.withOpacity(0.4),
                                 ),
-                                const Spacer(),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      AppImagePath.fireIcon,
-                                      width: 10,
-                                      height: 10,
-                                      color: AppColors.white.withOpacity(0.7),
-                                    ),
-                                    Text(
-                                      '343',
-                                      style: sfProDisplayRegular.copyWith(
-                                        fontSize: 10,
-                                        color: AppColors.white.withOpacity(0.7),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        '${popularViewModel.popularAllModelList[index].name.split(' ')[0]}',
+                                        style: sfProDisplaySemiBold.copyWith(fontSize: 12),
                                       ),
-                                    ),
-                                  ],
+                                      const Spacer(),
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            AppImagePath.fireIcon,
+                                            width: 10,
+                                            height: 10,
+                                            color: AppColors.white.withOpacity(0.7),
+                                          ),
+                                          Text(
+                                            '${popularViewModel.popularAllModelList[index].liveModel.getViewersId!.length ?? 0}',
+                                            style: sfProDisplayRegular.copyWith(
+                                              fontSize: 10,
+                                              color: AppColors.white.withOpacity(0.7),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
+                      );
+                    return SizedBox();
+                  }
+                ),
+                if(popularViewModel.popularAllModelList.isEmpty || isEmpty.value)
+                Column(
+                  children: [
+                    SizedBox(height: 250.h,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("*  ", style: sfProDisplayBlack.copyWith(color: Colors.red),),
+                        Text("Nothing is here", style: sfProDisplayMedium.copyWith(
+                          fontSize: 14.sp,
+                        ),),
                       ],
                     ),
-                  ),
+                  ],
                 ),
+               
+
               ],
             ),
           ),
         ),
+
         Positioned(
           top: 0,
           bottom: 0,
@@ -126,5 +172,17 @@ class ForYou extends StatelessWidget {
         ),
       ],
     );
+  }
+  bool checkStreamingTypeMismatch(PopularViewModel popularViewModel) {
+    int counter = 0;
+    int listLength = popularViewModel.popularAllModelList.length;
+
+    for (int i = 0; i < listLength; i++) {
+      if (popularViewModel.popularAllModelList[i].liveModel.getStreamingType != Get.find<LiveViewModel>().liveStreamingModel.getStreamingType) {
+        counter++;
+      }
+    }
+
+    return counter == listLength;
   }
 }

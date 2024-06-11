@@ -168,7 +168,7 @@ class ActiveMultiGuestOptions extends StatelessWidget {
                   ],
                 ),
               ),
-              if((seat6 || seat9) && !_controller.isExpanded.value)
+              if((seat6 || seat9) && (!_controller.isExpanded.value || _controller.seat ==0))
               Column(
                 children: [
                   Builder(

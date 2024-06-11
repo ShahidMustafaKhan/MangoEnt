@@ -23,7 +23,7 @@ class LiveMessagesModel extends ParseObject implements ParseCloneable {
   static final String messageTypeSystem = "SYSTEM";
   static final String messageTypeJoin = "JOIN";
   static final String messageTypeLeft = "LEFT";
-  static final String messageTypeCoHost = "HOST";
+  static final String messageTypeCoHost = "CoHOST";
 
   static final String keySenderAuthor = "author";
   static final String keySenderAuthorId = "authorId";

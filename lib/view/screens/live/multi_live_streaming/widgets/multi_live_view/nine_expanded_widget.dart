@@ -40,7 +40,7 @@ class NineExpandedMultiGuestView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           if(coHostList.length>=gridController.seat!)
-                          Expanded(child: ZegoMultiLiveView(userInfo: coHostList[gridController.seat! - 1 ], seat: gridController.seat!)),
+                          Expanded(child: ZegoMultiLiveView(userInfo:  gridController.seat==0 ? host : coHostList[gridController.seat! - 1 ], seat: gridController.seat!)),
                           if(coHostList.length<gridController.seat!)
                             Expanded(
                               child: Container(

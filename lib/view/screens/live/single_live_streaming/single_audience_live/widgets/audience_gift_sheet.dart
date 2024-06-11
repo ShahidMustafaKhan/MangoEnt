@@ -22,8 +22,10 @@ import 'multi_coHost_gift_widget.dart';
 
 class AudienceGiftSheet extends StatefulWidget {
   final BattleViewModel? battleViewModel;
-  
-  AudienceGiftSheet({this.battleViewModel});
+  final UserModel? profileUser;
+  final bool isProfileUser;
+
+  AudienceGiftSheet({this.battleViewModel, this.profileUser, this.isProfileUser=false});
 
   @override
   State<AudienceGiftSheet> createState() => _AudienceGiftSheetState();
@@ -60,11 +62,11 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(height: battleViewModel != null && battleViewModel!.isBattleView ? 16 : 12),
-            if(liveViewModel.isMultiGuest && liveViewModel.role == ZegoLiveRole.audience)
+            if(liveViewModel.isMultiGuest && liveViewModel.role == ZegoLiveRole.audience && widget.isProfileUser==false)
               MultiCoHostGiftAvatar(),
-            if(liveViewModel.isAudioLive && liveViewModel.role == ZegoLiveRole.audience)
+            if(liveViewModel.isAudioLive && liveViewModel.role == ZegoLiveRole.audience && widget.isProfileUser==false)
               AudioCoHostGiftAvatar(),
-            if(battleViewModel != null && battleViewModel!.isBattleView)
+            if(battleViewModel != null && battleViewModel!.isBattleView && widget.isProfileUser==false)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
@@ -493,10 +495,10 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                         const SizedBox(width: 7),
                         CoinsCountWidget(
                           count: '999',
-                          isSelected: selectedQuantity == '9999',
+                          isSelected: selectedQuantity == '999',
                           onTap: () {
                             setState(() {
-                              selectedQuantity = '9999';
+                              selectedQuantity = '999';
                             });
                           },
                         ),

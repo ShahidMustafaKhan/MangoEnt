@@ -46,7 +46,7 @@ class SixExpandedMultiGuestView extends StatelessWidget {
                                 child: Container(
                                     height: double.infinity,
                                     width: double.infinity,
-                                    child: ZegoMultiLiveView(userInfo: coHostList[gridController.seat! - 1 ], seat: gridController.seat!,)
+                                    child: ZegoMultiLiveView(userInfo: gridController.seat==0 ? host : coHostList[gridController.seat! - 1 ], seat: gridController.seat!,)
                                   //  CameraPreview(widget.cameraController),
                                 ),
                               ),

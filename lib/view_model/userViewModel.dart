@@ -102,6 +102,39 @@ class UserViewModel extends GetxController {
   }
 
 
+   followOrUnFollow(String objectId) async {
+    if(currentUser.getFollowing!.contains(objectId)){
+      currentUser.removeFollowing= objectId;
+      ParseResponse response = await currentUser.save();
+      if(response.success){
+        currentUser = response.results!.first as UserModel;
+        update();
+      }
+    }
+    else{
+      currentUser.setFollowing = objectId;
+      ParseResponse response = await currentUser.save();
+      if(response.success){
+        currentUser = response.results!.first as UserModel;
+        update();
+      }
+    }
+  }
+
+  bool followingUser(UserModel user){
+    if(currentUser.getFollowing!.contains(user.objectId)){
+      return true;
+    }
+    else{
+      currentUser.setFollowing = user.objectId!;
+      return false;
+    }
+  }
+
+
+
+
+
   updateViewModel(){
     update();
   }

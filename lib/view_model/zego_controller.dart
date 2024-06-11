@@ -28,12 +28,12 @@ import '../view/widgets/custom_buttons.dart';
 
 
 class ZegoController extends GetxController {
-  final ZegoLiveRole role;
+  ZegoLiveRole role;
   final String streamingType;
 
   UserModel currentUser = Get.find<UserViewModel>().currentUser;
-  final liveStreamingManager = ZegoLiveStreamingManager();
-  final expressService = ZEGOSDKManager().expressService;
+  var liveStreamingManager = ZegoLiveStreamingManager();
+  var expressService = ZEGOSDKManager().expressService;
   List<StreamSubscription> subscriptions = [];
   bool showingPKDialog = false;
   ZegoScreenCaptureSource? screenSharingSource;
@@ -50,7 +50,7 @@ class ZegoController extends GetxController {
     return liveStreamingManager.isLocalUserHost();
   }
 
-  audienceZegoLiveConfig(){
+  Future<void> audienceZegoLiveConfig()async {
       createEngine(currentUser.getUid.toString(), currentUser.getFullName.toString(), currentUser.getAvatar!.url.toString()).then((value){
         update();
         liveStreamingManager.currentUserRoleNoti.value = ZegoLiveRole.audience;
@@ -134,6 +134,33 @@ class ZegoController extends GetxController {
             title: 'Something went wrong!', context: Get.context!);
       });
     }
+
+  exitCurrentJoinOtherSession(LiveStreamingModel liveStreaming){
+    unSubscribeZegoService().then((value){
+      liveStreamingManager
+            ..leaveRoom()
+            ..uninit();
+        }).then((value) {
+      audienceZegoLiveConfig().then((value){
+        subscribeZegoService();
+      });
+        });
+
+    }
+
+  exitAudioCurrentJoinOtherSession(LiveStreamingModel liveStreaming){
+    unSubscribeAudioZegoService().then((value){
+      liveStreamingManager
+        ..uninit();
+    }).then((value) {
+      audienceAudioLiveConfig().then((value){
+        subscribeZegoAudioService();
+      });
+    });
+
+
+  }
+
 
   Future<void> hostTakeSeat() async {
     if (role == ZegoLiveRole.host) {
@@ -402,7 +429,7 @@ class ZegoController extends GetxController {
     ]);
   }
 
-  void unSubscribeZegoService(){
+  Future<void> unSubscribeZegoService() async {
     if(streamingType==LiveStreamingModel.keyTypeSingleLive || streamingType==LiveStreamingModel.keyTypeMultiGuestLive) {
       ZEGOSDKManager()
           .expressService
@@ -421,7 +448,7 @@ class ZegoController extends GetxController {
       unSubscribeAudioZegoService();
   }
 
-  void unSubscribeAudioZegoService(){
+  Future<void> unSubscribeAudioZegoService()async {
     liveAudioRoomManager.leaveRoom();
 
     for (final subscription in subscriptions) {
@@ -546,6 +573,7 @@ class ZegoController extends GetxController {
 
   @override
   void onInit() {
+    role=this.role;
     if(role==ZegoLiveRole.host){
       if(streamingType==LiveStreamingModel.keyTypeSingleLive || streamingType==LiveStreamingModel.keyTypeMultiGuestLive)
       streamerZegoLiveConfig();

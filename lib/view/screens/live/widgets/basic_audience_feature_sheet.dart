@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:teego/view/screens/live/single_live_streaming/single_audience_live/widgets/screen_recording_sheet.dart';
 import 'package:teego/view/screens/live/single_live_streaming/single_audience_live/widgets/settings_sheet.dart';
 
-import '../../../../../../utils/constants/app_constants.dart';
-import '../../../../../../utils/constants/typography.dart';
-import '../../../../../../utils/theme/colors_constant.dart';
+import '../../../../helpers/quick_actions.dart';
+import '../../../../utils/constants/app_constants.dart';
+import '../../../../utils/constants/typography.dart';
+import '../../../../utils/theme/colors_constant.dart';
+import 'basic_feature_sheets/live_setting_sheet.dart';
 
 
 class BasicAudienceFeatureSheet extends StatelessWidget {
@@ -74,20 +76,7 @@ class BasicAudienceFeatureSheet extends StatelessWidget {
                   ),
                   SizedBox(width: 32),
                   GestureDetector(
-                    onTap: (){
-                      Navigator.pop(context);
-                      showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                        ),
-                        backgroundColor: AppColors.grey500,
-                        builder: (context) => SettingsSheet(),
-                      );
-                    },
+                    onTap: ()=> openBottomSheet(LiveSettingSheet(), context, back: true),
                     child: ToolWidget(title: 'Setting', icon: AppImagePath.settings),
                   ),
                   SizedBox(width: 32),

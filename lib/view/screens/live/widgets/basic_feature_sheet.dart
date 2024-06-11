@@ -3,18 +3,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:teego/parse/LiveStreamingModel.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/utils/constants/typography.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/screens/live/multi_live_streaming/widgets/youtube_sheet.dart';
+import 'package:teego/view/screens/live/widgets/beauty_filters_sheets/sticker_modal_sheets.dart';
+import 'package:teego/view/screens/live/widgets/whisper/whisper_modal.dart';
 import 'package:teego/view_model/live_controller.dart';
 import 'package:teego/view_model/zego_controller.dart';
 
-import '../../../../zegocloud/zim_zego_sdk/zego_sdk_manager.dart';
-import '../../../single_audience_live/widgets/screen_recording_sheet.dart';
-import '../../../single_audience_live/widgets/settings_sheet.dart';
+import '../../../../helpers/quick_actions.dart';
+import 'basic_feature_sheets/data_sheet.dart';
+import 'basic_feature_sheets/filter_words.dart';
+import 'basic_feature_sheets/live_setting_sheet.dart';
+import 'basic_feature_sheets/local_music.dart';
+import 'basic_feature_sheets/manage.dart';
+import 'boost_sheet.dart';
+import 'wishList_streamer_sheet.dart';
+import '../zegocloud/zim_zego_sdk/zego_sdk_manager.dart';
+import '../single_live_streaming/single_audience_live/widgets/screen_recording_sheet.dart';
+import '../single_live_streaming/single_audience_live/widgets/settings_sheet.dart';
 
 class BasicFeatureSheet extends StatelessWidget {
 
@@ -49,14 +60,29 @@ class BasicFeatureSheet extends StatelessWidget {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    Column(
-                      children: [
-                        Image.asset(AppImagePath.wishBadge, width: 80, height: 60),
-                        Text(
-                          'Wish List',
-                          style: sfProDisplayRegular.copyWith(fontSize: 12),
-                        ),
-                      ],
+                    InkWell(
+                      onTap: (){
+                        Get.back();
+                        showModalBottomSheet(
+                            isScrollControlled : true,
+                            backgroundColor: Colors.transparent,
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.vertical(
+                            //     top: Radius.circular(20*fem), // Set the radius for the top border
+                            //   ),),
+                            context: context,
+                            builder: (BuildContext context) {
+                              return WishListStreamerSheet(); });
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset(AppImagePath.wishBadge, width: 80, height: 60),
+                          Text(
+                            'Wish List',
+                            style: sfProDisplayRegular.copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 30),
                     Column(
@@ -97,7 +123,7 @@ class BasicFeatureSheet extends StatelessWidget {
                           Image.asset(AppImagePath.youtube, width: 50, height: 50, fit: BoxFit.cover,),
                           const SizedBox(height: 11),
                           Text(
-                            liveViewModel.liveStreamingModel.getYoutube == true ? 'Exit Youtube' : "Youtube",
+                            "Youtube",
                             style: sfProDisplayRegular.copyWith(fontSize: 12),
                           ),
                         ],
@@ -116,48 +142,38 @@ class BasicFeatureSheet extends StatelessWidget {
                   child: Row(
                     children: [
                       if(isMultiGuest)
-                      ToolWidget(title: 'Boost', icon: AppImagePath.boost),
+                      ToolWidget(title: 'Boost', icon: "assets/png/streamer/boost.png", onTap: ()=> openBottomSheet(BoostSheet(), context, back: true),),
                       if(isMultiGuest)
                         SizedBox(width: 32),
-                      ToolWidget(title: 'Filter word', icon: AppImagePath.filterWord),
+                      ToolWidget(title: 'Filter word', icon: AppImagePath.filterWord, onTap: ()=> openBottomSheet(FilterWordWidget(), context, back: true)),
                       if(isMultiGuest && !isMultiSeat3)
                         SizedBox(width: 32),
                       if(isMultiGuest && !isMultiSeat3)
-                        GestureDetector(
-                            onTap: () => liveViewModel.changeMultiGuestSeatView(3),
-                            child: ToolWidget(title: '3P', icon: AppImagePath.sofa)),
+                        ToolWidget(title: '3P', icon: AppImagePath.sofa, onTap: () => liveViewModel.changeMultiGuestSeatView(3)),
                       if(isMultiGuest && !isMultiSeat4)
                         SizedBox(width: 32),
                       if(isMultiGuest && !isMultiSeat4)
-                        GestureDetector(
-                            onTap: () => liveViewModel.changeMultiGuestSeatView(4),
-                            child: ToolWidget(title: '4P', icon: AppImagePath.sofa)),
+                        ToolWidget(title: '4P', icon: AppImagePath.sofa, onTap: () => liveViewModel.changeMultiGuestSeatView(4),),
                       if(isMultiGuest && !isMultiSeat6)
                         SizedBox(width: 32),
                       if(isMultiGuest && !isMultiSeat6)
-                        GestureDetector(
-                            onTap: () => liveViewModel.changeMultiGuestSeatView(6),
-                            child: ToolWidget(title: '6P', icon: AppImagePath.sofa)),
+                        ToolWidget(title: '6P', icon: AppImagePath.sofa, onTap: () => liveViewModel.changeMultiGuestSeatView(6),),
                       if((isAudioLive &&  !isAudioSeat9) || (isMultiGuest && !isMultiSeat9))
                         SizedBox(width: 32),
                       if((isAudioLive &&  !isAudioSeat9) ||  (isMultiGuest && !isMultiSeat9))
-                        GestureDetector(
-                            onTap: () => isAudioLive ? liveViewModel.changeAudioSeatView(9) :liveViewModel.changeMultiGuestSeatView(9),
-                            child: ToolWidget(title: '9P', icon: AppImagePath.sofa)),
+                        ToolWidget(title: '9P', icon: AppImagePath.sofa, onTap: () => liveViewModel.changeMultiGuestSeatView(9)),
                       if((isAudioLive &&  !isAudioSeat12)  || (isMultiGuest && !isMultiSeat12))
                         SizedBox(width: 32),
                       if((isAudioLive &&  !isAudioSeat12)  || (isMultiGuest && !isMultiSeat12))
-                        GestureDetector(
-                            onTap: () => isAudioLive ? liveViewModel.changeAudioSeatView(12) :liveViewModel.changeMultiGuestSeatView(12),
-                            child: ToolWidget(title: '12P', icon: AppImagePath.sofa)),
+                        ToolWidget(title: '12P', icon: AppImagePath.sofa, onTap: () => isAudioLive ? liveViewModel.changeAudioSeatView(12) :liveViewModel.changeMultiGuestSeatView(12)),
                         SizedBox(width: 32),
-                      ToolWidget(title: 'Beauty', icon: AppImagePath.beauty),
+                      ToolWidget(title: 'Beauty', icon: AppImagePath.beauty, onTap: ()=> openBottomSheet(StickerModalSheet(), context, back: true)),
                       SizedBox(width: 32),
-                      ToolWidget(title: 'BGM', icon: AppImagePath.bgm),
+                      ToolWidget(title: 'BGM', icon: AppImagePath.bgm, onTap: ()=> openBottomSheet(LocalMusicWidget(), context, back: true)),
                       SizedBox(width: 32),
-                      ToolWidget(title: 'Whispers', icon: AppImagePath.whisper),
+                      ToolWidget(title: 'Whispers', icon: AppImagePath.whisper, onTap: ()=> openBottomSheet(WhisperModal(), context, back: true)),
                       SizedBox(width: 32),
-                      ToolWidget(title: 'Announcement', icon: AppImagePath.announcement),
+                      ToolWidget(title: 'Announcement', icon: AppImagePath.announcement, onTap: ()=> null),
                     ],
                   ),
                 ),
@@ -175,54 +191,35 @@ class BasicFeatureSheet extends StatelessWidget {
                       ValueListenableBuilder<bool>(
                           valueListenable: zegoController.expressService.currentUser!.isCamerOnNotifier,
                           builder: (context, cameraOn, _) {
-                            return GestureDetector(
-                                onTap: ()=> ZEGOSDKManager.instance.expressService.turnCameraOn(!cameraOn),
-                                child: ToolWidget(title: cameraOn ? 'OFF' : 'ON', icon: AppImagePath.cameraOff, iconColor: cameraOn ? null : AppColors.yellowColor,));
+                            return ToolWidget(title: cameraOn ? 'OFF' : 'ON', icon: AppImagePath.cameraOff, iconColor: cameraOn ? null : AppColors.yellowColor, onTap: ()=> ZEGOSDKManager.instance.expressService.turnCameraOn(!cameraOn),);
                         }
                       ),
                       if(!zegoController.expressService.isSharingScreen.value && !isAudioLive && !isSingleLive)
                         SizedBox(width: 32),
                       if(!zegoController.expressService.isSharingScreen.value && !isAudioLive && !isSingleLive)
-                      GestureDetector(onTap: (){
+                      ToolWidget(title: 'Share Screen', icon: AppImagePath.screenShare, onTap: (){
                         if(!zegoController.expressService.isSharingScreen.value){
                           Get.back();
                           zegoController.startScreenSharing();
                         }
-                      }, child: ToolWidget(title: 'Share Screen', icon: AppImagePath.screenShare)),
+                      },),
                       if(!isAudioLive)
                         SizedBox(width: 32),
                       if(!isAudioLive)
-                      GestureDetector(
-                          onTap: (){
-                            final user = zegoController.expressService.currentUser!;
-                            user.isCameraFront.value= !user.isCameraFront.value;
-                            ZEGOSDKManager.instance.expressService.useFrontCamera(user.isCameraFront.value);
-                          },
-                          child: ToolWidget(title: 'Switch', icon: AppImagePath.switchIcon)),
+                      ToolWidget(title: 'Switch', icon: AppImagePath.switchIcon, onTap: (){
+                        final user = zegoController.expressService.currentUser!;
+                        user.isCameraFront.value= !user.isCameraFront.value;
+                        ZEGOSDKManager.instance.expressService.useFrontCamera(user.isCameraFront.value);
+                      },),
                       if(!isAudioLive)
                         SizedBox(width: 32),
-                      ToolWidget(title: 'Data', icon: AppImagePath.dataIcon),
+                      ToolWidget(title: 'Data', icon: AppImagePath.dataIcon, onTap: ()=> openBottomSheet(DataSheetWidget(), context, back: true) ),
                       SizedBox(width: 32),
-                      InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                            showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              backgroundColor: AppColors.grey500,
-                              builder: (context) => ScreenRecordingSheet(),
-                            );
-                          },
-                          child: ToolWidget(title: 'Record', icon: AppImagePath.recordIcon)),
+                      ToolWidget(title: 'Record', icon: AppImagePath.recordIcon, onTap: ()=> openBottomSheet(ScreenRecordingSheet(), context, back: true)),
                       SizedBox(width: 32),
-                      ToolWidget(title: 'Mirror', icon: AppImagePath.mirrorIcon),
-                      SizedBox(width: 32),
-                      ToolWidget(title: 'Admin', icon: AppImagePath.admin),
+                      // ToolWidget(title: 'Mirror', icon: AppImagePath.mirrorIcon),
+                      // SizedBox(width: 32),
+                      ToolWidget(title: 'Admin', icon: AppImagePath.admin , onTap: ()=> openBottomSheet(ManageSheet(), context, back: true)),
                       SizedBox(width: 32),
                       GestureDetector(
                           onTap: (){
@@ -239,10 +236,11 @@ class BasicFeatureSheet extends StatelessWidget {
                               builder: (context) => SettingsSheet(),
                             );
                           },
-                          child:  ToolWidget(title: 'Setting', icon: AppImagePath.settings)),
+                          child:  ToolWidget(title: 'Setting', icon: AppImagePath.settings, onTap: ()=> openBottomSheet(LiveSettingSheet(), context, back: true))),
                     ],
                   ),
                 ),
+                SizedBox(height: 15.h,)
               ],
             ),
           );
@@ -256,32 +254,37 @@ class ToolWidget extends StatelessWidget {
   final String title;
   final String icon;
   final Color? iconColor;
+  final onTap;
 
   const ToolWidget({
 
     required this.title,
     required this.icon,
+    required this.onTap,
     this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: AppColors.darkBlue,
+    return GestureDetector(
+      onTap:onTap,
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: AppColors.darkBlue,
+            ),
+            child: Image.asset(icon, width: 28, height: 28, color: iconColor,),
           ),
-          child: Image.asset(icon, width: 28, height: 28, color: iconColor,),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          title,
-          style: sfProDisplayRegular.copyWith(fontSize: 12),
-        ),
-      ],
+          const SizedBox(height: 10),
+          Text(
+            title,
+            style: sfProDisplayRegular.copyWith(fontSize: 12),
+          ),
+        ],
+      ),
     );
   }
 }

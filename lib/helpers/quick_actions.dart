@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:lottie/lottie.dart';
@@ -21,6 +23,8 @@ import 'package:flutter/material.dart';
 import '../utils/Utils.dart';
 import '../utils/constants/app_constants.dart';
 import '../view/widgets/AvatarInitials.dart';
+import '../view/widgets/custom_buttons.dart';
+import '../view_model/live_controller.dart';
 
 
 class QuickActions {
@@ -1676,27 +1680,27 @@ class QuickActions {
                           ),
                         ),
                       ),
-                      Container(
-                        width: 48 * fem, // 52% of screen width
-                        height: 4 * fem, // 4% of screen height
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14 * fem),
-                          // 14% of screen width
-                          color: Color(0xFF777777), // Background color
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(14 * fem),
-                          // 14% of screen width
-                          child: LinearProgressIndicator(
-                            value: QuickActions.wishListProgressValue(
-                                liveStreamingModel),
-                            // Change this value to set the progress
-                            backgroundColor: Colors.transparent,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xFFFFBD2B)), // Active color
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   width: 48 * fem, // 52% of screen width
+                      //   height: 4 * fem, // 4% of screen height
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: BorderRadius.circular(14 * fem),
+                      //     // 14% of screen width
+                      //     color: Color(0xFF777777), // Background color
+                      //   ),
+                      //   child: ClipRRect(
+                      //     borderRadius: BorderRadius.circular(14 * fem),
+                      //     // 14% of screen width
+                      //     // child: LinearProgressIndicator(
+                      //     //   value: QuickActions.wishListProgressValue(
+                      //     //       liveStreamingModel),
+                      //       // Change this value to set the progress
+                      //       backgroundColor: Colors.transparent,
+                      //       valueColor: AlwaysStoppedAnimation<Color>(
+                      //           Color(0xFFFFBD2B)), // Active color
+                      //     ),
+                      //   ),
+
                     ],
                   ),
                 ),
@@ -1708,16 +1712,16 @@ class QuickActions {
     );
   }
 
-  static double wishListProgressValue(LiveStreamingModel liveStreamingModel) {
-    double totalReceived = 0;
-    double totalAmount = 0;
-    if (liveStreamingModel.getMyWishList != null) {
-      for (int i = 0; i < liveStreamingModel.getMyWishList!.length; i++) {
+  static double wishListProgressValue(LiveViewModel liveViewModel) {
+    double totalReceived = 0.0;
+    double totalAmount = 0.0;
+    if (liveViewModel.myWishList != null && liveViewModel.myWishList!.isNotEmpty) {
+      for (int i = 0; i < liveViewModel.myWishList!.length; i++) {
         totalReceived = totalReceived + double.parse(
-            liveStreamingModel.getMyWishList![i][LiveStreamingModel
-                .keyReceived]);
+            liveViewModel.myWishList![i][LiveStreamingModel
+                .keyReceived].toString());
         totalAmount = totalAmount + double.parse(
-            liveStreamingModel.getMyWishList![i][LiveStreamingModel.keyAmount]);
+            liveViewModel.myWishList![i][LiveStreamingModel.keyAmount].toString());
       }
       return (totalReceived / totalAmount);
     }
@@ -2452,7 +2456,7 @@ class QuickActions {
                                   child: Opacity(
                                     opacity: 0.9,
                                     child: Image.asset(
-                                      'assets/dino/gemstones.png',
+                                      AppImagePath.coinsIcon,
                                       width: 15 * fem,
                                       height: 11 * fem,
                                     ),
@@ -2475,7 +2479,7 @@ class QuickActions {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(13 * fem),
                             child: Image.asset(
-                              'assets/dino/overlay-3-5af.png',
+                              'assets/png/overlay.png',
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -2574,7 +2578,7 @@ class QuickActions {
                                   width: 12.55 * fem,
                                   height: 19.71 * fem,
                                   child: Image.asset(
-                                    'assets/dino/asset-154x-1.png',
+                                    'assets/png/zee',
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -2710,7 +2714,7 @@ class QuickActions {
                                                     width: 15 * fem,
                                                     height: 11 * fem,
                                                     child: Image.asset(
-                                                      'assets/dino/gemstones.png',
+                                                      AppImagePath.coinsIcon,
                                                       width: 15 * fem,
                                                       height: 11 * fem,
                                                     ),
@@ -2872,58 +2876,6 @@ class QuickActions {
                           },
                         ),
                       ),),
-                    // Positioned(
-                    //   // group52971cWs (1:19990)
-                    //   left: 139*fem,
-                    //   top: 129.5517578125*fem,
-                    //   child: Container(
-                    //     padding: EdgeInsets.fromLTRB(27*fem, 52.45*fem, 22.58*fem, 44.13*fem),
-                    //     width: 106.58*fem,
-                    //     height: 140.58*fem,
-                    //     decoration: BoxDecoration (
-                    //       color: Color(0xff2a2634),
-                    //       borderRadius: BorderRadius.circular(5*fem),
-                    //       boxShadow: [
-                    //         BoxShadow(
-                    //           color: Color(0x3f000000),
-                    //           offset: Offset(0*fem, 4*fem),
-                    //           blurRadius: 2*fem,
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: [
-                    //         Container(
-                    //           // signuploginwithphoneGbR (1:19992)
-                    //           margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 3*fem, 8*fem),
-                    //           child: Text(
-                    //             '+ ',
-                    //             textAlign: TextAlign.center,
-                    //             style: SafeGoogleFont (
-                    //               'DM Sans',
-                    //               fontSize: 41*ffem,
-                    //               fontWeight: FontWeight.w400,
-                    //               height: 0.5365853659*ffem/fem,
-                    //               color: Color(0xff777777),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           // aeroplaneNuM (1:19993)
-                    //           'Add wishes',
-                    //           style: SafeGoogleFont (
-                    //             'DM Sans',
-                    //             fontSize: 10*ffem,
-                    //             fontWeight: FontWeight.w700,
-                    //             height: 1.4*ffem/fem,
-                    //             color: Color(0xff9e9e9e),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     Positioned(
                       // button87q (I1:19994;0:15783)
                       left: 21 * fem,
@@ -3023,16 +2975,9 @@ class QuickActions {
     int selected = -1;
     int amount = 1;
     String category = 'popular';
-    List images = [
-      'assets/dino/heart.png',
-      'assets/dino/cake.png',
-      'assets/dino/car.png',
-      'assets/dino/parachute.png',
-      'assets/dino/play.png',
-      'assets/dino/castle.png',
-      'assets/dino/iloveyou.png',
-      "assets/dino/-Yw9.png"
-    ];
+    List images = [AppImagePath.lamborghini, AppImagePath.bearCastle , AppImagePath.yachtIsland,
+      AppImagePath.babyDragon, AppImagePath.hearts, AppImagePath.kissingGift , AppImagePath.motorCycleEntry ];
+
     return showModalBottomSheet(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -5391,6 +5336,59 @@ class QuickActions {
     }
   }
 
+
+  static void showAlertDialog(BuildContext context, String title, Function() onTap){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color(0xFF494848),
+          elevation: 2,
+          clipBehavior: Clip.hardEdge,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(10.0))),
+          title: Text(
+            title,
+            style: TextStyle(
+                color: AppColors.white, fontSize: 14),
+          ),
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: PrimaryButton(
+                    title: "No",
+                    textColor: AppColors.black,
+                    borderRadius: 35,
+                    borderColor:
+                    AppColors.yellowBtnColor,
+                    onTap: () {
+                      Get.back();
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 10.w,
+                ),
+                Expanded(
+                  child: PrimaryButton(
+                    title: "Yes",
+                    textColor: AppColors.black,
+                    borderRadius: 35,
+                    bgColor: AppColors.yellowBtnColor,
+                    onTap: onTap
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 }
 
 
@@ -5400,4 +5398,39 @@ class AppCountryCode {
   static const String canadaCode = 'CA';
   static const String franceCode = 'FR';
   static const String ukraineCode = 'UA';
+}
+
+
+void openBottomSheet(Widget widget , BuildContext context, {bool back=false}){
+  if(back==true)
+    Get.back();
+
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+    ),
+    backgroundColor: AppColors.grey500,
+    isScrollControlled: true,
+    builder: (context) => Wrap(
+      children: [
+        widget,
+        // StickerModalSheet(),  // single live create extra sheets
+        // FilterWordWidget(), //  filter word sheet
+        // LocalMusicWidget(), // local music sheet
+        // DataSheetWidget(),       //  data sheet
+        // ScreenSharingWidget(), //  screen sharing
+        //  ManageSheet(),   // manage sheet
+        // LiveSettingSheet(), //  live setting sheet
+        // BoostSheet(), //  multi guest boost sheet
+        // SubscriberSheet(), // multi guest subscriber sheet
+        // WhisperModal(), // whisper modal sheet
+        // TopGifters(), // top gifters sheet
+      ],
+    ),
+  );
+
 }

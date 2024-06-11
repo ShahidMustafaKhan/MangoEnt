@@ -36,7 +36,10 @@ class SingleStreamerLiveItemWidget extends StatelessWidget {
                 if (battleViewModel.isBattleView==false)
                   const Spacer(),
                 if (battleViewModel.isBattleView == false)
-                ChatFeature(),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, right: 10.w),
+                    child: ChatFeature(),
+                ),
                 if (battleViewModel.isBattleView)
                   Expanded(
                   child: Padding(
@@ -60,7 +63,7 @@ class SingleStreamerLiveItemWidget extends StatelessWidget {
                                     children: [
                                       SizedBox(height: 8.h),
                                       Padding(
-                                        padding: EdgeInsets.only(bottom: 10.h),
+                                        padding: EdgeInsets.only(left: 20, right: 10.w,bottom: 10.h),
                                         child: ChatFeature(),
                                       ),
                                     ],

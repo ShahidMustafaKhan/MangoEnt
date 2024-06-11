@@ -9,6 +9,7 @@ import 'package:teego/view/screens/live/multi_live_streaming/widgets/multi_live_
 import 'package:teego/view/screens/live/single_live_streaming/single_audience_live/widgets/audience_bottom_bar.dart';
 import 'package:teego/view_model/animation_controller.dart';
 import 'package:teego/view_model/live_controller.dart';
+import '../../../../view_model/youtube_controller.dart';
 import '../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import '../widgets/bottom_card.dart';
 import '../streamer_live_preview/audio_live/audio_live_top_bar.dart';
@@ -22,6 +23,7 @@ class MultiLiveWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AnimationViewModel animationViewModel = Get.find();
+    YoutubeController youtubeController = Get.put(YoutubeController());
     return GetBuilder<LiveViewModel>(builder: (liveViewModel)  {
         return Column(
           children: [

@@ -16,9 +16,12 @@ import 'package:teego/parse/CommentsModel.dart';
 import 'package:teego/parse/GiftsModel.dart';
 import 'package:teego/parse/GiftsSentModel.dart';
 import 'package:teego/parse/InvitedUsersModel.dart';
+import 'package:teego/parse/MessageListModel.dart';
+import 'package:teego/parse/MessageModel.dart';
 import 'package:teego/parse/NotificationsModel.dart';
 import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/parse/PostsModel.dart';
+import 'package:teego/parse/RankingModel.dart';
 import 'package:teego/parse/ReportModel.dart';
 import 'package:teego/parse/TimerModel.dart';
 import 'package:teego/parse/WithdrawModel.dart';
@@ -75,6 +78,7 @@ void main() async {
   Map<String, ParseObjectConstructor> subClassMap =
       <String, ParseObjectConstructor>{
     PostsModel.keyTableName: () => PostsModel(),
+    RankingModel.keyTableName: () => RankingModel(),
     NotificationsModel.keyTableName: () => NotificationsModel(),
     CommentsModel.keyTableName: () => CommentsModel(),
     GiftsModel.keyTableName: () => GiftsModel(),
@@ -82,6 +86,8 @@ void main() async {
     LiveStreamingModel.keyTableName: () => LiveStreamingModel(),
     LiveMessagesModel.keyTableName: () => LiveMessagesModel(),
     LiveMessagesModel.keyTableName: () => LiveMessagesModel(),
+    MessageModel.keyTableName: () => MessageModel(),
+    MessageListModel.keyTableName: () => MessageListModel(),
     WithdrawModel.keyTableName: () => WithdrawModel(),
     PaymentsModel.keyTableName: () => PaymentsModel(),
     InvitedUsersModel.keyTableName: () => InvitedUsersModel(),

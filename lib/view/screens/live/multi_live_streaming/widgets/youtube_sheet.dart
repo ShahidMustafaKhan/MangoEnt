@@ -9,11 +9,13 @@ import 'package:teego/view/screens/live/single_live_streaming/single_audience_li
 import 'package:teego/view/screens/live/single_live_streaming/single_audience_live/widgets/settings_sheet.dart';
 import 'package:teego/view_model/live_controller.dart';
 import 'package:teego/view_model/youtube_controller.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/constants/typography.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
 import '../../../../../model/youtube_model.dart';
+import '../../../../../utils/constants/status.dart';
 
 
 class YoutubeSheet extends StatefulWidget {
@@ -23,14 +25,13 @@ class YoutubeSheet extends StatefulWidget {
 }
 
 class _YoutubeSheetState extends State<YoutubeSheet> {
-  YoutubeController youtubeController = Get.put(YoutubeController());
-  LiveViewModel liveViewModel = Get.find();
-  String title='drake';
-  TextEditingController titleController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
-
+    YoutubeController youtubeController = Get.find();
+    LiveViewModel liveViewModel = Get.find();
+    TextEditingController titleController = TextEditingController();
     return Container(
       height: 600.h,
       decoration: BoxDecoration(
@@ -112,16 +113,13 @@ class _YoutubeSheetState extends State<YoutubeSheet> {
                         ),
                       ),
                       Container(
-                        width: 340,
+                        width: 250.w,
                         margin: EdgeInsets.fromLTRB(13, 0.4, 0, 1.4),
                         child: TextField(
                           expands: false,
                           controller: titleController,
                           onSubmitted: (value){
-                            title=value;
-                            setState(() {
-
-                            });
+                            youtubeController.fetchYouTubeVideos(value);
                           },
                           style: GoogleFonts.getFont(
                             'Roboto Condensed',
@@ -153,85 +151,85 @@ class _YoutubeSheetState extends State<YoutubeSheet> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<YouTubeSearchResult>(
-                  future: youtubeController.fetchYouTubeVideos(title),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}', style: sfProDisplayMedium.copyWith(color: Colors.black),));
-                    } else if (snapshot.hasData) {
-                      List<YouTubeVideo>  youtubeVideoList = snapshot.data!.items;
-                      return ListView.separated(
-                        padding: EdgeInsets.only(
-                            left: 16.w, right: 16.w, top: 19.h, bottom: 16.h),
-                        itemCount: snapshot.data!.items.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap:(){
-                              Get.back();
-                              liveViewModel.setYoutube(true, youtubeVideoList[index].id.videoId );
-                            },
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Container(
-                                      height: 193.h,
-                                      width: double.infinity,
-                                      child: Image.network(
-                                        youtubeVideoList[index].snippet.thumbnails.high.url,
-                                      fit: BoxFit.cover,)),
-                                  SizedBox(height: 12.h),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.w),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          youtubeVideoList[index].snippet.title,
-                                          style: sfProDisplayMedium.copyWith(
-                                              fontSize: 14.sp,
-                                              color: Colors.black
-                                          ),),
-                                        SizedBox(height: 8.h),
-                                        Row(
-                                          children: [
-                                            Text(youtubeVideoList[index].snippet.channelTitle,
-                                              style: sfProDisplayRegular.copyWith(
-                                                  fontSize: 12.sp,
-                                                  color: Colors.black.withOpacity(
-                                                      0.5)
-                                              ),),
-                                            SizedBox(width: 8.w),
-                                            Text('${QuickHelp.getTimeAgo(DateTime.parse(youtubeVideoList[index].snippet.publishedAt))}',
-                                              style: sfProDisplayRegular.copyWith(
-                                                  fontSize: 12.sp,
-                                                  color: Colors.black.withOpacity(
-                                                      0.5)
-                                              ),),
-                                          ],
-                                        )
-                                      ],
+            child: GetBuilder<YoutubeController>(
+                init: youtubeController,
+                builder: (youtubeController) {
+                  if(youtubeController.status == Status.Completed)
+                  return ListView.separated(
+                                padding: EdgeInsets.only(
+                                    left: 16.w, right: 16.w, top: 19.h, bottom: 16.h),
+                                itemCount: youtubeController.youtubeVideoList!.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap:(){
+                                      Get.back();
+                                      if(liveViewModel.liveStreamingModel.getYoutube == false)
+                                      liveViewModel.setYoutube(true, youtubeController.youtubeVideoList![index].id.videoId );
+                                      else{
+                                        liveViewModel.setYoutube(true, youtubeController.youtubeVideoList![index].id.videoId );
+                                        youtubeController.youtubePlayerController.load(youtubeController.youtubeVideoList![index].id.videoId);
+                                      }
+                                    },
+                                    child: Container(
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                              height: 193.h,
+                                              width: double.infinity,
+                                              child: Image.network(
+                                                youtubeController.youtubeVideoList![index].snippet.thumbnails.high.url,
+                                              fit: BoxFit.cover,)),
+                                          SizedBox(height: 12.h),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 5.w),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  youtubeController.youtubeVideoList![index].snippet.title,
+                                                  style: sfProDisplayMedium.copyWith(
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black
+                                                  ),),
+                                                SizedBox(height: 8.h),
+                                                Row(
+                                                  children: [
+                                                    Text(youtubeController.youtubeVideoList![index].snippet.channelTitle,
+                                                      style: sfProDisplayRegular.copyWith(
+                                                          fontSize: 12.sp,
+                                                          color: Colors.black.withOpacity(
+                                                              0.5)
+                                                      ),),
+                                                    SizedBox(width: 8.w),
+                                                    Text('${QuickHelp.getTimeAgo(DateTime.parse(youtubeController.youtubeVideoList![index].snippet.publishedAt))}',
+                                                      style: sfProDisplayRegular.copyWith(
+                                                          fontSize: 12.sp,
+                                                          color: Colors.black.withOpacity(
+                                                              0.5)
+                                                      ),),
+                                                  ],
+                                                )
+                                              ],
 
+                                            ),
+                                          )
+
+                                        ],
+                                      ),
                                     ),
-                                  )
+                                  );
+                                },
+                                separatorBuilder: (BuildContext context, int index) {
+                                  return SizedBox(height: 24.h,);
+                                },);
+                  else
+                    return Center(child: CircularProgressIndicator());
 
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(height: 24.h,);
-                        },);
-                    }
-                    else
-                      return SizedBox(child: Center(child: Text('Something went wrong', style: sfProDisplayMedium.copyWith(
-                        color: Colors.black
-                      ),)),);
-                  }),
-          )
+                }
+            ),
+
+                     ),
 
 
 

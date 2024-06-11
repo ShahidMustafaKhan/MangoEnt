@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:teego/view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/constants/typography.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
@@ -15,6 +16,7 @@ class MultiGuestGridSettings extends StatelessWidget {
   MultiGuestGridSettings(this.user);
 
   final GridController _controller = Get.find<GridController>();
+  final LiveViewModel liveViewModel = Get.find<LiveViewModel>();
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
@@ -44,12 +46,12 @@ class MultiGuestGridSettings extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible: _controller.isExpanded.value,
+                            visible: _controller.isExpanded.value && _controller.seat!=0 && liveViewModel.role == ZegoLiveRole.host,
                             child: GestureDetector(
                               onTap: (){
                                 Get.back();
-                                _controller.isExpanded.value=false;
-                                Get.find<LiveViewModel>().setExpandedFeature(false, null);
+                                _controller.seat=0;
+                                Get.find<LiveViewModel>().setExpandedFeature(true, 0);
                               },
                               child: Row(
                                 children: [

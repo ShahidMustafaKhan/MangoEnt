@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:teego/parse/LiveStreamingModel.dart';
 import 'package:teego/view/screens/home/battle.dart';
+import 'package:teego/view_model/ranking_controller.dart';
 import 'package:teego/view_model/userViewModel.dart';
 import 'package:teego/view_model/zego_controller.dart';
 
@@ -904,12 +905,15 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setTeamAGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url! };
     _battleModel.setTeamScoreA= coins + _battleModel.getTeamScoreA;
     _battleModel.save();
+    Get.find<RankingViewModel>().addRecord(coins);
   }
 
   sendGiftToTeamB({required String gift, required String audio, required int coins}){
     _battleModel.setTeamBGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url! };
     _battleModel.setTeamScoreB= coins + _battleModel.getTeamScoreB;
     _battleModel.save();
+    Get.find<RankingViewModel>().addRecord(coins);
+
   }
 
   sendGiftToAllTeams({required String gift, required String audio, required int coins}){
@@ -917,8 +921,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setTeamBGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url! };
     _battleModel.setTeamScoreA= coins + _battleModel.getTeamScoreA;
     _battleModel.setTeamScoreB= coins + _battleModel.getTeamScoreB;
-
     _battleModel.save();
+    Get.find<RankingViewModel>().addRecord(coins);
+
   }
 
   runGiftAnimationForTeamA(BattleModel value){

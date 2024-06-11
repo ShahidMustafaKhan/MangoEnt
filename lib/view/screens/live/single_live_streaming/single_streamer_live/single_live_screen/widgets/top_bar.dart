@@ -74,7 +74,7 @@ class _TopBarState extends State<TopBar> {
                                             ),
                                           ),
                                           backgroundColor: AppColors.grey500,
-                                          builder: (context) => AudienceDetailSheet(),
+                                          builder: (context) => AudienceDetailSheet(liveViewModel.liveStreamingModel.getAuthor!),
                                         );
                                       },
                                       child: Row(

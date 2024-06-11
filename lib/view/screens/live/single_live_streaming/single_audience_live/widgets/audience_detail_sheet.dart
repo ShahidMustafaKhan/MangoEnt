@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:teego/view_model/userViewModel.dart';
 
 import '../../../../../../helpers/quick_help.dart';
+import '../../../../../../parse/UserModel.dart';
 import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/constants/typography.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
 import '../../../../../../view_model/live_controller.dart';
 import '../../../../../widgets/custom_buttons.dart';
+import 'audience_gift_sheet.dart';
 
 
 class AudienceDetailSheet extends StatelessWidget {
-
+  final UserModel profileUser;
+  AudienceDetailSheet(this.profileUser);
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LiveViewModel>(builder: (liveViewModel)  {
+    return GetBuilder<UserViewModel>(builder: (userViewModel)  {
       return SizedBox(
-          height: 400,
+          height: userViewModel.currentUser.objectId != profileUser.objectId ? 400 : 230,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Stack(
@@ -45,13 +51,13 @@ class AudienceDetailSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text('🦊 ${liveViewModel.liveStreamingModel.getAuthor!.getFullName!} 🦊', style: sfProDisplayBold.copyWith(fontSize: 16)),
+                      Text('🦊 ${profileUser.getFullName!} 🦊', style: sfProDisplayBold.copyWith(fontSize: 16)),
                       const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'id: ${liveViewModel.liveStreamingModel.getAuthor!.getUid!}',
+                            'id: ${profileUser.getUid!}',
                             style: sfProDisplayRegular.copyWith(fontSize: 12, color: AppColors.white.withOpacity(0.7)),
                           ),
                           const SizedBox(width: 10),
@@ -67,7 +73,7 @@ class AudienceDetailSheet extends StatelessWidget {
                               children: [
                                 Image.asset(AppImagePath.marsIcon, height: 15, width: 15),
                                 const SizedBox(width: 5),
-                                Text(QuickHelp.getBirthdayFromDate(liveViewModel.liveStreamingModel.getAuthor!.getBirthday!)),
+                                Text(QuickHelp.getBirthdayFromDate(profileUser.getBirthday!)),
                               ],
                             ),
                           ),
@@ -78,7 +84,7 @@ class AudienceDetailSheet extends StatelessWidget {
                               borderRadius: const BorderRadius.all(Radius.circular(35)),
                               color: AppColors.darkOrange,
                             ),
-                            child: Text('Lv. ${liveViewModel.liveStreamingModel.getAuthor!.getLevel ?? 1}'),
+                            child: Text('Lv. ${profileUser.getLevel ?? 1}'),
                           ),
                         ],
                       ),
@@ -88,7 +94,7 @@ class AudienceDetailSheet extends StatelessWidget {
                         children: [
                           Column(
                             children: [
-                              Text(liveViewModel.liveStreamingModel.getAuthor!.getFollowers!.length.toString(), style: sfProDisplayBold.copyWith(fontSize: 18)),
+                              Text(profileUser.getFollowers!.length.toString(), style: sfProDisplayBold.copyWith(fontSize: 18)),
                               const SizedBox(height: 5),
                               Text(
                                 'Following',
@@ -106,7 +112,7 @@ class AudienceDetailSheet extends StatelessWidget {
                           ),
                           Column(
                             children: [
-                              Text(liveViewModel.liveStreamingModel.getAuthor!.getFollowing!.length.toString(), style: sfProDisplayBold.copyWith(fontSize: 18)),
+                              Text(profileUser.getFollowing!.length.toString(), style: sfProDisplayBold.copyWith(fontSize: 18)),
                               const SizedBox(height: 5),
                               Text(
                                 'Followers',
@@ -137,8 +143,10 @@ class AudienceDetailSheet extends StatelessWidget {
                           )
                         ],
                       ),
-                      const SizedBox(height: 30),
-                      Container(
+                      if(userViewModel.currentUser.objectId != profileUser.objectId)
+                        const SizedBox(height: 30),
+                      if(userViewModel.currentUser.objectId != profileUser.objectId)
+                        Container(
                         decoration: BoxDecoration(
                           color: AppColors.orangeContainer,
                           borderRadius: BorderRadius.circular(18),
@@ -184,21 +192,26 @@ class AudienceDetailSheet extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Spacer(),
-                      Row(
+                      if(userViewModel.currentUser.objectId != profileUser.objectId)
+                        const Spacer(),
+                      if(userViewModel.currentUser.objectId != profileUser.objectId)
+                        Row(
                         children: [
                           Expanded(
                             child: PrimaryButton(
-                              onTap: () {},
+                              onTap: () {
+                                userViewModel.followOrUnFollow(profileUser.objectId!);
+                              },
                               bgColor: AppColors.yellowColor,
                               borderRadius: 50,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  if(!userViewModel.followingUser(profileUser))
                                   const Icon(Icons.add, color: AppColors.black),
                                   const SizedBox(width: 8),
                                   Text(
-                                    'Follow',
+                                    userViewModel.followingUser(profileUser) ? 'Following' : 'Follow',
                                     style: sfProDisplayMedium.copyWith(color: AppColors.black, fontSize: 18),
                                   ),
                                 ],
@@ -206,18 +219,40 @@ class AudienceDetailSheet extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          Container(
-                            padding: const EdgeInsets.all(7),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [
-                                  AppColors.progressPinkColor,
-                                  AppColors.progressPinkColor2,
-                                ],
+                          GestureDetector(
+                            onTap: () {
+                              Get.back();
+                              showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                ),
+                                isScrollControlled: true,
+                                backgroundColor: AppColors.grey500,
+                                builder: (context) => Wrap(
+                                  children: [
+                                    AudienceGiftSheet(profileUser: profileUser, isProfileUser: true,),
+                                  ],
+                                ),
+                              );
+                            },
+
+                            child: Container(
+                              padding: const EdgeInsets.all(7),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  colors: [
+                                    AppColors.progressPinkColor,
+                                    AppColors.progressPinkColor2,
+                                  ],
+                                ),
                               ),
+                              child: Image.asset(AppImagePath.giftIcon, width: 25, height: 25),
                             ),
-                            child: Image.asset(AppImagePath.giftIcon, width: 25, height: 25),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
@@ -253,7 +288,7 @@ class AudienceDetailSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(color: AppColors.yellowColor, width: 2),
                       borderRadius: BorderRadius.circular(80),
-                      image: DecorationImage(image: NetworkImage(liveViewModel.liveStreamingModel.getAuthor!.getAvatar!.url!), fit: BoxFit.cover),
+                      image: DecorationImage(image: NetworkImage(profileUser.getAvatar!.url!), fit: BoxFit.cover),
                     ),
                   ),
                 ),

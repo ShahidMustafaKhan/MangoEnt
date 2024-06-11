@@ -9,54 +9,43 @@ import 'chat_card.dart';
 
 class ChatFeature extends StatelessWidget {
   ChatFeature();
-
-  final LiveMessagesViewModel liveMessagesViewModel = Get.put(LiveMessagesViewModel());
-
-
   Widget build(BuildContext context) {
-    return GetBuilder<BattleViewModel>(builder: (controller) {
-        return GetBuilder<LiveMessagesViewModel>(builder: (liveMessagesViewModel) {
-          return liveMessagesViewModel.showDisclaimerMessage && controller.isBattleView==false ?
-                disclaimerMessage():
-                Container(
+    final LiveMessagesViewModel liveMessagesViewModel = Get.find();
+    return GetBuilder<LiveMessagesViewModel>(init: liveMessagesViewModel ,builder: (liveMessagesViewModel) {
+          return Container(
                   height: 185.h,
-                  child: ListView.builder(
-                    reverse: true,
+                  child: ListView.separated(
                     physics: AlwaysScrollableScrollPhysics(),
                     shrinkWrap: true,
+                    reverse: true,
                     itemCount: liveMessagesViewModel.liveMessagesModelList.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: 20, right: 10.w),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: ChatCard(liveMessagesModel: liveMessagesViewModel.liveMessagesModelList[index]),
-                        ),
+                      return Align(
+                        alignment: Alignment.topLeft,
+                        child: ChatCard(liveMessagesModel: liveMessagesViewModel.liveMessagesModelList[index],index: index, lastMessage: liveMessagesViewModel.liveMessagesModelList.length-1 == index,),
                       );
-                    },
+                    }, separatorBuilder: (BuildContext context, int index) { return SizedBox(height: 9.h); },
                   ),
                 );
               }
-            );
-          }
         );
   }
 
-   Widget disclaimerMessage(){
-    return Container(
-      margin: EdgeInsets.fromLTRB(0.w, 0, 0, 0),
-      constraints: BoxConstraints (
-        maxWidth: 308.w,
-      ),
-      child: Text(
-        'We moderate Live Broadcasts. Smoking, Vulgarity, \nPorn, indecent exposure or Any copyright infringement \nis NOT Allowed and will be banned. Live broadcasts are \nmonitored 24 hours a day.\nWarning. Third party Top-UP or Recharge is subject\nto account closure, suspension, or permanent ban.',
-        style: SafeGoogleFont (
-          'DM Sans',
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w400,
-          color: const Color(0xffffffff),
-        ),
-      ),
-    );
-  }
+  //  Widget disclaimerMessage(){
+  //   return Container(
+  //     margin: EdgeInsets.fromLTRB(0.w, 0, 0, 0),
+  //     constraints: BoxConstraints (
+  //       maxWidth: 308.w,
+  //     ),
+  //     child: Text(
+  //       'We moderate Live Broadcasts. Smoking, Vulgarity, \nPorn, indecent exposure or Any copyright infringement \nis NOT Allowed and will be banned. Live broadcasts are \nmonitored 24 hours a day.\nWarning. Third party Top-UP or Recharge is subject\nto account closure, suspension, or permanent ban.',
+  //       style: SafeGoogleFont (
+  //         'DM Sans',
+  //         fontSize: 12.sp,
+  //         fontWeight: FontWeight.w400,
+  //         color: const Color(0xffffffff),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

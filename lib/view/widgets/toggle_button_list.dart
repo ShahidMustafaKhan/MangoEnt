@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:teego/view_model/ranking_controller.dart';
 
 import '../../utils/constants/app_constants.dart';
 import '../../utils/constants/typography.dart';
+import '../../utils/routes/app_routes.dart';
 
 class ToggleButtonList extends StatefulWidget {
   final int? selected;
@@ -51,15 +55,21 @@ class _ToggleButtonListState extends State<ToggleButtonList> {
             ),
           ),
           SizedBox(width: 12.w),
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child:
-            SvgPicture.asset(AppImagePath.searchIcon, ),
+          GestureDetector(
+            onTap: ()=>  Get.toNamed(AppRoutes.searchScreen),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child:
+              SvgPicture.asset(AppImagePath.searchIcon, ),
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child:
-                Image.asset(AppImagePath.trophyIcon, width: 40, height: 40),
+          GestureDetector(
+            onTap: ()=> Get.toNamed(AppRoutes.topFan),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child:
+                  Image.asset(AppImagePath.trophyIcon, width: 40, height: 40),
+            ),
           ),
           SizedBox(width: 9.w),
         ],

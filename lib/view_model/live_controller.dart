@@ -9,7 +9,10 @@ import 'package:teego/parse/BattleStreamingModel.dart';
 import 'package:teego/parse/LiveStreamingModel.dart';
 import 'package:teego/view_model/gift_contoller.dart';
 import 'package:teego/view_model/live_messages_controller.dart';
+import 'package:teego/view_model/ranking_controller.dart';
 import 'package:teego/view_model/userViewModel.dart';
+import 'package:teego/view_model/youtube_controller.dart';
+import 'package:teego/view_model/zego_controller.dart';
 import '../data/app/setup.dart';
 import '../helpers/quick_help.dart';
 import '../parse/TimerModel.dart';
@@ -22,7 +25,7 @@ import 'multi_guest_grid_controller.dart';
 
 
 class LiveViewModel extends GetxController {
-  final ZegoLiveRole role;
+  ZegoLiveRole role;
   final LiveStreamingModel? liveModel;
 
   //---- live preview-------
@@ -67,7 +70,7 @@ class LiveViewModel extends GetxController {
   List<UserModel> multiGuestCoHostList=[];
   List<UserModel> audioCoHostList=[];
 
-
+  List? myWishList = [];
 
 
   bool get isSingleLive {
@@ -144,6 +147,8 @@ class LiveViewModel extends GetxController {
         String audio = lastGift["audio"];
         Get.find<GiftViewModel>().loadAnimation(gift, audio);
     }
+      if(liveStreamingModel.getMyWishList!= null){
+      myWishList = liveStreamingModel.getMyWishList!;}
       update();
 
       updateViewersList(value.getViewersId ?? []);
@@ -152,6 +157,7 @@ class LiveViewModel extends GetxController {
       if(value.getStreaming==false && role==ZegoLiveRole.audience){
         closeAlert(Get.context!, forceEnded: true);
       }
+      setYoutubeControllerValue();
 
       });
     }
@@ -257,6 +263,9 @@ class LiveViewModel extends GetxController {
 
   closeAlert(BuildContext context, {bool forceEnded=false}) {
     if (role!=ZegoLiveRole.host) {
+      if(forceEnded==true)
+      Get.toNamed(AppRoutes.endScreen);
+      else
       popBackToHomePage(forceEnded: forceEnded);
     } else {
       QuickHelp.showDialogLivEend(
@@ -266,7 +275,7 @@ class LiveViewModel extends GetxController {
         message: 'live_streaming.finish_live_ask'.tr(),
         onPressed: () {
           Get.back();
-          popBackToHomePage();
+          Get.toNamed(AppRoutes.endScreen);
           endLive();
         },
       );
@@ -281,10 +290,17 @@ class LiveViewModel extends GetxController {
   }
 
   void popBackToHomePage({bool forceEnded=false}){
+    if(forceEnded==true){
     Get.back();
     Get.back();
-    if(forceEnded==true)
-    QuickHelp.showSnackBar(title: 'Streamer Ended Live');
+    Get.back();
+    }
+    else{
+      Get.back();
+      Get.back();
+      Get.back();
+
+    }
   }
 
   void startLive(){
@@ -325,6 +341,7 @@ class LiveViewModel extends GetxController {
   sendGift({required String gift, required String audio, required int coins}){
     liveStreamingModel.setGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url!, "coins": coins };
     liveStreamingModel.save();
+    Get.find<RankingViewModel>().addRecord(coins);
   }
 
   fetchViewersList() async {
@@ -459,6 +476,29 @@ class LiveViewModel extends GetxController {
     update();
   }
 
+  void setYoutubeControllerValue(){
+    if(isMultiGuest && role == ZegoLiveRole.audience) {
+      if (liveStreamingModel.getYoutube == true) {
+        if (liveStreamingModel.getYoutubeVideoId != null && Get
+            .find<YoutubeController>()
+            .videoId != liveStreamingModel.getYoutubeVideoId){
+          Get.find<YoutubeController>().videoId=liveStreamingModel.getYoutubeVideoId!;
+          Get.find<YoutubeController>().youtubePlayerController.load(liveStreamingModel.getYoutubeVideoId!);}
+      if(Get.find<YoutubeController>().youtubePlayerController.value.isPlaying!=liveStreamingModel.getYoutubeVideoPlaying){
+        if(liveStreamingModel.getYoutubeVideoPlaying == true)
+          Get.find<YoutubeController>().youtubePlayerController.play();
+        else
+          Get.find<YoutubeController>().youtubePlayerController.pause();
+        }
+      }
+    }
+  }
+
+  void youtubePlaying(bool value){
+    liveStreamingModel.setYoutubeVideoPlaying = value;
+    liveStreamingModel.save();
+  }
+
   void changeMultiGuestSeatView(int seat){
     liveStreamingModel.setYoutube = false;
     Get.find<GridController>().isExpanded.value=false;
@@ -525,13 +565,57 @@ class LiveViewModel extends GetxController {
   //----------------------
 
 
+  //---------------- join other streamer Live Session
+
+  joinOtherStreamerLiveSession(LiveStreamingModel? otherSessionLiveStreamingModel){
+    if(otherSessionLiveStreamingModel!=null){
+      liveStreamingModel=otherSessionLiveStreamingModel;
+      update();
+      subscribeLiveStreamingModel();
+      Get.find<LiveMessagesViewModel>().updateLiveMessages(liveStreamingModel:otherSessionLiveStreamingModel);
+      Get.find<LiveMessagesViewModel>().setupLiveMessages();
+      if(!isAudioLive)
+      Get.find<ZegoController>().exitCurrentJoinOtherSession(otherSessionLiveStreamingModel);
+      else
+        Get.find<ZegoController>().exitAudioCurrentJoinOtherSession(otherSessionLiveStreamingModel);
+
+
+    }
+  }
+
+  endLiveStreamingAndJoinOtherSession(BuildContext context, LiveStreamingModel? otherSessionLiveStreamingModel){
+    if(role==ZegoLiveRole.host){
+      QuickHelp.showDialogLivEend(
+        context: context,
+        title: 'live_streaming.live_'.tr(),
+        confirmButtonText: 'live_streaming.finish_live'.tr(),
+        message: 'End Stream to Join New Session?',
+        onPressed: () {
+          Get.back();
+          endLive().then((value){
+            role=ZegoLiveRole.audience;
+            update();
+            Get.find<ZegoController>().role= ZegoLiveRole.audience;
+            Get.find<LiveMessagesViewModel>().role= ZegoLiveRole.audience;
+            Get.find<ZegoController>().update();
+            joinOtherStreamerLiveSession(otherSessionLiveStreamingModel);
+          });
+        },
+      );
+    }
+  }
+
+
   LiveViewModel(this.role, this.liveModel);
 
   @override
   void onInit() {
+    role=this.role;
     if(role==ZegoLiveRole.audience){
       liveStreamingModel=this.liveModel!;
       giftListLength=liveStreamingModel.getGiftsList!.length;
+      if(liveStreamingModel.getMyWishList!= null)
+        myWishList = liveStreamingModel.getMyWishList!;
       updateLiveStreamingModel();
     }
     if(role==ZegoLiveRole.host)

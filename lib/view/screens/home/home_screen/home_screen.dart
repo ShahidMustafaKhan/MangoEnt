@@ -3,12 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:teego/view/screens/home/popular.dart';
 
-import '../../../parse/UserModel.dart';
-import '../../../view_model/tab_bar_controller.dart';
-import '../../widgets/toggle_button_list.dart';
-import 'battle.dart';
-import 'explore.dart';
-import 'game.dart';
+import '../../../../parse/UserModel.dart';
+import '../../../../view_model/tab_bar_controller.dart';
+import '../../../widgets/toggle_button_list.dart';
+import '../battle.dart';
+import '../explore.dart';
+import '../game/game.dart';
 
 
 class HomeView extends StatelessWidget {

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/utils/constants/typography.dart';
 import 'package:teego/utils/routes/app_routes.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/widgets/custom_buttons.dart';
 import 'package:teego/view_model/live_controller.dart';
+
+import '../../widgets/beauty_filters_sheets/sticker_modal_sheets.dart';
 
 class LiveBottomCard extends StatelessWidget {
   final LiveViewModel liveViewModel;
@@ -24,7 +27,9 @@ class LiveBottomCard extends StatelessWidget {
             children: [
               const SizedBox(width: 20),
               if(liveViewModel.selectedLiveType.value != liveViewModel.bottomTab[liveViewModel.gameLiveIndex] && liveViewModel.selectedLiveType.value != liveViewModel.bottomTab[liveViewModel.audioLiveIndex])
-              Image.asset(AppImagePath.makeup, width: 30, height: 30),
+              GestureDetector(
+                  onTap: () => openBottomSheet(StickerModalSheet(),context),
+                  child: Image.asset(AppImagePath.makeup, width: 30, height: 30)),
               if(liveViewModel.selectedLiveType.value != liveViewModel.bottomTab[liveViewModel.gameLiveIndex] && liveViewModel.selectedLiveType.value != liveViewModel.bottomTab[liveViewModel.audioLiveIndex])
                 const SizedBox(width: 40),
               Expanded(

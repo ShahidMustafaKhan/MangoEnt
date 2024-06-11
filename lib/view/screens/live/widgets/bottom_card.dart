@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/constants/typography.dart';
 import '../../../../view_model/live_controller.dart';
+import '../single_live_streaming/single_streamer_live/single_live_screen/widgets/chat_feature.dart';
 import 'bottom_bar.dart';
 import '../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 
@@ -51,58 +52,8 @@ class BottomCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(bottom: 0),
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) {
-                          final message = messages[index];
-                          return Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.only(right: 10),
-                                      height: 25.h,
-                                      decoration: BoxDecoration(
-                                        color: Color(int.parse(message['color']!)),
-                                        borderRadius: BorderRadius.circular(19),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 5.w,
-                                          ),
-                                          Image.asset(
-                                            AppImagePath.profilePic,
-                                            width: 16.h,
-                                            height: 16.h,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            message['text']!,
-                                            style: sfProDisplayMedium.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              if(index!=messages.length-1)
-                              SizedBox(
-                                height: 9.h,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                      padding: EdgeInsets.only(bottom: 8.h),
+                      child: ChatFeature(),
                     ),
                   ),
                   SizedBox(

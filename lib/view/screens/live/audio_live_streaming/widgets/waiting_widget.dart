@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 
 import '../../../../../helpers/quick_help.dart';
@@ -115,7 +116,7 @@ class WaitingWidget extends StatelessWidget {
                                                 Text(user.getFullName ?? ''),
                                                 const SizedBox(width: 16),
                                                 SvgPicture.asset(
-                                                  AppImagePath.franceFlag,
+                                                  QuickActions.getCountryFlag(user),
                                                   width: 24,
                                                   height: 17,
                                                 ),

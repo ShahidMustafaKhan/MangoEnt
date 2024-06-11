@@ -11,8 +11,8 @@ import '../../../../../../view_model/zego_controller.dart';
 import '../../../../utils/constants/typography.dart';
 import '../../../../utils/global_variables.dart';
 import '../single_live_streaming/single_audience_live/widgets/audience_gift_sheet.dart';
-import '../single_live_streaming/single_audience_live/widgets/basic_audience_feature_sheet.dart';
-import '../single_live_streaming/single_streamer_live/single_live_screen/widgets/basic_feature_sheet.dart';
+import 'basic_audience_feature_sheet.dart';
+import 'basic_feature_sheet.dart';
 import '../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import '../zegocloud/zim_zego_sdk/internal/sdk/zim/Define/zim_room_request.dart';
 import '../zegocloud/zim_zego_sdk/live_audio_room_manager.dart';
@@ -54,6 +54,7 @@ class BottomBar extends StatelessWidget {
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
+                          isScrollControlled: false,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),

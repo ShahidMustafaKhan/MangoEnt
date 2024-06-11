@@ -134,9 +134,11 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   static final String keyTaskCheckIn='taskCheckIn';
 
   static final String keyMyWishList='myWishList';
+  static final String keyDisableWishList='disableWishList';
   static final String keyAmount='amount';
   static final String keyReceived='received';
   static final String keyName='name';
+  static final String keyPath='path';
 
   static final String keyStickerTitle='stickerTitle';
   static final String keyStickerType='stickerType';
@@ -168,6 +170,7 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
 
   static final String keyYoutube='youtube';
   static final String keyYoutubeVideoId='youtubeVideoId';
+  static final String keyYoutubeVideoPlaying='youtubeVideoPlaying';
 
 
 
@@ -516,17 +519,17 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   set removeMyWishList(Map<String,dynamic> wishItem) => setRemove(keyMyWishList, wishItem);
   set removeMyWishAllList(List wishItem) => setRemoveAll(keyMyWishList, wishItem);
 
-  // List<dynamic>? get getPrimaryHostScore {
-  //
-  //   List<dynamic> gifts = [];
-  //
-  //   List<dynamic>? gift = get<List<dynamic>>(keyPrimaryHostScore);
-  //   if(gift != null && gift.length > 0){
-  //     return gift;
-  //   } else {
-  //     return gifts;
-  //   }
-  // }
+  set setDisableWishList(bool isFirstLive) => set<bool>(keyDisableWishList, isFirstLive);
+
+  bool? get getDisableWishList {
+    var isMultiGuest = get<bool>(keyDisableWishList);
+
+    if(isMultiGuest != null){
+      return isMultiGuest;
+    }else{
+      return false;
+    }
+  }
 
   List<dynamic>? get getPrimaryHostScore {
     List<dynamic> gifts = [];
@@ -764,6 +767,15 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
 
   String? get getYoutubeVideoId => get<String>(keyYoutubeVideoId);
   set setYoutubeVideoId (String id) => set<String>(keyYoutubeVideoId, id);
+
+  bool? get getYoutubeVideoPlaying {
+    bool? playing = get<bool>(keyYoutubeVideoPlaying);
+    if(playing == null)
+      return false;
+    else
+      return playing;
+  }
+  set setYoutubeVideoPlaying (bool value) => set<bool>(keyYoutubeVideoPlaying, value);
 
 }
 
