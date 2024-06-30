@@ -32,6 +32,9 @@ class ChatViewModel extends GetxController {
   ParseFileBase? parseFile;
   int? _countSelectedPictures = 0;
 
+  RxString text= ''.obs;
+
+
   int currentView = 0;
   List<Widget>? pages;
 
@@ -91,7 +94,7 @@ class ChatViewModel extends GetxController {
     });
   }
 
-  Future<List<dynamic>?> _loadMessages() async {
+  Future<List<dynamic>?> loadMessages() async {
 
     QueryBuilder<MessageModel> queryFrom =
     QueryBuilder<MessageModel>(MessageModel());
@@ -417,12 +420,19 @@ class ChatViewModel extends GetxController {
       update();
   }
 
+  void setInitialLoad(){
+    Future.delayed(Duration(microseconds: 100), () async {
+      initialLoad = await loadMessages();
+      update();
+    });
+  }
+
   ChatViewModel(this.mUser);
 
   @override
   void onInit() {
     Future.delayed(Duration(microseconds: 100), (){
-        initialLoad = _loadMessages();
+        initialLoad = loadMessages();
         update();
     });
 

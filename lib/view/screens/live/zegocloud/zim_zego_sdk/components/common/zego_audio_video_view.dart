@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../internal/sdk/express/express_service.dart';
 
 class ZegoAudioVideoView extends StatefulWidget {
@@ -32,7 +33,7 @@ class _ZegoAudioVideoViewState extends State<ZegoAudioVideoView> {
       return videoView();
     } else {
       if (widget.userInfo.streamID != null) {
-        return widget.fromMultiGuest==false ? coHostNomalView(): widget.seat == 4 || widget.seat == 6 ? multiGuestCameraOffView(fem,ffem,widget.seat!): multiGuestCameraOffView9_12(fem,ffem,widget.seat!,);
+        return coHostNomalView();
       } else {
         return Container();
       }
@@ -45,6 +46,10 @@ class _ZegoAudioVideoViewState extends State<ZegoAudioVideoView> {
       padding: EdgeInsets.fromLTRB(1*fem, 0.9*fem, 1*fem, 7*fem),
       width:  width ?? 126*fem,
       height: height ?? 125*fem,
+      decoration: BoxDecoration(
+        border: Border.all(color: Color(0xffBD8DF4), width: 3)
+
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -146,49 +151,39 @@ class _ZegoAudioVideoViewState extends State<ZegoAudioVideoView> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration (
-
-          ),
         ),
         Center(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(90)),
-              child: Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
+          child: ValueListenableBuilder<String?>(
+              valueListenable: widget.userInfo.avatarUrlNotifier,
+              builder: (context, url, _) {
+                if(url != null)
+                  return Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Color(0xffBD8DF4), width: 3)
+                  ),
+                  child: CircleAvatar(
+                    radius: 45.r,
+                    child: ClipRRect(
+                                borderRadius: BorderRadius.circular(65),
+                                child: Image.network(url))
+
+                  ),
                 ),
-                child: ValueListenableBuilder<String?>(
-                    valueListenable: widget.userInfo.avatarUrlNotifier,
-                    builder: (context, url, _) {
-                      if(url != null)
-                      return  Image.network(url);
-                      else
-                        return SizedBox();
-                  }
-                ),
-              ),
-            ),
+
+              );
+                else
+                  return SizedBox();
+            }
           ),
         ),
       ],
     );
   }
 
-  // Widget videoView() {
-  //   return ValueListenableBuilder<Widget?>(
-  //     valueListenable: widget.userInfo.videoViewNotifier,
-  //     builder: (context, view, _) {
-  //       if (view != null) {
-  //         return view;
-  //       } else {
-  //         return Container();
-  //       }
-  //     },
-  //   );
-  // }
+
   Widget videoView() {
     return ValueListenableBuilder<Widget?>(
       valueListenable: widget.userInfo.videoViewNotifier,

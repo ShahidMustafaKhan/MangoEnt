@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Trans;
@@ -13,10 +15,12 @@ import 'package:teego/view_model/ranking_controller.dart';
 import 'package:teego/view_model/userViewModel.dart';
 import 'package:teego/view_model/youtube_controller.dart';
 import 'package:teego/view_model/zego_controller.dart';
+import 'package:wakelock/wakelock.dart';
 import '../data/app/setup.dart';
 import '../helpers/quick_help.dart';
 import '../parse/TimerModel.dart';
 import '../parse/UserModel.dart';
+import '../utils/constants/status.dart';
 import '../utils/routes/app_routes.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/internal_defines.dart';
@@ -36,6 +40,11 @@ class LiveViewModel extends GetxController {
     LiveStreamingModel.keyTypeGameLive,
   ];
 
+
+  late Timer liveTimer;
+  RxInt liveTime=0.obs;
+
+
   int multiLiveIndex=0;
   int singleLiveIndex=1;
   int audioLiveIndex=2;
@@ -47,17 +56,21 @@ class LiveViewModel extends GetxController {
 
   RxString title = ''.obs;
   RxString mode = 'Public'.obs;
+  RxString backgroundImage=''.obs;
   RxList tagList=[].obs;
   RxString selectedLanguage='Language'.obs;
   RxString roomAnnouncement=''.obs;
   LiveStreamingModel liveStreamingModel= LiveStreamingModel();
+  late LiveStreamingModel tempLiveStreamingModel;
   LiveQuery liveQuery = LiveQuery();
   Subscription? subscription;
   int giftListLength=0;
   List giftSendersList=[];
+  RxBool isCameraOn = true.obs;
   ParseFileBase? parseFile;
   RxString selectedLiveType=LiveStreamingModel.keyTypeSingleLive.obs;
   List viewerList=[];
+  RxBool giftAnimation = true.obs;
 
   //------ people who are live list
   List<UserModel> liveUsers=[];
@@ -71,6 +84,17 @@ class LiveViewModel extends GetxController {
   List<UserModel> audioCoHostList=[];
 
   List? myWishList = [];
+
+  List blockList=[];
+  List disableList=[];
+  List adminList=[];
+
+  Status status = Status.Completed;
+
+  RxBool dislike = false.obs;
+
+  RxBool chatField = false.obs;
+  TextEditingController chatEditingController = TextEditingController();
 
 
   bool get isSingleLive {
@@ -102,10 +126,28 @@ class LiveViewModel extends GetxController {
   }
 
 
+  set toggleDislike(bool value){
+    dislike.value = !dislike.value;
+  }
 
-  addParseFile(ParseFileBase? file){
+
+
+  addParseFile(ParseFileBase? file, File imageFile, BuildContext context) async {
     parseFile = file;
-    update();
+    liveStreamingModel.setImage = file!;
+    ParseResponse response = await liveStreamingModel.save();
+    if(response.success && response.results!= null ){
+      liveStreamingModel = response.results!.first;
+      QuickHelp.hideLoadingDialog(context);
+      QuickHelp.hideLoadingDialog(context);
+      update();
+
+    }
+    else{
+      QuickHelp.hideLoadingDialog(context);
+      QuickHelp.hideLoadingDialog(context);
+    }
+
   }
 
   updateLiveStreamingModel(){
@@ -114,6 +156,17 @@ class LiveViewModel extends GetxController {
 
   saveLiveStreamingModel(){
     liveStreamingModel.save();
+  }
+
+  Future<void> toggleCamera(CameraController cameraController) async {
+    if (isCameraOn.value) {
+      await cameraController.pausePreview();
+    } else {
+      await cameraController.resumePreview();
+    }
+
+      isCameraOn.value = !isCameraOn.value;
+
   }
 
 
@@ -158,11 +211,16 @@ class LiveViewModel extends GetxController {
         closeAlert(Get.context!, forceEnded: true);
       }
       setYoutubeControllerValue();
+      checkKickOutUserList(value);
+      blockUserList(value);
+      getDisableChatUsers(value);
+      getAdminList(value);
+      changeBackgroundImage(value);
 
       });
     }
 
-  unSubscribeLiveStreamingModel() async {
+  Future unSubscribeLiveStreamingModel() async {
     if (subscription != null) {
       liveQuery.client.unSubscribe(subscription!);
     }
@@ -175,7 +233,8 @@ class LiveViewModel extends GetxController {
     liveStreamingModel.setAuthor =currentUser;
     liveStreamingModel.setAuthorId =currentUser.objectId!;
     liveStreamingModel.setAuthorUid =currentUser.getUid!;
-    // liveStreamingModel.setImage = parseFile!;
+    if(parseFile != null)
+    liveStreamingModel.setImage = parseFile!;
     if (currentUser.getGeoPoint != null) {
       liveStreamingModel.setStreamingGeoPoint =currentUser.getGeoPoint!;
     }
@@ -188,6 +247,7 @@ class LiveViewModel extends GetxController {
     liveStreamingModel.setMode =  mode.value;
     liveStreamingModel.setRoomAnnouncement =  roomAnnouncement.value;
     liveStreamingModel.setLanguage=  selectedLanguage.value;
+    liveStreamingModel.setBackgroundImage =  backgroundImage.value;
 
     if(selectedLiveType.value == bottomTab[audioLiveIndex])
     liveStreamingModel.setAudioSeats= nineMemberIndex.value == 0 ? 8 : 11;
@@ -223,7 +283,7 @@ class LiveViewModel extends GetxController {
       QuickHelp.showAppNotificationAdvanced(
           context: context,
           title: "live_streaming.live_set_cover_error".tr(),
-          message: "unknown_error".tr(),
+          message: error!.message,
           isError: true,
           user: Get.find<UserViewModel>().currentUser);
 
@@ -234,7 +294,7 @@ class LiveViewModel extends GetxController {
       QuickHelp.showAppNotificationAdvanced(
           context: context,
           title: "live_streaming.live_set_cover_error".tr(),
-          message: "unknown_error".tr(),
+          message: err,
           isError: true,
           user: Get.find<UserViewModel>().currentUser);
     });
@@ -245,6 +305,7 @@ class LiveViewModel extends GetxController {
     if(uid!=liveStreamingModel.getAuthor!.getUid!){
       if(updateType == ZegoUpdateType.Add){
         liveStreamingModel.addViewersCount = 1;
+        liveStreamingModel.setViewsCount = 1;
         liveStreamingModel.setViewersId = uid;
       }
       else{
@@ -261,10 +322,10 @@ class LiveViewModel extends GetxController {
 
   }
 
-  closeAlert(BuildContext context, {bool forceEnded=false}) {
+  closeAlert(BuildContext context, {bool forceEnded=false, bool kickOut = false}) {
     if (role!=ZegoLiveRole.host) {
       if(forceEnded==true)
-      Get.toNamed(AppRoutes.endScreen);
+      Get.toNamed(AppRoutes.endScreen, arguments: kickOut);
       else
       popBackToHomePage(forceEnded: forceEnded);
     } else {
@@ -285,6 +346,7 @@ class LiveViewModel extends GetxController {
   Future<void> endLive() async {
     if(role==ZegoLiveRole.host){
       liveStreamingModel.setStreaming=false;
+      liveStreamingModel.setLiveTime=liveTime.value.toString();
       liveStreamingModel.save();
     }
   }
@@ -303,7 +365,7 @@ class LiveViewModel extends GetxController {
     }
   }
 
-  void startLive(){
+  Future<void> startLive() async {
     if(role==ZegoLiveRole.host) {
       liveStreamingModel.setStreaming = true;
       liveStreamingModel.save();
@@ -340,8 +402,12 @@ class LiveViewModel extends GetxController {
 
   sendGift({required String gift, required String audio, required int coins}){
     liveStreamingModel.setGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url!, "coins": coins };
+    liveStreamingModel.setGifterCount = 1;
+    liveStreamingModel.setTotalCoins = coins;
+    liveStreamingModel.addDiamonds = coins;
     liveStreamingModel.save();
     Get.find<RankingViewModel>().addRecord(coins);
+    Get.find<UserViewModel>().deductBalance(coins);
   }
 
   fetchViewersList() async {
@@ -408,7 +474,7 @@ class LiveViewModel extends GetxController {
     queryBuilder.whereNotEqualTo(
         LiveStreamingModel.keyAuthorUid, Get.find<UserViewModel>().currentUser.getUid);
     queryBuilder.whereNotContainedIn(
-        LiveStreamingModel.keyAuthor, Get.find<UserViewModel>().currentUser.getBlockedUsers!);
+        LiveStreamingModel.keyAuthorUid, Get.find<UserViewModel>().currentUser.getBlockedUsersIds!);
     queryBuilder.whereValueExists(LiveStreamingModel.keyAuthor, true);
     queryBuilder.whereDoesNotMatchQuery(
         LiveStreamingModel.keyAuthor, queryUsers);
@@ -564,6 +630,82 @@ class LiveViewModel extends GetxController {
 
   //----------------------
 
+  // ------------
+
+  joinOtherHostSession(String objectId){
+
+    unSubscribeLiveStreamingModel().then((value) async {
+      endLive().then((value) async {
+        tempLiveStreamingModel = liveStreamingModel;
+        LiveStreamingModel? otherSessionLiveStreamingModel = await getOtherHostLiveObject(objectId);
+            // .then((otherSessionLiveStreamingModel){
+          tempLiveStreamingModel = liveStreamingModel;
+          if(otherSessionLiveStreamingModel!.objectId  !=null) {
+            liveStreamingModel = otherSessionLiveStreamingModel;
+            Get.find<LiveMessagesViewModel>().role= ZegoLiveRole.audience;
+            role= ZegoLiveRole.audience;
+            Get.find<ZegoController>().update();
+            update();
+            Get.find<ZegoController>().role= ZegoLiveRole.audience;
+            subscribeLiveStreamingModel();
+            Get.find<LiveMessagesViewModel>().unSubscribeLiveMessageModels().then((value){
+              Get.find<LiveMessagesViewModel>().updateLiveMessages(
+                  liveStreamingModel: otherSessionLiveStreamingModel);
+              Get.find<LiveMessagesViewModel>().setupLiveMessages();
+            });
+          }
+        });
+      // });
+    });
+
+
+  }
+
+  Future<LiveStreamingModel?> getOtherHostLiveObject(String objectId) async {
+    QueryBuilder<LiveStreamingModel> queryBuilder = QueryBuilder<
+        LiveStreamingModel>(LiveStreamingModel());
+
+    queryBuilder.whereEqualTo(LiveStreamingModel.keyObjectId, objectId);
+    queryBuilder.includeObject([
+      LiveStreamingModel.keyAuthor,
+      LiveStreamingModel.keyAuthorInvited,
+      LiveStreamingModel.keyPrivateLiveGift,
+    ]);
+    ParseResponse response = await queryBuilder.query();
+    if (response.success) {
+      if (response.results != null){
+        LiveStreamingModel live = response.results!.first! as LiveStreamingModel;
+        return live;
+
+      }
+
+    }
+  }
+
+  backToLiveSession(){
+    unSubscribeLiveStreamingModel().then((value) async {
+      liveStreamingModel = tempLiveStreamingModel;
+      role=ZegoLiveRole.host;
+      startLive().then((value){
+        update();
+        Get.find<ZegoController>().role= ZegoLiveRole.host;
+        Get.find<LiveMessagesViewModel>().role= ZegoLiveRole.host;
+        Get.find<ZegoController>().update();
+        update();
+        subscribeLiveStreamingModel();
+        Get.find<LiveMessagesViewModel>().unSubscribeLiveMessageModels().then((value){
+          Get.find<LiveMessagesViewModel>().updateLiveMessages(
+              liveStreamingModel: liveStreamingModel);
+          Get.find<LiveMessagesViewModel>().setupLiveMessages();
+        });
+
+
+      });
+    });
+
+  }
+
+
 
   //---------------- join other streamer Live Session
 
@@ -606,6 +748,214 @@ class LiveViewModel extends GetxController {
   }
 
 
+  void incrementNewFansCount(){
+    liveStreamingModel.setFansCount = 1;
+    liveStreamingModel.save();
+  }
+
+  void incrementCount(int coins){
+    liveStreamingModel.setGifterCount = 1;
+    liveStreamingModel.setTotalCoins = coins;
+    liveStreamingModel.save();
+  }
+
+  void subscriberCount(){
+    liveStreamingModel.setSubscriberGain = 1;
+    liveStreamingModel.save();
+  }
+
+  void addComment(){
+    liveStreamingModel.setComments = 1;
+    liveStreamingModel.save();
+  }
+
+
+  runLiveTimer(){
+    liveTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      liveTime.value = liveTime.value+1;
+    });
+  }
+
+  cancelLiveTimer(){
+    if(liveTimer.isActive)
+    liveTimer.cancel();
+  }
+
+  disableRecordFeature(bool disable){
+    liveStreamingModel.setDisableRecord = disable;
+    liveStreamingModel.save();
+  }
+
+  disableScreenShotFeature(bool disable){
+    liveStreamingModel.setDisableScreenShot = disable;
+    liveStreamingModel.save();
+  }
+
+  disableGiftAnimation(bool disable){
+    giftAnimation.value = true;
+    update();
+  }
+
+  String filterMessage(String message) {
+    List<String> words = message.split(' ');
+    for (int i = 0; i < words.length; i++) {
+      if (liveStreamingModel.getFilteredList!.contains(words[i])) {
+        words[i] = "******";
+      }
+    }
+    return words.join(' ');
+  }
+
+  blockUserList(LiveStreamingModel value) async {
+    if(value.getBlockedList!.length != blockList.length) {
+      QueryBuilder<UserModel> query = QueryBuilder(UserModel.forQuery());
+      query.whereContainedIn(
+          UserModel.keyUid, value.getBlockedList!);
+      ParseResponse response = await query.query();
+      if (response.success) {
+        if (response.results != null && response.results!.isNotEmpty) {
+          blockList = response.results!;
+          status = Status.Completed;
+          update();
+        }
+        else {
+          blockList = [];
+          status = Status.Completed;
+          update();
+        }
+      }
+      else{
+        status = Status.Completed;
+        update();
+      }
+    }
+  }
+
+  addBlockUser(int uid){
+    liveStreamingModel.setBlockedList = uid;
+    liveStreamingModel.save();
+    Get.find<UserViewModel>().addToBlockList(uid);
+
+  }
+
+  removeBlockUser(int uid){
+    liveStreamingModel.removeBlockedUser = uid;
+    liveStreamingModel.save();
+    Get.find<UserViewModel>().removeFromBlockList(uid);
+  }
+
+  getAdminList(LiveStreamingModel value) async {
+    if(value.getAdminList!.length != adminList.length) {
+      QueryBuilder<UserModel> query = QueryBuilder(UserModel.forQuery());
+      query.whereContainedIn(
+          UserModel.keyUid, value.getAdminList!);
+      ParseResponse response = await query.query();
+      if (response.success) {
+        if (response.results != null && response.results!.isNotEmpty) {
+          adminList = response.results!;
+          status = Status.Completed;
+          update();
+        }
+        else {
+          adminList = [];
+          status = Status.Completed;
+          update();
+        }
+      }
+      else{
+        adminList = [];
+        status = Status.Completed;
+        update();
+      }
+    }
+  }
+
+  bool isCurrentUserInAdminList() {
+    return adminList.any((element) {
+      UserModel user = element as UserModel;
+      return user.getUid == Get.find<UserViewModel>().currentUser.getUid;
+    });
+  }
+
+
+  addAdmin(int uid){
+    liveStreamingModel.setAdminList = uid;
+    liveStreamingModel.save();
+  }
+
+  removeAdmin(int uid){
+    liveStreamingModel.removeAdminUser = uid;
+    liveStreamingModel.save();
+  }
+
+  getDisableChatUsers(LiveStreamingModel value) async {
+    if(value.getDisableChatList!.length != disableList.length) {
+      QueryBuilder<UserModel> query = QueryBuilder(UserModel.forQuery());
+      query.whereContainedIn(
+          UserModel.keyUid, value.getDisableChatList!);
+      ParseResponse response = await query.query();
+      if (response.success) {
+        if (response.results != null && response.results!.isNotEmpty) {
+          disableList = response.results!;
+          status = Status.Completed;
+          update();
+        }
+        else {
+          disableList = [];
+          status = Status.Completed;
+          update();
+        }
+      }
+      else{
+        status = Status.Completed;
+        update();
+      }
+    }
+  }
+
+  addDisableChatUser(int uid){
+    liveStreamingModel.setDisableChatList = uid;
+    liveStreamingModel.save();
+  }
+
+  removeDisableChatUser(int uid){
+    liveStreamingModel.removeDisableChatUser = uid;
+    liveStreamingModel.save();
+  }
+
+  addKickOutUser(int uid){
+    liveStreamingModel.setKickOutList = uid;
+    liveStreamingModel.setLiveTime = liveTime.value.toString();
+    liveStreamingModel.save();
+  }
+
+  checkKickOutUserList(LiveStreamingModel value) async {
+    if(role == ZegoLiveRole.audience)
+    if(value.getKickOutList!.contains(Get.find<UserViewModel>().currentUser.getUid)){
+      closeAlert(Get.context!, forceEnded: true , kickOut: true);
+    }
+  }
+
+  bool isUserInChatDisableList() {
+    if(role == ZegoLiveRole.audience)
+      if(liveStreamingModel.getDisableChatList!.contains(Get.find<UserViewModel>().currentUser.getUid)){
+        return true;
+      }
+    else{
+      return false;
+      }
+    else
+      return false;
+  }
+
+  changeBackgroundImage(LiveStreamingModel value){
+    if(value.getBackgroundImage != null && value.getBackgroundImage == backgroundImage.value)
+    backgroundImage.value = value.getBackgroundImage!;
+  }
+
+
+
+
   LiveViewModel(this.role, this.liveModel);
 
   @override
@@ -618,8 +968,11 @@ class LiveViewModel extends GetxController {
         myWishList = liveStreamingModel.getMyWishList!;
       updateLiveStreamingModel();
     }
-    if(role==ZegoLiveRole.host)
+    if(role==ZegoLiveRole.host){
+      runLiveTimer();
       endPreviousLiveStreaming();
+     }
+    Wakelock.enable();
 
 
     super.onInit();
@@ -628,6 +981,10 @@ class LiveViewModel extends GetxController {
   @override
   void onClose() {
     endLive();
+    if(role == ZegoLiveRole.host)
+    cancelLiveTimer();
+    Wakelock.disable();
+
     super.onClose();
   }
 

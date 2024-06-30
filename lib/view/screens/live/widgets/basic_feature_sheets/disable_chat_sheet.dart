@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:teego/utils/constants/app_constants.dart';
+import '../../../../../helpers/quick_actions.dart';
+import '../../../../../parse/UserModel.dart';
+import '../../../../../utils/constants/status.dart';
 import '../../../../../utils/constants/typography.dart';
 import '../../../../../utils/theme/colors_constant.dart';
+import '../../../../../view_model/live_controller.dart';
 import '../../../../widgets/custom_buttons.dart';
 
 class DisableChatSheet extends StatelessWidget {
@@ -11,76 +18,117 @@ class DisableChatSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                ...List.generate(
-                  1,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 18),
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 24,
-                          backgroundColor: AppColors.grey300,
-                          backgroundImage: AssetImage(AppImagePath.profilePic),
-                        ),
-                        const SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+    LiveViewModel liveViewModel = Get.find();
+    liveViewModel.getDisableChatUsers(liveViewModel.liveStreamingModel);
+
+    return GetBuilder<LiveViewModel>(
+        init: liveViewModel,
+        builder: (liveViewModel) {
+          return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if(liveViewModel.status == Status.Completed)
+                      ...List.generate(
+                        liveViewModel.disableList.length,
+                            (index) {
+                          UserModel user = liveViewModel.disableList[index] as UserModel;
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 18),
+                            child: Row(
                               children: [
-                                const Text('Savannah Nguyen'),
+                                CircleAvatar(
+                                  radius: 24,
+                                  backgroundColor: AppColors.grey300,
+                                  backgroundImage: NetworkImage(user.getAvatar!.url!),
+                                ),
                                 const SizedBox(width: 16),
-                                SvgPicture.asset(
-                                  AppImagePath.franceFlag,
-                                  width: 24,
-                                  height: 17,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(user.getFullName!),
+                                        const SizedBox(width: 16),
+                                        if(user.getHideMyLocation == false)
+                                          SvgPicture.asset(
+                                          QuickActions.getCountryFlag(user),
+                                          width: 24,
+                                          height: 17,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'id: ${user.getUid}',
+                                          style: sfProDisplayRegular.copyWith(
+                                              fontSize: 12,
+                                              color: AppColors.white.withOpacity(0.7)),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Icon(Icons.copy,
+                                            size: 15,
+                                            color: AppColors.white.withOpacity(0.7)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                PrimaryButton(
+                                  width: 65.w,
+                                  height: 32.h,
+                                  title: 'Remove',
+                                  borderRadius: 35,
+                                  textStyle: sfProDisplayMedium.copyWith(
+                                      fontSize: 16, color: AppColors.black),
+                                  bgColor: AppColors.yellowBtnColor,
+                                  onTap: () {
+                                    liveViewModel.disableList.removeAt(index);
+                                    liveViewModel.update();
+                                    liveViewModel.removeDisableChatUser(user.getUid!);
+                                  },
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Text(
-                                  'id: 12345678',
-                                  style: sfProDisplayRegular.copyWith(
-                                      fontSize: 12,
-                                      color: AppColors.white.withOpacity(0.7)),
-                                ),
-                                const SizedBox(width: 10),
-                                Icon(Icons.copy,
-                                    size: 15,
-                                    color: AppColors.white.withOpacity(0.7)),
-                              ],
-                            ),
+                          );}
+                    ),
+                    if(liveViewModel.disableList.isEmpty && liveViewModel.status == Status.Completed)
+                      Container(
+                        height: 200.h,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("*  ", style: sfProDisplayBlack.copyWith(color: Colors.red),),
+                            Text("No users restricted from chat feature", style: sfProDisplayMedium.copyWith(
+                              fontSize: 14.sp,
+
+                            ),),
                           ],
                         ),
-                        const Spacer(),
-                        PrimaryButton(
-                          width: 65.w,
-                          height: 32.h,
-                          title: 'Enable',
-                          borderRadius: 35,
-                          textStyle: sfProDisplayMedium.copyWith(
-                              fontSize: 16, color: AppColors.black),
-                          bgColor: AppColors.yellowBtnColor,
-                          onTap: () {},
+                      ),
+                    if(liveViewModel.status == Status.Loading)
+                      Container(
+                        height: 200.h,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator()
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      }
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:teego/view/screens/live/single_live_streaming/single_audience_live/widgets/audience_gift_card.dart';
 import 'package:teego/view_model/battle_controller.dart';
 import 'package:teego/view_model/chat_controller.dart';
+import 'package:teego/view_model/whisper_controller.dart';
 
 
 import '../../../../../../parse/UserModel.dart';
@@ -17,11 +18,12 @@ import '../../../widgets/custom_buttons.dart';
 
 
 class MessageGiftSheet extends StatefulWidget {
-  final BattleViewModel? battleViewModel;
+
   final UserModel? profileUser;
   final bool isProfileUser;
+  final bool whisper;
 
-  MessageGiftSheet({this.battleViewModel, this.profileUser, this.isProfileUser=false});
+  MessageGiftSheet({this.profileUser, this.whisper=false, this.isProfileUser=false});
 
   @override
   State<MessageGiftSheet> createState() => _MessageGiftSheetState();
@@ -402,8 +404,12 @@ class _MessageGiftSheetState extends State<MessageGiftSheet> {
                           borderRadius: 30,
                           bgColor: AppColors.yellowColor,
                           onTap: () {
+                            if(widget.whisper == false)
                                 Get.find<ChatViewModel>().saveMessage(MessageModel.messageTypeGif,
                                      messageType: MessageModel.messageTypeGif, onTap: () {}, gif: selectedGift, coins: selectedCoin, amount: int.parse(selectedQuantity) );
+                            else
+                              Get.find<WhisperViewModel>().saveMessage(MessageModel.messageTypeGif,
+                                  messageType: MessageModel.messageTypeGif, onTap: () {}, gif: selectedGift, coins: selectedCoin, amount: int.parse(selectedQuantity) );
                                 Get.back();
                           },
                         ),

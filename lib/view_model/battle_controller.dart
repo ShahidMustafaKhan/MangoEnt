@@ -141,6 +141,15 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     return _battleModel.getPlayerB?.getAvatar?.url ?? '';
   }
 
+  bool get isCurrentUserPlayerB{
+    if(_battleModel.getPlayerB!=null)
+    return _battleModel.getPlayerB!.getUid ==
+        Get.find<UserViewModel>().currentUser.getUid;
+    else
+      return false;
+
+  }
+
 
   int get leftScoreCard => isHost || Get.find<LiveViewModel>().role==ZegoLiveRole.audience
 
@@ -193,7 +202,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
       ..setBattleStarted = false
       ..setLiveObjectId = liveObjectId
       ..setLiveObject= liveObject
-      ..setHostUid = host.getUid!;
+      ..setHostUid = host.getUid!
+      ..setBackgroundImage = Get.find<LiveViewModel>().backgroundImage.value;
+    ;
     
     ParseResponse response = await _battleModel.save();
     if(response.success) {
@@ -272,6 +283,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setTeamBWins= value.getTeamBWins ?? 0;
     _battleModel.setDraw= value.getDraw ;
     getPlayerB(value.getPlayerB);
+    changeBackgroundImage(value);
 
     update();
   }
@@ -590,12 +602,14 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
       ..whereEqualTo(BattleModel.keyHostUid, hostUid)
       ..orderByDescending(BattleModel.keyCreatedAt)  // before invite host has already set a new battleModel
       ..setLimit(1)
-      ..includeObject([BattleModel.keyHost, BattleModel.keyPlayerB]);
+      ..includeObject([BattleModel.keyHost, BattleModel.keyPlayerB , BattleModel.keyLiveObject]);
     ParseResponse response = await query.query();
     if (response.success && response.results!.isNotEmpty) {
 
       _battleModel = response.results!.first as BattleModel;
-      if (_battleModel.getBattleStarted! == true) {    //  if battleStarted is true than trigger versus animation
+      Get.find<LiveViewModel>().backgroundImage.value = _battleModel.getBackgroundImage ?? '';
+      Get.find<LiveViewModel>().joinOtherHostSession(_battleModel.getLiveObjectId ?? '');
+    if (_battleModel.getBattleStarted! == true) {    //  if battleStarted is true than trigger versus animation
         versusAnimationLoaded = true;
         triggerVersusAnimation();
       }
@@ -767,6 +781,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     unSubscribeBattleModel();
     endBattleView();
     pauseLiveStreamingForPkPlayer(false);
+    resetBackgroundForPkPlayer();
     Get.find<AnimationViewModel>().resetAllAnimationsController();
   }
 
@@ -778,12 +793,17 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   pauseLiveStreamingForPkPlayer(bool value){
-    if(isHost==false && Get.find<LiveViewModel>().role!=ZegoLiveRole.audience){
-      if(value==true)
-        Get.find<LiveViewModel>().endLive();
-      else
-        Get.find<LiveViewModel>().startLive();
+    if(isHost==false){
+      if(value==false) {
+        // Get.find<LiveViewModel>().startLive();
+        Get.find<LiveViewModel>().backToLiveSession();
+      }
     }
+  }
+
+  resetBackgroundForPkPlayer(){
+    if(isHost==false && Get.find<LiveViewModel>().role!=ZegoLiveRole.audience)
+        Get.find<LiveViewModel>().backgroundImage.value= Get.find<LiveViewModel>().liveStreamingModel.getBackgroundImage ?? '';
   }
 
 
@@ -906,6 +926,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setTeamScoreA= coins + _battleModel.getTeamScoreA;
     _battleModel.save();
     Get.find<RankingViewModel>().addRecord(coins);
+    Get.find<UserViewModel>().deductBalance(coins);
+    Get.find<LiveViewModel>().incrementCount(coins);
+
   }
 
   sendGiftToTeamB({required String gift, required String audio, required int coins}){
@@ -913,6 +936,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setTeamScoreB= coins + _battleModel.getTeamScoreB;
     _battleModel.save();
     Get.find<RankingViewModel>().addRecord(coins);
+    Get.find<UserViewModel>().deductBalance(coins);
+    Get.find<LiveViewModel>().incrementCount(coins);
+
 
   }
 
@@ -923,6 +949,8 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setTeamScoreB= coins + _battleModel.getTeamScoreB;
     _battleModel.save();
     Get.find<RankingViewModel>().addRecord(coins);
+    Get.find<UserViewModel>().deductBalance(coins);
+    Get.find<LiveViewModel>().incrementCount(coins);
 
   }
 
@@ -950,7 +978,11 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-
+  changeBackgroundImage(BattleModel value){
+    if(value.getBackgroundImage != null)
+      Get.find<LiveViewModel>().
+      backgroundImage.value = value.getBackgroundImage!;
+  }
 
 
 

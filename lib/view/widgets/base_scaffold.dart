@@ -16,7 +16,9 @@ class BaseScaffold extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final bool bottomNavigationBar;
   final bool safeArea;
+  final bool? topSafeArea;
   final Widget? endDrawer;
+  final bool extendBodyBehindAppBar;
   const BaseScaffold(
       {Key? key,
       required this.body,
@@ -24,7 +26,7 @@ class BaseScaffold extends StatelessWidget {
       this.appBar,
       this.bottomNavigationBar = false,
       this.safeArea = false,
-      this.endDrawer,
+      this.endDrawer, this.extendBodyBehindAppBar=false, this.topSafeArea,
       }) : super(key: key);
 
   @override
@@ -42,9 +44,10 @@ class BaseScaffold extends StatelessWidget {
                 colors: Get.isDarkMode ? AppColors.darkBGGradientColor : AppColors.lightBGGradientColor)),
         child: Scaffold(
           resizeToAvoidBottomInset: true,
+          extendBodyBehindAppBar: extendBodyBehindAppBar,
           appBar: appBar,
           body: SafeArea(
-            top: safeArea ? false : true,
+            top: topSafeArea ?? safeArea ? false : true,
             bottom: safeArea ? false : false,
             left: safeArea ? false : true,
             right: safeArea ? false : true,

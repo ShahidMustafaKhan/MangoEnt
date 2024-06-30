@@ -36,9 +36,8 @@ class _GuestsWidgetState extends State<GuestsWidget> {
         userList.add(user);
       }
     }
-    if(zegoController.streamingType == LiveStreamingModel.keyTypeMultiGuestLive)
+    else
       userList = zegoController.liveStreamingManager.coHostUserListNoti.value;
-
 
 
     setState(() {

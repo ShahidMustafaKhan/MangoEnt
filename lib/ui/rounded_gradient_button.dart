@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teego/utils/theme/colors_constant.dart';
 import '../utils/Utils.dart';
 
 class RoundedGradientButton extends StatelessWidget {
@@ -79,12 +80,12 @@ class RoundedGradientButton extends StatelessWidget {
           child: Ink(
             width: size.width,
             decoration: BoxDecoration(
-              // color: hPrimaryColor,
-              gradient: LinearGradient(
-                colors: colors,
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
+              color: AppColors.yellowBtnColor,
+              // gradient: LinearGradient(
+              //   colors: colors,
+              //   begin: Alignment.centerLeft,
+              //   end: Alignment.centerRight,
+              // ),
               borderRadius: borderRadius != null
                   ? BorderRadius.all(Radius.circular(borderRadius!))
                   : BorderRadius.only(

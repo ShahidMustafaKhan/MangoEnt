@@ -31,7 +31,7 @@ class _LogInState extends State<LogIn> {
   RxBool isPasswordObscure = false.obs;
   final _formKey = GlobalKey<FormState>();
   RxBool isFormDirty = false.obs;
-  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'dashboard']);
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   late SharedPreferences preferences;
   AuthViewModel authViewModel= Get.put(AuthViewModel());

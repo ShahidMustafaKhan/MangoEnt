@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:teego/helpers/quick_actions.dart';
+import 'package:teego/view/screens/live/widgets/basic_feature_sheets/admin_list_sheet.dart';
 import 'package:teego/view_model/userViewModel.dart';
 
 import '../../../../../../helpers/quick_help.dart';
@@ -11,12 +14,14 @@ import '../../../../../../utils/constants/typography.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
 import '../../../../../../view_model/live_controller.dart';
 import '../../../../../widgets/custom_buttons.dart';
+import '../../../widgets/basic_feature_sheets/manage.dart';
 import 'audience_gift_sheet.dart';
 
 
 class AudienceDetailSheet extends StatelessWidget {
   final UserModel profileUser;
-  AudienceDetailSheet(this.profileUser);
+  final bool viewer;
+  AudienceDetailSheet(this.profileUser, {this.viewer=false});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<UserViewModel>(builder: (userViewModel)  {
@@ -32,6 +37,7 @@ class AudienceDetailSheet extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 30),
                   child: Column(
                     children: [
+                      if(viewer==false)
                       Align(
                         alignment: Alignment.centerRight,
                         child: Container(
@@ -51,7 +57,31 @@ class AudienceDetailSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text('🦊 ${profileUser.getFullName!} 🦊', style: sfProDisplayBold.copyWith(fontSize: 16)),
+                      if(viewer==true)
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: ()=> openBottomSheet(ManageSheet(profileUser), context, back: true),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8.63.w, vertical: 2.83.h),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                                color: AppColors.yellowBtnColor,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text('Manage', style : sfProDisplayRegular.copyWith(
+                                    fontSize: 10.sp, color: AppColors.black
+                                  )),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        Text('🦊 ${profileUser.getFullName!} 🦊', style: sfProDisplayBold.copyWith(fontSize: 16)),
                       const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -207,8 +237,7 @@ class AudienceDetailSheet extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  if(!userViewModel.followingUser(profileUser))
-                                  const Icon(Icons.add, color: AppColors.black),
+                                  Icon(userViewModel.followingUser(profileUser) ? Icons.check : Icons.add, color: AppColors.black),
                                   const SizedBox(width: 8),
                                   Text(
                                     userViewModel.followingUser(profileUser) ? 'Following' : 'Follow',
@@ -288,8 +317,9 @@ class AudienceDetailSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(color: AppColors.yellowColor, width: 2),
                       borderRadius: BorderRadius.circular(80),
-                      image: DecorationImage(image: NetworkImage(profileUser.getAvatar!.url!), fit: BoxFit.cover),
+                      // image: DecorationImage(image: NetworkImage(profileUser.getAvatar!.url!), fit: BoxFit.cover),
                     ),
+                    child: QuickActions.avatarWidget(profileUser),
                   ),
                 ),
               ],

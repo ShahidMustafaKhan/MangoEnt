@@ -1,10 +1,15 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:teego/parse/LiveStreamingModel.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/utils/constants/typography.dart';
 import 'package:teego/utils/permission/choose_photo_permission.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
+import 'package:teego/view_model/userViewModel.dart';
 
 import '../../../../../view_model/live_controller.dart';
 import '../../../../widgets/app_text_field_streamer.dart';
@@ -14,7 +19,8 @@ import '../../single_live_streaming/single_streamer_live/single_live_screen/widg
 
 
 class LiveViewTopMenu extends StatelessWidget {
-  LiveViewTopMenu({Key? key}) : super(key: key);
+  final CameraController cameraController;
+  LiveViewTopMenu({Key? key, required this.cameraController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +47,11 @@ class LiveViewTopMenu extends StatelessWidget {
                           height: 90,
                           width: 90,
                           decoration: BoxDecoration(
-                            image: controller.parseFile==null ? DecorationImage(
-                              image:  AssetImage(AppImagePath.singleLiveBgImage) ,
+                            image: controller.liveStreamingModel.getImage==null ? DecorationImage(
+                              image:  NetworkImage(Get.find<UserViewModel>().currentUser.getAvatar!.url!) ,
                               fit: BoxFit.cover,
                             ) : DecorationImage(
-                              image:  NetworkImage(controller.parseFile!.url!),
+                              image:  NetworkImage(controller.liveStreamingModel.getImage!.url!),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -141,11 +147,31 @@ class LiveViewTopMenu extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 5),
-                              CircleAvatar(
-                                radius: 15,
-                                backgroundColor: AppColors.grey300.withOpacity(0.6),
-                                child: Image.asset(AppImagePath.cameraOff, width: 14, height: 14),
+                              const SizedBox(width: 8),
+                              Obx(() {
+                                  return Visibility(
+                                    visible : liveViewModel.selectedLiveType.value != LiveStreamingModel.keyTypeAudioLive,
+                                    child: GestureDetector(
+                                      onTap:()=> liveViewModel.toggleCamera(cameraController),
+                                      child: Obx(() {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(bottom: 1.0),
+                                            child: Center(
+                                              child: CircleAvatar(
+                                                radius: 15,
+                                                backgroundColor: AppColors.grey300.withOpacity(0.6),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(7.0),
+                                                  child: Image.asset(AppImagePath.cameraOff,fit: BoxFit.cover, color: liveViewModel.isCameraOn.value == false ? AppColors.yellowColor.withOpacity(0.9) : null,),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      ),
+                                    ),
+                                  );
+                                }
                               ),
                               Spacer(),
                               if(liveViewModel.tagList.length==0)

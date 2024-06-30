@@ -22,48 +22,53 @@ class _LanguageSheetState extends State<LanguageSheet> {
 
   @override
   Widget build(BuildContext context) {
+    RxString language = liveViewModel.selectedLanguage.value.obs;
     return SizedBox(
       height: 520,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 30),
-            Text(
-              'Language',
-              style: sfProDisplaySemiBold.copyWith(fontSize: 24),
-            ),
-            const SizedBox(height: 12),
-            ...List.generate(
-              languages.length,
-              (index) => GestureDetector(
-                onTap: ()=> liveViewModel.selectedLanguage.value=languages[index],
-                child: Column(
-                  children: [
-                    const Divider(color: AppColors.grey300),
-                    const SizedBox(height: 16),
-                    Text(
-                      languages[index],
-                      style: sfProDisplaySemiBold.copyWith(fontSize: 16, color: Colors.white),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+        child: Obx(() {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 30),
+                Text(
+                  'Language',
+                  style: sfProDisplaySemiBold.copyWith(fontSize: 24),
                 ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            PrimaryButton(
-              title: 'Confirm',
-              borderRadius: 35,
-              textStyle: sfProDisplayBold.copyWith(fontSize: 16, color: AppColors.black),
-              bgColor: AppColors.yellowBtnColor,
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            const SizedBox(height: 10),
-          ],
+                const SizedBox(height: 12),
+                ...List.generate(
+                  languages.length,
+                  (index) => GestureDetector(
+                    onTap: ()=> language.value=languages[index],
+                    child: Column(
+                      children: [
+                        const Divider(color: AppColors.grey300),
+                        const SizedBox(height: 16),
+                        Text(
+                          languages[index],
+                          style: sfProDisplaySemiBold.copyWith(fontSize: 16, color: language.value==languages[index] ? AppColors.yellowColor : Colors.white),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                PrimaryButton(
+                  title: 'Confirm',
+                  borderRadius: 35,
+                  textStyle: sfProDisplayBold.copyWith(fontSize: 16, color: AppColors.black),
+                  bgColor: AppColors.yellowBtnColor,
+                  onTap: () {
+                    liveViewModel.selectedLanguage.value=language.value;
+                    Navigator.pop(context);
+                  },
+                ),
+                const SizedBox(height: 10),
+              ],
+            );
+          }
         ),
       ),
     );

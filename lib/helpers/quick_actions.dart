@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,7 +12,9 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:teego/helpers/send_notifications.dart';
+import 'package:teego/main.dart';
 import 'package:teego/parse/LiveStreamingModel.dart';
 import 'package:teego/parse/NotificationsModel.dart';
 import 'package:teego/parse/PostsModel.dart';
@@ -19,15 +25,36 @@ import 'package:teego/ui/container_with_corner.dart';
 import 'package:teego/ui/text_with_tap.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:flutter/material.dart';
+import 'package:teego/view_model/userViewModel.dart';
 
 import '../utils/Utils.dart';
 import '../utils/constants/app_constants.dart';
+import '../utils/routes/app_routes.dart';
 import '../view/widgets/AvatarInitials.dart';
 import '../view/widgets/custom_buttons.dart';
 import '../view_model/live_controller.dart';
+import '../view_model/zego_controller.dart';
 
 
 class QuickActions {
+
+
+ static Future<String> getDeviceName(BuildContext context) async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String name;
+
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      name = androidInfo.model;
+    } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      name = iosInfo.name ?? '';
+    } else {
+      name = '';
+    }
+
+    return name;
+  }
 
 
   static Widget avatarWidgetNotification(
@@ -78,22 +105,27 @@ class QuickActions {
   static Widget avatarWidget(UserModel currentUser,
       {double? width, double? height, EdgeInsets? margin, String? imageUrl}) {
     if (currentUser.getAvatar != null) {
-      return Container(
-        margin: margin,
-        width: width,
-        height: height,
-        child: CachedNetworkImage(
-          imageUrl: currentUser.getAvatar!.url!,
-          imageBuilder: (context, imageProvider) =>
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: imageProvider, fit: BoxFit.cover),
+      return GestureDetector(
+        onTap: (){
+          goToProfile(otherProfile: true, mUser: currentUser);
+        },
+        child: Container(
+          margin: margin,
+          width: width,
+          height: height,
+          child: CachedNetworkImage(
+            imageUrl: currentUser.getAvatar!.url!,
+            imageBuilder: (context, imageProvider) =>
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
+                  ),
                 ),
-              ),
-          placeholder: (context, url) => _avatarInitials(currentUser),
-          errorWidget: (context, url, error) => _avatarInitials(currentUser),
+            placeholder: (context, url) => _avatarInitials(currentUser),
+            errorWidget: (context, url, error) => _avatarInitials(currentUser),
+          ),
         ),
       );
     } else if (imageUrl != null) {
@@ -522,12 +554,12 @@ class QuickActions {
               // Set the colors for AlertDialogTheme
               dialogBackgroundColor: Colors.white,
               colorScheme: ColorScheme.light(
-                primary: Colors.black, // Button text color
-                onPrimary: Colors.white, // Button background color
+                primary: Colors.white, // Button text color
+                onPrimary: Color(0xff494848), // Button background color
               ),
             ),
             child: Dialog(
-              backgroundColor: Colors.white,
+              backgroundColor: Color(0xff494848),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0),
               ),
@@ -538,7 +570,7 @@ class QuickActions {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Lottie.asset(
-                      'assets/animation/payment_success.json',
+                      'assets/animations/payment_success.json',
                       // Replace with your Lottie animation file
                       width: 100,
                       height: 100,
@@ -550,6 +582,7 @@ class QuickActions {
                       'Payment Complete!',
                       style: TextStyle(
                           fontSize: 20.0,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'DM Sans'
                       ),
@@ -559,6 +592,7 @@ class QuickActions {
                       'Thank you for your purchase.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
+                          color: Colors.white,
                           fontFamily: 'DM Sans'
                       ),
                     ),
@@ -572,18 +606,10 @@ class QuickActions {
                         width: 80,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(24)),
-                          gradient: const LinearGradient (
-                            begin: Alignment(0, -1),
-                            end: Alignment(0, 1),
-                            colors: <Color>[
-                              Color(0xff3d8ee1),
-                              Color(0xff68c5e2)
-                            ],
-                            stops: <double>[0, 1],
-                          ),
+                         color: AppColors.yellowBtnColor
                         ),
                         child: Center(child: Text('OK', style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'DM Sans'
                         ),)),
@@ -2122,7 +2148,7 @@ class QuickActions {
                                               child: InkWell(
                                                 onTap: () {
                                                   if (currentUser
-                                                      .getDiamondsTotal! >= 3) {
+                                                      .getCoins! >= 3) {
                                                     if (int.parse(
                                                         wishList[index][LiveStreamingModel
                                                             .keyAmount]) !=
@@ -2154,7 +2180,7 @@ class QuickActions {
                                                       liveStreamingModel
                                                           .save().then((value) {
                                                         currentUser
-                                                            .decrementDiamondsTotal =
+                                                            .decrementCoins =
                                                         3;
 
                                                         currentUser.save();
@@ -5303,6 +5329,7 @@ class QuickActions {
 
 
   static String getCountryFlag(UserModel currentUser) {
+   if(currentUser.getHideMyLocation==false){
     String country = currentUser.getCountry ?? 'Pakistan';
     if (country == "Pakistan")
       return AppImagePath.pakistanFlag;
@@ -5315,7 +5342,10 @@ class QuickActions {
     else if (country == "Ukraine")
       return AppImagePath.ukraineFlag;
     else
-      return AppImagePath.pakistanFlag;
+      return AppImagePath.pakistanFlag;}
+   else{
+     return '';
+   }
   }
 
   static String getCountryCode(UserModel currentUser) {
@@ -5389,6 +5419,24 @@ class QuickActions {
   }
 
 
+  static Future<void> shareImage( Uint8List byteData) async {
+
+    String path = Get.find<ZegoController>().appDocumentsPath != ''
+        ? Get.find<ZegoController>().appDocumentsPath +
+        '/' +
+        'tmp_snapshot_${DateTime.now().microsecondsSinceEpoch}.png'
+        : '';
+
+    File tempFile = File('$path');
+    await tempFile.writeAsBytes(byteData);
+    Share.shareFiles(
+      [tempFile.path],
+      text: '',
+      subject: 'Share via WhatsApp',
+    );
+  }
+
+
 }
 
 
@@ -5401,7 +5449,7 @@ class AppCountryCode {
 }
 
 
-void openBottomSheet(Widget widget , BuildContext context, {bool back=false}){
+void openBottomSheet(Widget widget , BuildContext context, {bool back=false, Color? color}){
   if(back==true)
     Get.back();
 
@@ -5413,7 +5461,7 @@ void openBottomSheet(Widget widget , BuildContext context, {bool back=false}){
         topRight: Radius.circular(20),
       ),
     ),
-    backgroundColor: AppColors.grey500,
+    backgroundColor: color ?? AppColors.grey500,
     isScrollControlled: true,
     builder: (context) => Wrap(
       children: [
@@ -5432,5 +5480,14 @@ void openBottomSheet(Widget widget , BuildContext context, {bool back=false}){
       ],
     ),
   );
+
+}
+
+
+void goToProfile({bool otherProfile=false, UserModel? mUser}){
+  if(Get.find<UserViewModel>().currentUser.objectId! != mUser!.objectId!)
+  Get.toNamed(AppRoutes.profileScreen, arguments: {"otherProfile" : otherProfile, "mUser": mUser});
+  else
+    Get.toNamed(AppRoutes.profileScreen, arguments: {"otherProfile" : false, "mUser": null});
 
 }

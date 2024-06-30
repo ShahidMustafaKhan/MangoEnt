@@ -346,7 +346,7 @@ class _WishListStreamerSheetState extends State<WishListStreamerSheet> {
                                             child: SizedBox(
                                               height: 14*fem,
                                               child: Text(
-                                                '${liveViewModel.myWishList![index][LiveStreamingModel.keyReceived]}/${liveViewModel.myWishList![index][LiveStreamingModel.keyAmount].toString()}',
+                                                '${(int.parse(liveViewModel.myWishList![index][LiveStreamingModel.keyReceived])*3)}/${(int.parse(liveViewModel.myWishList![index][LiveStreamingModel.keyAmount])*3).toString()}',
                                                 style: SafeGoogleFont (
                                                   'DM Sans',
                                                   fontSize: 10*ffem,

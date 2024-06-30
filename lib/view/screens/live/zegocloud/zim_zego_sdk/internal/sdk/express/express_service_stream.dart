@@ -47,13 +47,13 @@ extension ExpressServiceStream on ExpressService {
 
   Future<void> startPublishingStream(String streamID, {ZegoPublishChannel channel = ZegoPublishChannel.Main}) async {
     currentUser?.streamID = streamID;
-    currentUser?.coinsNotifier.value = Get.find<UserViewModel>().currentUser.getDiamondsTotal ?? 0;
+    currentUser?.coinsNotifier.value = Get.find<UserViewModel>().currentUser.getCoins ?? 0;
 
     final extraInfo = jsonEncode({
       'mic': currentUser?.isMicOnNotifier.value ?? false ? 'on' : 'off',
       'cam': currentUser?.isCamerOnNotifier.value ?? false ? 'on' : 'off',
       'avatar': currentUser?.avatarUrlNotifier.value ?? '',
-      'coins': Get.find<UserViewModel>().currentUser.getDiamondsTotal ?? 0,
+      'coins': Get.find<UserViewModel>().currentUser.getCoins ?? 0,
     });
     debugPrint('startPublishingStream:$streamID');
     debugPrint('startPublishingStream:${currentUser?.isMicOnNotifier.value}');

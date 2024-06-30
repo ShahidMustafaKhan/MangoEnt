@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
+import 'package:teego/view_model/popular_controller.dart';
 
+import '../../../../view_model/search_controller.dart';
 import '../../../widgets/recently_popular_search.dart';
 import '../../../widgets/you_may_like.dart';
 
@@ -11,6 +13,7 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SearchController searchController = Get.put(SearchController());
     return BaseScaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -34,6 +37,14 @@ class SearchScreen extends StatelessWidget {
                   height: 36.h,
                   width: 306.w,
                   child: TextField(
+                    onChanged: (value){
+                      if(value.isEmpty){
+                        searchController.getRecentPopularUserModel();
+                      }
+                      else{
+                        searchController.searchRecentPopularUserModel(value);
+                      }
+                    },
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Color(0xffBCBBBE),

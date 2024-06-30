@@ -49,9 +49,11 @@ class LiveMessagesViewModel extends GetxController {
 
     subscription!.on(LiveQueryEvent.create, (liveMessage) async {
       print('*** enter ***setupLiveMessage');
-
-      liveMessagesModelList.insert(0,liveMessage as LiveMessagesModel);
-      update();
+      LiveMessagesModel message = liveMessage as LiveMessagesModel;
+      if((message.getMessageType == LiveMessagesModel.messageTypeComment && message.getAuthorId == Get.find<UserViewModel>().currentUser.getUid!.toString())==false) {
+        liveMessagesModelList.insert(0, liveMessage);
+        update();
+      }
     });
   }
 
@@ -84,7 +86,7 @@ class LiveMessagesViewModel extends GetxController {
   }
 
 
-  unSubscribeLiveMessageModels() async {
+  Future<void> unSubscribeLiveMessageModels() async {
     liveMessagesModelList=[];
     if (subscription != null) {
       liveQuery.client.unSubscribe(subscription!);
@@ -118,7 +120,11 @@ class LiveMessagesViewModel extends GetxController {
 
     liveMessagesModel.setMessage = message;
     liveMessagesModel.setMessageType = messageType;
+    if(liveMessagesModel.getMessageType == LiveMessagesModel.messageTypeComment){
+      liveMessagesModelList.insert(0, liveMessagesModel);
+      update();}
     await liveMessagesModel.save();
+
   }
 
   sendMessageJoinOrLeft(
@@ -144,7 +150,7 @@ class LiveMessagesViewModel extends GetxController {
 
   Future delayedFunctions() async {
       if(role==ZegoLiveRole.host) {
-        Future.delayed(Duration(seconds: 2), () {
+        // Future.delayed(Duration(seconds: 2), () {
           sendMessage(
             LiveMessagesModel.messageTypeSystem,
             "The broadcaster has started live streaming",
@@ -162,7 +168,7 @@ class LiveMessagesViewModel extends GetxController {
                 .getAvatar!
                 .url!,
           );
-        });
+        // });
       }
 
   }

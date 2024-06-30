@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/utils/constants/app_constants.dart';
+import 'package:teego/view_model/zego_controller.dart';
 
 import '../../../../../helpers/quick_help.dart';
 import '../../../../../parse/UserModel.dart';
@@ -21,6 +22,7 @@ class WaitingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LiveViewModel liveViewModel = Get.find();
+    ZegoController zegoController = Get.find();
 
     int numberOfItems = 4;
 
@@ -35,7 +37,6 @@ class WaitingWidget extends StatelessWidget {
                 builder: (context, Map<String, dynamic> requestMap, _) {
                   final requestList = requestMap.values.toList();
                   List userIdList = requestList.map((obj) => obj.senderID).toList();
-                  print(userIdList);
                   numberOfItems=requestMap.values
                       .toList()
                       .length;
@@ -115,7 +116,8 @@ class WaitingWidget extends StatelessWidget {
                                               children: [
                                                 Text(user.getFullName ?? ''),
                                                 const SizedBox(width: 16),
-                                                SvgPicture.asset(
+                                                if(user.getHideMyLocation == false)
+                                                  SvgPicture.asset(
                                                   QuickActions.getCountryFlag(user),
                                                   width: 24,
                                                   height: 17,
@@ -144,28 +146,42 @@ class WaitingWidget extends StatelessWidget {
                                         ),
                                         const Spacer(),
                                         if(Get.find<LiveViewModel>().role==ZegoLiveRole.host)
-                                        PrimaryButton(
-                                          width: 65.w,
-                                          height: 32.h,
-                                          title: 'Add',
-                                          borderRadius: 35,
-                                          textStyle: sfProDisplayMedium
-                                              .copyWith(
-                                              fontSize: 16,
-                                              color: AppColors.black),
-                                          bgColor: AppColors.yellowBtnColor,
-                                          onTap: () {
-                                            ZEGOSDKManager.instance.zimService
-                                                .acceptRoomRequest(
-                                                roomRequest.requestID ?? '')
-                                                .then((value) {
-                                                  Get.back();
-                                            })
-                                                .catchError((error) {
-                                              QuickHelp.showAppNotificationAdvanced(title: 'Agree cohost failed!', context: context);
+                                          ValueListenableBuilder<List<ZegoSDKUser>>(
+                                              valueListenable: zegoController.liveStreamingManager.coHostUserListNoti,
+                                              builder: (context, coHostList, _) {
+                                                int length = coHostList.length;
+                                                return PrimaryButton(
+                                              width: 65.w,
+                                              height: 32.h,
+                                              title: 'Add',
+                                              borderRadius: 35,
+                                              textStyle: sfProDisplayMedium
+                                                  .copyWith(
+                                                  fontSize: 16,
+                                                  color: AppColors.black),
+                                              bgColor: AppColors.yellowBtnColor,
+                                              onTap: () {
+                                                if(liveViewModel.isSingleLive && length!=0){
 
-                                            });
-                                          },
+                                                  QuickHelp.showAppNotificationAdvanced(title: 'You currently have a co-host. To add a new one, please remove the existing co-host first.', context: context);
+
+                                                }
+                                                else{
+                                                  ZEGOSDKManager.instance.zimService
+                                                      .acceptRoomRequest(
+                                                      roomRequest.requestID ?? '')
+                                                      .then((value) {
+                                                    Get.back();
+                                                  })
+                                                      .catchError((error) {
+                                                    QuickHelp.showAppNotificationAdvanced(title: 'Agree cohost failed!', context: context);
+
+                                                  });
+                                                }
+
+                                              },
+                                            );
+                                          }
                                         ),
                                       ],
                                     ),

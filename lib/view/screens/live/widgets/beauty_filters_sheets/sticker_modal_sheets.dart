@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:teego/view/screens/live/widgets/beauty_filters_sheets/background_single_live_sheet.dart';
 import 'package:teego/view/screens/live/widgets/beauty_filters_sheets/sticker_sheet.dart';
 import '../../../../../../../utils/constants/typography.dart';
 import '../../../../../../../utils/theme/colors_constant.dart';
+import '../../../../../view_model/live_controller.dart';
 import 'background_sheet.dart';
 import 'beauty_sheet.dart';
 import 'filter_sheet.dart';
@@ -15,7 +19,7 @@ class StickerModalSheet extends StatefulWidget {
 
 class _StickerModalSheetState extends State<StickerModalSheet> {
   int selectedIndex = -1;
-  String selectedTab = 'Sticker';
+  String selectedTab = 'Background';
 
   void onTabSelected(String tab) {
     setState(() {
@@ -32,7 +36,9 @@ class _StickerModalSheetState extends State<StickerModalSheet> {
       case 'Beauty':
         return BeautyWidget();
       case 'Background':
-        return BackgroundWidget();
+        return
+          Get.find<LiveViewModel>().isSingleLive ? BackgroundSingleLiveWidget() :
+          BackgroundWidget();
       default:
         return StickerWidget();
     }

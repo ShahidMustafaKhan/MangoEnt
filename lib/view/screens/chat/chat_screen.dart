@@ -55,16 +55,16 @@ class _MessageViewState extends State<MessageView> {
   }
 
 
-  void _scrollToLastIndex() {
-    Future.delayed(Duration(milliseconds: 100), () {
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: Duration(microseconds: 300),
-        curve: Curves.easeOut,
-      );
-    });
-
-  }
+  // void _scrollToLastIndex() {
+  //   Future.delayed(Duration(milliseconds: 100), () {
+  //     scrollController.animateTo(
+  //       scrollController.position.maxScrollExtent,
+  //       duration: Duration(microseconds: 300),
+  //       curve: Curves.easeOut,
+  //     );
+  //   });
+  //
+  // }
 
   void _scrollToLastIndex2() {
     Future.delayed(Duration(seconds: 1), () {
@@ -101,7 +101,7 @@ class _MessageViewState extends State<MessageView> {
                 MessageViewTopBar(),
                 Expanded(
                   child: FutureBuilder<List<dynamic>?>(
-                      future: chatViewModel.initialLoad,
+                      future: chatViewModel.loadMessages(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.hasData) {
                           // _scrollToLastIndex2();
@@ -112,6 +112,7 @@ class _MessageViewState extends State<MessageView> {
                             elements: reversedList,
                             reverse: true,
                             order: StickyGroupedListOrder.DESC,
+                            padding: EdgeInsets.only(bottom: 7.h),
                             // Check first
                             groupBy: (dynamic message) {
                               if (message.createdAt != null) {
@@ -143,7 +144,7 @@ class _MessageViewState extends State<MessageView> {
                             },
                             groupSeparatorBuilder: (dynamic element) {
                               return Padding(
-                                padding: EdgeInsets.only(bottom: 0, top: 3),
+                                padding: EdgeInsets.only(bottom: 15, top: 15),
                                 child: TextWithTap(
                                   QuickHelp.getMessageTime(element.createdAt != null
                                       ? element.createdAt!
@@ -191,11 +192,13 @@ class _MessageViewState extends State<MessageView> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                         ),
-                                        child: Image.asset(
-                                          AppImagePath.profilePic,
-                                          height: double.infinity,
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            chatMessage.getAuthor!.getAvatar!.url!,
+                                            height: double.infinity,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                       SizedBox(width: 10.w),
@@ -350,7 +353,7 @@ class _MessageViewState extends State<MessageView> {
                       }
                   ),
                 ),
-                MessageViewBottomBar(onTap: _scrollToLastIndex),
+                MessageViewBottomBar(),
                 SizedBox(height: 10.h),
               ],
             ),

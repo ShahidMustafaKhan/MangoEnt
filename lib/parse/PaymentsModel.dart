@@ -26,17 +26,22 @@ class PaymentsModel extends ParseObject implements ParseCloneable {
 
   static final String keyPaymentMethod = "method";
   static final String keyPaymentStatus = "status";
-  static final String keyPaymentType = "paymentType";
+  static final String keyTransactionType = "transactionType";
 
-  static final String keyPaymentTypeWithdraw = "withdraw";
+  static final String keyTransactionTypeWithdraw = "Withdraw";
+  static final String keyTransactionTypePurchase = "Buy Coin";
+
+  static final String keyTransactionTypePurchaseMethod = "Store";
 
   static final String keyPaymentTypePayPal="Paypal";
   static final String keyPaymentTypeQiwiWallet="Qiwi wallet";
 
-  static final String keyWithDrawAmount = "withdrawAmount";
-  static final String keyDiamondAmount = "diamondAmount";
+  static final String keyAmount = "withdrawAmount";
+  static final String keyCoins = "coins";
   static final String keyPaypalEmail = "paypalEmail";
   static final String keyQiwiWalletNo = "QiwiWalletNo";
+
+  static final String keyReferenceNumber = "referenceNumber";
 
   static final String keyItemId = "sku";
   static final String  keyItemName = "name";
@@ -50,14 +55,14 @@ class PaymentsModel extends ParseObject implements ParseCloneable {
   String? get getAuthorId => get<String>(keyAuthorId);
   set setAuthorId(String authorId) => set<String>(keyAuthorId, authorId);
 
-  double? get getWithDrawAmount => get<double>(keyWithDrawAmount);
-  set setWithDrawAmount(double amount) => set<double>(keyWithDrawAmount, amount);
+  dynamic? get getAmount => get<dynamic>(keyAmount);
+  set setAmount(double amount) => set<double>(keyAmount, amount);
 
-  int? get getDiamondAmount => get<int>(keyDiamondAmount);
-  set setDiamondAmount(int amount) => set<int>(keyDiamondAmount, amount);
+  int? get getCoinsAmount => get<int>(keyCoins);
+  set setCoinsAmount(num amount) => set<num>(keyCoins, amount);
 
-  String? get getPaymentType => get<String>(keyPaymentType);
-  set setPaymentType(String authorId) => set<String>(keyPaymentType, authorId);
+  String? get getTransactionType => get<String>(keyTransactionType);
+  set setTransactionType(String type) => set<String>(keyTransactionType, type);
 
   String? get getFullName => get<String>(keyFullName);
   set setFullName(String name) => set<String>(keyFullName, name);
@@ -67,6 +72,9 @@ class PaymentsModel extends ParseObject implements ParseCloneable {
 
   String? get getQiwiWalletNo => get<String>(keyQiwiWalletNo);
   set setQiwiWalletNo(String walletNo) => set<String>(keyQiwiWalletNo, walletNo);
+
+  String? get getReferenceNumber=> get<String>(keyReferenceNumber);
+  set setReferenceNumber(String referenceNumber) => set<String>(keyReferenceNumber, referenceNumber);
 
   String? get getStatus => get<String>(keyPaymentStatus);
   set setStatus(String status) => set<String>(keyPaymentStatus, status);

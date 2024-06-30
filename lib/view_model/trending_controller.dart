@@ -37,7 +37,7 @@ class TrendingViewModel extends GetxController {
     queryBuilder.whereNotEqualTo(
         LiveStreamingModel.keyAuthorUid, Get.find<UserViewModel>().currentUser.getUid);
     queryBuilder.whereNotContainedIn(
-        LiveStreamingModel.keyAuthor, Get.find<UserViewModel>().currentUser.getBlockedUsers!);
+        LiveStreamingModel.keyAuthorUid, Get.find<UserViewModel>().currentUser.getBlockedUsersIds!);
     queryBuilder.whereValueExists(LiveStreamingModel.keyAuthor, true);
     queryBuilder.whereDoesNotMatchQuery(
         LiveStreamingModel.keyAuthor, queryUsers);
@@ -77,9 +77,9 @@ class TrendingViewModel extends GetxController {
           name: liveModel.getAuthor!.getFullName!,
           avatar: liveModel.getAuthor!.getAvatar!.url!,
           flag: QuickActions.getCountryFlag(liveModel.getAuthor!),
-          country: '${QuickActions.getCountryCode(liveModel.getAuthor!)} No.2',
+          country: '${QuickActions.getCountryCode(liveModel.getAuthor!)} ',
           liveModel: liveModel,
-          achievementCount: liveModel.getAuthor!.getDiamondsTotal ?? 0,
+          achievementCount: liveModel.getAuthor!.getCoins ?? 0,
           image: liveModel.getImage!=null ? liveModel.getImage!.url! : tempImagePath);
 
       tempModelList.add(trendingModel);

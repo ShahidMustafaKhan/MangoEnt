@@ -27,7 +27,7 @@ class RoomAnnouncementCard extends StatelessWidget {
                   ),
                 ),
                 backgroundColor: AppColors.grey500,
-                builder: (context) => const RoomAnnouncementSheet(),
+                builder: (context) => const RoomAnnouncementSheet(fromPreview: true,),
               );
             },
             child: Container(

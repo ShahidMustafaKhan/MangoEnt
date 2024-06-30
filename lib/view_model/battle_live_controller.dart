@@ -62,7 +62,7 @@ class BattleLiveViewModel extends GetxController {
     queryBuilder.whereNotEqualTo(
         BattleModel.keyHostUid, Get.find<UserViewModel>().currentUser.getUid);
     queryBuilder.whereNotContainedIn(
-        BattleModel.keyHost, Get.find<UserViewModel>().currentUser.getBlockedUsers!);
+        BattleModel.keyHostUid, Get.find<UserViewModel>().currentUser.getBlockedUsersIds!);
     queryBuilder.whereValueExists(BattleModel.keyHost, true);
     queryBuilder.whereValueExists(BattleModel.keyLiveObject, true);
     queryBuilder.whereDoesNotMatchQuery(

@@ -61,7 +61,7 @@ class _TrendingToggleButtonListState extends State<TrendingToggleButtonList> {
             padding: const EdgeInsets.only(top: 8),
             child: GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoutes.postNotificationScreen);
+                Get.toNamed(AppRoutes.createPostScreen);
               },
               child: Image.asset(
                 AppImagePath.notification,
@@ -74,7 +74,9 @@ class _TrendingToggleButtonListState extends State<TrendingToggleButtonList> {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(AppRoutes.createPostScreen);
+              },
               child: Image.asset(AppImagePath.post, width: 40, height: 40),
             ),
           ),

@@ -12,24 +12,28 @@ import '../../../../utils/theme/colors_constant.dart';
 import 'message_gift_sheet.dart';
 
 class MessageViewBottomBar extends StatelessWidget {
-  final Function() onTap;
-  MessageViewBottomBar({Key? key, required this.onTap}) : super(key: key);
+  MessageViewBottomBar({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
     ChatViewModel chatViewModel = Get.find();
-    RxString text= ''.obs;
+
     return Obx(() {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               height: 40.h,
-              width: text.isNotEmpty ? 300.w : 190.w,
+              width: chatViewModel.text.isNotEmpty ? 300.w : 190.w,
               child: TextField(
                 controller: chatViewModel.messageController,
                 onChanged: (value){
-                  text.value=value;
+                  chatViewModel.text.value=value;
+                },
+                onSubmitted: (value){
+                  chatViewModel.text.value='';
+                  chatViewModel.messageController.text='';
                 },
                 decoration: InputDecoration(
                   filled: true,
@@ -45,23 +49,7 @@ class MessageViewBottomBar extends StatelessWidget {
                 ),
               ),
             ),
-            // SizedBox(width: 50.w,),
-            // if(text.value.isEmpty)
-            // Container(
-            //   height: 36.h,
-            //   width: 36.w,
-            //   decoration: BoxDecoration(
-            //     shape: BoxShape.circle,
-            //   ),
-            //   child: Center(
-            //     child: Image.asset(
-            //       AppImagePath.chatMic,
-            //       height: 24.h,
-            //       width: 18.w,
-            //     ),
-            //   ),
-            // ),
-            if(text.value.isEmpty)
+            if(chatViewModel.text.value.isEmpty)
               GestureDetector(
                 onTap: ()=> chatViewModel.choosePhotoFromGallery(context),
                 child: Container(
@@ -79,7 +67,7 @@ class MessageViewBottomBar extends StatelessWidget {
                 ),
             ),
               ),
-            if(text.value.isEmpty)
+            if(chatViewModel.text.value.isEmpty)
               GestureDetector(
                 onTap: ()=> chatViewModel.choosePhotoFromCamera(context),
                 child: Container(
@@ -99,12 +87,13 @@ class MessageViewBottomBar extends StatelessWidget {
               ),
             GestureDetector(
               onTap: (){
-                if(text.value.isNotEmpty){
+                if(chatViewModel.text.value.isNotEmpty){
                 chatViewModel.saveMessage(chatViewModel.messageController.text,
-                    messageType: MessageModel.messageTypeText, onTap: onTap);
+                    messageType: MessageModel.messageTypeText, onTap: (){});
                 chatViewModel.messageController.text = "";
-                chatViewModel.changeButtonIcon("");
-                chatViewModel.update();
+                chatViewModel.text.value='';
+                // chatViewModel.changeButtonIcon("");
+                // chatViewModel.update();
 
                 }
                 else{
@@ -115,9 +104,9 @@ class MessageViewBottomBar extends StatelessWidget {
                 height: 36.h,
                 width: 36.w,
                 decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: text.value.isEmpty ? Color(0xffE5375A) :  AppColors.yellowBtnColor),
+                    BoxDecoration(shape: BoxShape.circle, color: chatViewModel.text.value.isEmpty ? Color(0xffE5375A) :  AppColors.yellowBtnColor),
                 child: Center(
-                  child: text.value.isEmpty ? Image.asset(
+                  child: chatViewModel.text.value.isEmpty ? Image.asset(
                     AppImagePath.giftIcon,
                     height: 20.h,
                     width: 20.w,

@@ -6,9 +6,11 @@ import 'package:svgaplayer_flutter/player.dart';
 import 'package:teego/view/screens/live/single_live_streaming/single_audience_live/widgets/gift_animation_view.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
 import 'package:teego/view_model/live_controller.dart';
+import '../../../../../parse/LiveStreamingModel.dart';
 import '../../../../../view_model/gift_contoller.dart';
 import '../../../../../view_model/battle_controller.dart';
 import '../../../../../view_model/live_messages_controller.dart';
+import '../../widgets/background_image.dart';
 import '../../widgets/for_you_widget.dart';
 import '../../zegocloud/widgets/zegocloud_preview.dart';
 import '../../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
@@ -19,10 +21,11 @@ class SingleLiveAudienceScreen extends StatelessWidget {
   SingleLiveAudienceScreen();
 
   bool hideNav=false;
+  LiveStreamingModel? liveModel  = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
-    final LiveViewModel liveViewModel = Get.put(LiveViewModel(ZegoLiveRole.audience, Get.arguments));
+    final LiveViewModel liveViewModel = Get.put(LiveViewModel(ZegoLiveRole.audience, liveModel));
     final BattleViewModel battleViewModel = Get.put(BattleViewModel());
     final GiftViewModel giftViewModel = Get.put(GiftViewModel());
     final LiveMessagesViewModel liveMessagesViewModel = Get.put(LiveMessagesViewModel(liveViewModel));
@@ -43,6 +46,7 @@ class SingleLiveAudienceScreen extends StatelessWidget {
         return Container(
           child: Stack(
             children: [
+              BackgroundImage(),
               if(battleViewModel.isBattleView==false)
                 ZegoCloudPreview(role:ZegoLiveRole.audience),
               SingleStreamerLiveItemWidget(),

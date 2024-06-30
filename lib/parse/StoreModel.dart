@@ -19,7 +19,8 @@ class StoreModel extends ParseObject implements ParseCloneable {
   static String keyAuthor = "author";
   static String keyAuthorUid = "authorUid";
 
-  static String keyMyItems = "myItems";
+  static String keyMyAvatarItems = "myAvatarItems";
+  static String keyMyRoomDecorItems = "myRoomDecorItems";
 
 
 
@@ -29,19 +30,9 @@ class StoreModel extends ParseObject implements ParseCloneable {
   int? get getAuthorUid => get<int>(keyAuthorUid);
   set setAuthorUid(int authorUid) => set<int>(keyAuthorUid, authorUid);
 
-  // List? get getMyItems => get<List>(keyMyItems);
-  // List<dynamic>? get getMyItems{
-  //
-  //   List<dynamic>? items = get<List<dynamic>>(keyMyItems);
-  //   if(items != null){
-  //     return items;
-  //   } else {
-  //     return [];
-  //   }
-  // }
 
-  List<int>? get getMyItems {
-    dynamic data = get(keyMyItems); // Assuming get() method retrieves data from somewhere
+  List? get getMyAvatarItems {
+    dynamic data = get(keyMyAvatarItems); // Assuming get() method retrieves data from somewhere
 
     if (data is Map<String, dynamic>) {
       // Handle the case where data is a Map<String, dynamic>
@@ -49,19 +40,44 @@ class StoreModel extends ParseObject implements ParseCloneable {
       // For example, you can convert it to List<dynamic> by extracting values from the map
       return []; // or whatever appropriate
     } else if (data is List<dynamic>) {
-      List<int> intList = data.map((e) => e is String ? int.parse(e) : e as int).toList();
+
 
       // Return the data as it is if it's already of the expected type
-      return intList;
+      return data;
     } else {
       // Handle any other cases here
       return []; // or throw an exception or handle it as required
     }
   }
-  set setMyItems(List items) => set<List>(keyMyItems, items);
+  set setMyAvatarItems(List items) => set<List>(keyMyAvatarItems, items);
 
-  set incrementMyItems(int item) {
-    setAddUnique(keyMyItems, item);
+  set incrementMyAvatarItems(Map<String, dynamic> item) {
+    setAddUnique(keyMyAvatarItems, item);
+  }
+
+
+  List? get getMyRoomDecorItems {
+    dynamic data = get(keyMyRoomDecorItems); // Assuming get() method retrieves data from somewhere
+
+    if (data is Map<String, dynamic>) {
+      // Handle the case where data is a Map<String, dynamic>
+      // Convert it to List<dynamic> or handle it accordingly
+      // For example, you can convert it to List<dynamic> by extracting values from the map
+      return []; // or whatever appropriate
+    } else if (data is List<dynamic>) {
+
+
+      // Return the data as it is if it's already of the expected type
+      return data;
+    } else {
+      // Handle any other cases here
+      return []; // or throw an exception or handle it as required
+    }
+  }
+  set setMyRoomDecorItems(List items) => set<List>(keyMyRoomDecorItems, items);
+
+  set incrementMyRoomDecorItems(Map<String, dynamic> item) {
+    setAddUnique(keyMyRoomDecorItems, item);
   }
 
 

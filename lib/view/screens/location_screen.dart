@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:teego/data/app/setup.dart';
 import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/parse/UserModel.dart';
@@ -260,7 +261,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 textAlign: TextAlign.center,
                 marginTop: 0,
                 fontSize: 14,
-                marginBottom: 10,
+                marginBottom: 20.h,
                 marginLeft: 50,
                 marginRight: 50,
                 color: Color(0xFF989898),

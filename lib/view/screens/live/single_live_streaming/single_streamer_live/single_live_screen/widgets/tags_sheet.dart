@@ -54,7 +54,7 @@ class _TagsSheetState extends State<TagsSheet> {
                       if (liveViewModel.tagList.contains(data[index])) {
                         liveViewModel.tagList.remove(data[index]);
                       } else {
-                        liveViewModel.tagList.add(data[index]);
+                        liveViewModel.tagList.insert(0,data[index]);
                       }
                       setState(() {});
                     },

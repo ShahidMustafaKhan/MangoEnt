@@ -98,6 +98,7 @@ class _InviteWidgetState extends State<InviteWidget> {
                                       children: [
                                         Text(liveViewModel.friendsList[index].getFullName ?? ''),
                                         const SizedBox(width: 16),
+                                        if(liveViewModel.friendsList[index].getHideMyLocation == false)
                                         SvgPicture.asset(
                                           QuickActions.getCountryFlag(liveViewModel.friendsList[index]),
                                           width: 24,
@@ -222,6 +223,7 @@ class _InviteWidgetState extends State<InviteWidget> {
                                       children: [
                                         Text(liveViewModel.liveUsers[index].getFullName ?? ''),
                                         const SizedBox(width: 16),
+                                        if(liveViewModel.liveUsers[index].getHideMyLocation == false)
                                         SvgPicture.asset(
                                           QuickActions.getCountryFlag(liveViewModel.liveUsers[index]),
                                           width: 24,

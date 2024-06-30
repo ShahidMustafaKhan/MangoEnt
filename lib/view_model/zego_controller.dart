@@ -1,8 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:teego/parse/BattleStreamingModel.dart';
 import 'package:teego/parse/LiveStreamingModel.dart';
 import 'package:teego/view_model/animation_controller.dart';
@@ -15,6 +21,7 @@ import '../utils/Utils.dart';
 import '../utils/theme/colors_constant.dart';
 import '../view/screens/live/multi_live_streaming/widgets/multi_guest_grid_settings.dart';
 import '../view/screens/live/single_live_streaming/single_audience_live/widgets/invitation_dialog.dart';
+import '../view/screens/live/zegocloud/widgets/zego_utils.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/audioRoom/layout_config.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/audioRoom/live_audio_room_seat.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
@@ -30,6 +37,7 @@ import '../view/widgets/custom_buttons.dart';
 class ZegoController extends GetxController {
   ZegoLiveRole role;
   final String streamingType;
+  bool isCameraOn = true;
 
   UserModel currentUser = Get.find<UserViewModel>().currentUser;
   var liveStreamingManager = ZegoLiveStreamingManager();
@@ -41,6 +49,8 @@ class ZegoController extends GetxController {
   ValueNotifier<bool> isApplyStateNoti = ValueNotifier(false);
   String? currentRequestID;
   RoomRequest? myRoomRequest;
+  String appDocumentsPath = '';
+
 
 
   bool isCameraEnabled = true;
@@ -75,9 +85,10 @@ class ZegoController extends GetxController {
         expressService.useFrontCamera(true);
         if(expressService.currentUser!=null)
           expressService.currentUser!.isCameraFront.value=true;
-        ZEGOSDKManager.instance.currentUser?.coinsNotifier.value = Get.find<UserViewModel>().currentUser.getDiamondsTotal ?? 0;
+          expressService.currentUser!.isCamerOnNotifier.value=isCameraOn;
+        ZEGOSDKManager.instance.currentUser?.coinsNotifier.value = Get.find<UserViewModel>().currentUser.getCoins ?? 0;
         ZegoLiveStreamingManager().currentUserRoleNoti.value = ZegoLiveRole.host;
-        ZEGOSDKManager.instance.expressService.turnCameraOn(true);
+        ZEGOSDKManager.instance.expressService.turnCameraOn(isCameraOn);
         ZEGOSDKManager.instance.expressService.turnMicrophoneOn(true);
         ZEGOSDKManager.instance.expressService.startPreview( );
         startLive();
@@ -248,7 +259,7 @@ class ZegoController extends GetxController {
         } else if (type == RoomCommandType.unMuteSpeaker) {
           ZEGOSDKManager().expressService.turnMicrophoneOn(true);
         } else if (type == RoomCommandType.kickOutRoom) {
-          if(streamingType == LiveStreamingModel.keyTypeMultiGuestLive)
+          if(streamingType != LiveStreamingModel.keyTypeAudioLive)
             liveStreamingManager.endCoHost();
           if(streamingType == LiveStreamingModel.keyTypeAudioLive){
           liveAudioRoomManager.leaveRoom();
@@ -567,13 +578,63 @@ class ZegoController extends GetxController {
       expressService.hostScreenView.value = null;
     }
   }
+  Future<void> requestPermissions() async {
+    // Request storage permissions
+    PermissionStatus storagePermission = await Permission.storage.request();
+
+    if (storagePermission.isGranted) {
+      print("Storage permission granted.");
+    } else if (storagePermission.isDenied) {
+      print("Storage permission denied.");
+    } else if (storagePermission.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
+
+  void startLiveStreamRecording(String recordingPath) {
+    // Initialize the ZegoExpressEngine if not already initialized
+    // Start recording the stream
+    requestPermissions().then((value) => ZegoExpressEngine.instance.startRecordingCapturedData(
+        ZegoDataRecordConfig(
+          "$recordingPath/shahid.mp4",
+          ZegoDataRecordType.Default,
+        ), channel:  ZegoPublishChannel.Main
+    ).then((value) {
+    }));
 
 
-  ZegoController(this.role, this.streamingType);
+  }
+
+  void stopLiveStreamRecording() {
+    ZegoExpressEngine.instance.stopRecordingCapturedData().then((value) {
+
+    });
+  }
+
+  void onSnapshotButtonClickedHost(BuildContext context) {
+    ZegoExpressEngine.instance.takePublishStreamSnapshot().then((result) {
+
+      ZegoUtils.showImage(context, result.image);
+
+    });
+  }
+
+  void onSnapshotButtonClickedAudience(BuildContext context) {
+    ZegoExpressEngine.instance.takePlayStreamSnapshot(ZegoLiveStreamingManager.instance.hostNoti.value!.streamID.toString()).then((result) async {
+
+      ZegoUtils.showImage(context, result.image);
+
+
+    });
+  }
+
+
+  ZegoController(this.role, this.streamingType,{this.isCameraOn=true});
 
   @override
   void onInit() {
     role=this.role;
+    isCameraOn = this.isCameraOn;
     if(role==ZegoLiveRole.host){
       if(streamingType==LiveStreamingModel.keyTypeSingleLive || streamingType==LiveStreamingModel.keyTypeMultiGuestLive)
       streamerZegoLiveConfig();
@@ -592,6 +653,15 @@ class ZegoController extends GetxController {
     subscribeZegoService();
     else if (streamingType==LiveStreamingModel.keyTypeAudioLive)
       subscribeZegoAudioService();
+
+    if (GetPlatform.isAndroid) {
+      getExternalStorageDirectories(type: StorageDirectory.pictures)
+          .then((dir) =>
+      appDocumentsPath = dir == null ? '' : dir.first.path);
+    } else {
+      getApplicationDocumentsDirectory()
+          .then((dir) => appDocumentsPath = dir.path);
+    }
 
 
     super.onInit();

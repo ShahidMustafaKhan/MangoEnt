@@ -11,16 +11,19 @@ import 'package:teego/utils/constants/typography.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/screens/live/multi_live_streaming/widgets/youtube_sheet.dart';
 import 'package:teego/view/screens/live/widgets/beauty_filters_sheets/sticker_modal_sheets.dart';
+import 'package:teego/view/screens/live/widgets/subscrption/subscriber_sheet.dart';
 import 'package:teego/view/screens/live/widgets/whisper/whisper_modal.dart';
 import 'package:teego/view_model/live_controller.dart';
 import 'package:teego/view_model/zego_controller.dart';
 
 import '../../../../helpers/quick_actions.dart';
+import '../single_live_streaming/single_streamer_live/single_live_screen/widgets/room_announcement_sheet.dart';
 import 'basic_feature_sheets/data_sheet.dart';
 import 'basic_feature_sheets/filter_words.dart';
 import 'basic_feature_sheets/live_setting_sheet.dart';
 import 'basic_feature_sheets/local_music.dart';
 import 'basic_feature_sheets/manage.dart';
+import 'basic_feature_sheets/manage_modal.dart';
 import 'boost_sheet.dart';
 import 'wishList_streamer_sheet.dart';
 import '../zegocloud/zim_zego_sdk/zego_sdk_manager.dart';
@@ -48,7 +51,7 @@ class BasicFeatureSheet extends StatelessWidget {
           init: liveViewModel,
           builder: (controller) {
             return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.only(left: 16, right: 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -85,15 +88,21 @@ class BasicFeatureSheet extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 30),
-                    Column(
-                      children: [
-                        Image.asset(AppImagePath.subscriber, width: 50, height: 50),
-                        const SizedBox(height: 11),
-                        Text(
-                          'Subscriber',
-                          style: sfProDisplayRegular.copyWith(fontSize: 12),
-                        ),
-                      ],
+                    GestureDetector(
+                      onTap:(){
+                        Get.back();
+                        openBottomSheet(SubscriberSheet(), context);
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset(AppImagePath.subscriber, width: 50, height: 50),
+                          const SizedBox(height: 11),
+                          Text(
+                            'Subscriber',
+                            style: sfProDisplayRegular.copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 37),
                     if(isMultiGuest)
@@ -141,10 +150,10 @@ class BasicFeatureSheet extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      if(isMultiGuest)
-                      ToolWidget(title: 'Boost', icon: "assets/png/streamer/boost.png", onTap: ()=> openBottomSheet(BoostSheet(), context, back: true),),
-                      if(isMultiGuest)
-                        SizedBox(width: 32),
+                      // if(isMultiGuest)
+                      // ToolWidget(title: 'Boost', icon: "assets/png/streamer/boost.png", onTap: ()=> openBottomSheet(BoostSheet(), context, back: true),),
+                      // if(isMultiGuest)
+                      //   SizedBox(width: 32),
                       ToolWidget(title: 'Filter word', icon: AppImagePath.filterWord, onTap: ()=> openBottomSheet(FilterWordWidget(), context, back: true)),
                       if(isMultiGuest && !isMultiSeat3)
                         SizedBox(width: 32),
@@ -173,7 +182,18 @@ class BasicFeatureSheet extends StatelessWidget {
                       SizedBox(width: 32),
                       ToolWidget(title: 'Whispers', icon: AppImagePath.whisper, onTap: ()=> openBottomSheet(WhisperModal(), context, back: true)),
                       SizedBox(width: 32),
-                      ToolWidget(title: 'Announcement', icon: AppImagePath.announcement, onTap: ()=> null),
+                      ToolWidget(title: 'Announcement', icon: AppImagePath.announcement, onTap: ()=> showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                        ),
+                        backgroundColor: AppColors.grey500,
+                        builder: (context) => const RoomAnnouncementSheet(),
+                      )),
                     ],
                   ),
                 ),
@@ -219,7 +239,7 @@ class BasicFeatureSheet extends StatelessWidget {
                       SizedBox(width: 32),
                       // ToolWidget(title: 'Mirror', icon: AppImagePath.mirrorIcon),
                       // SizedBox(width: 32),
-                      ToolWidget(title: 'Admin', icon: AppImagePath.admin , onTap: ()=> openBottomSheet(ManageSheet(), context, back: true)),
+                      ToolWidget(title: 'Admin', icon: AppImagePath.admin , onTap: ()=> openBottomSheet(ManageModalSheet(initialTab: 'Disable Chat'), context, back: true),),
                       SizedBox(width: 32),
                       GestureDetector(
                           onTap: (){

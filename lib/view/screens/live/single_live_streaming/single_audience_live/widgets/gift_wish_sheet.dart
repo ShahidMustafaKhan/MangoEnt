@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/view_model/live_controller.dart';
 import 'package:teego/view_model/userViewModel.dart';
 import '../../../../../../parse/LiveStreamingModel.dart';
@@ -83,7 +84,8 @@ class GiftWishSheet extends StatelessWidget {
                           style: sfProDisplaySemiBold.copyWith(fontSize: 16),
                         ),
                         const SizedBox(height: 24),
-                        Container(
+                        if(liveViewModel.myWishList!.isNotEmpty)
+                          Container(
                           height: 425.h,
                           child: GridView.builder(
                             physics: AlwaysScrollableScrollPhysics(),
@@ -106,7 +108,7 @@ class GiftWishSheet extends StatelessWidget {
                                 score: (int.parse(giftCard[LiveStreamingModel.keyReceived])*3).toString(),
                                 progress: double.parse(giftCard[LiveStreamingModel.keyReceived])/double.parse(giftCard[LiveStreamingModel.keyAmount]),
                                 onSend: (){
-                                  if(userViewModel.currentUser.getDiamondsTotal! >= 3){
+                                  if(userViewModel.currentUser.getCoins! >= 3){
                                     if(int.parse(giftCard[LiveStreamingModel.keyAmount])!=int.parse(giftCard[LiveStreamingModel.keyReceived])) {
                                       Map<String,
                                           dynamic> item = {
@@ -129,7 +131,7 @@ class GiftWishSheet extends StatelessWidget {
                                           .save().then((
                                           value) {
                                         userViewModel.currentUser
-                                            .decrementDiamondsTotal =
+                                            .decrementCoins =
                                         3;
 
                                         userViewModel.currentUser.save();
@@ -143,6 +145,25 @@ class GiftWishSheet extends StatelessWidget {
                             },
                           ),
                         ),
+                        if(liveViewModel.myWishList!.isEmpty)
+                          Container(
+                            height: 200.h,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("*  ", style: sfProDisplayBlack.copyWith(color: Colors.red),),
+                                    Text("No item added yet", style: sfProDisplayMedium.copyWith(
+                                      fontSize: 14.sp,
+
+                                    ),),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
 
                       ],
                     ),

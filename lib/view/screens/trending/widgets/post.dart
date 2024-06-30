@@ -7,7 +7,7 @@ class PostView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 25.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 65.h),
       child: ListView.builder(
         itemCount: 5,
         itemBuilder: (context, index) {

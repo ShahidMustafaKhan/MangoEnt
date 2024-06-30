@@ -146,7 +146,7 @@ dependencies:
 
   share_plus:
 
-#  wakelock: ^0.6.2
+  wakelock: ^0.6.2
   fluttertoast:
 
 
@@ -168,6 +168,19 @@ dependencies:
   youtube_player_flutter:
 
   sticky_grouped_list: ^3.1.0
+  device_info_plus:
+  english_words:
+  syncfusion_flutter_sliders:
+
+  just_audio: ^0.9.31
+
+  flutter_keyboard_visibility:
+  ed_screen_recorder:
+  screenshot: ^1.1.0
+  carousel_slider: ^4.2.1
+
+
+
 
 
 
@@ -185,6 +198,7 @@ flutter:
 
   assets:
     - assets/svg/
+    - assets/reels/
     - assets/png/
     - assets/translations/
     - assets/flags/
@@ -197,6 +211,9 @@ flutter:
 #    - assets/avatar/
 #    - assets/chat/
     - assets/png/Chat/
+    - assets/png/dashboard/
+    - assets/png/userProfile/
+    - assets/png/streamerProfile/
     - assets/png/streamer/
     - assets/png/streamer/battle/
     - assets/svga/
@@ -216,6 +233,10 @@ flutter:
     - assets/png/top_streams/
     - assets/png/trending/
     - assets/png/home/
+    - assets/png/setting/
+    - assets/svg/avatar_frame/
+    - assets/png/background/
+    - assets/png/room_decor/
 
 
 

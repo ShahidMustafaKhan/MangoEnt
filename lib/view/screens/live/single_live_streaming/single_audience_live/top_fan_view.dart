@@ -22,7 +22,7 @@ class TopFanView extends StatefulWidget {
 }
 
 class _TopFanViewState extends State<TopFanView> {
-  String activeTab = "Daily";
+  String activeTab = "Weekly";
   RankingViewModel rankingViewModel = Get.find();
   List<RankingModel> ranking=[];
 
@@ -219,7 +219,8 @@ class _TopFanViewState extends State<TopFanView> {
                                   children: [
                                     Text(gifter.getFullName ?? ''),
                                     const SizedBox(width: 16),
-                                    SvgPicture.asset(
+                                    if(gifter.getHideMyLocation == false)
+                                      SvgPicture.asset(
                                       QuickActions.getCountryFlag(gifter),
                                       width: 24,
                                       height: 17,

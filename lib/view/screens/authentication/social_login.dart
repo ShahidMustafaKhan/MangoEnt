@@ -125,7 +125,7 @@ class SocialLogin {
     }
   }
 
-  static GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
+  static GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'dashboard']);
 
   static Future<void> googleLogin(BuildContext context, SharedPreferences preferences) async {
     try {

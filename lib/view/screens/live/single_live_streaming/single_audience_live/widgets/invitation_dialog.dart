@@ -57,8 +57,8 @@ class InvitationDialog extends StatelessWidget {
               const SizedBox(height: 50),
               PrimaryButton(
                 bgColor: AppColors.yellow.withOpacity(0.3),
-                title: 'Join my live!',
-                textStyle: sfProDisplaySemiBold.copyWith(fontSize: 16),
+                title: 'Join me for an epic PK battle!',
+                textStyle: sfProDisplaySemiBold.copyWith(fontSize: 15),
                 onTap: () {
                 },
               ),

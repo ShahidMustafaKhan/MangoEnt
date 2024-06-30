@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:teego/parse/WhisperListModel.dart';
 import 'package:teego/view/screens/live/widgets/whisper/whisper_sheet.dart';
 import '../../../../../../../utils/constants/typography.dart';
 import '../../../../../../../utils/theme/colors_constant.dart';
+import '../../../../../view_model/whisper_list_controller.dart';
 import 'greeting_sheet.dart';
 
 class WhisperModal extends StatefulWidget {
@@ -52,45 +56,45 @@ class _WhisperModalState extends State<WhisperModal> {
                     children: [
                       Text(
                         'Whisper',
-                        style: sfProDisplayMedium.copyWith(fontSize: 20),
+                        style: sfProDisplaySemiBold.copyWith(fontSize: 20.sp),
                       ),
-                      if (selectedTab == 'Whisper')
-                        Container(
-                          margin: const EdgeInsets.only(top: 4),
-                          height: 4,
-                          width: 20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.white,
-                          ),
-                        ),
+                      // if (selectedTab == 'Whisper')
+                      //   Container(
+                      //     margin: const EdgeInsets.only(top: 4),
+                      //     height: 4,
+                      //     width: 20,
+                      //     decoration: BoxDecoration(
+                      //       shape: BoxShape.circle,
+                      //       color: AppColors.white,
+                      //     ),
+                      //   ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 30.w,
-                ),
-                GestureDetector(
-                  onTap: () => onTabSelected('Greeting'),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Greeting',
-                        style: sfProDisplayMedium.copyWith(fontSize: 20),
-                      ),
-                      if (selectedTab == 'Greeting')
-                        Container(
-                          margin: const EdgeInsets.only(top: 4),
-                          height: 4,
-                          width: 20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.white,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
+                // SizedBox(
+                //   width: 30.w,
+                // ),
+                // GestureDetector(
+                //   onTap: () => onTabSelected('Greeting'),
+                //   child: Column(
+                //     children: [
+                //       Text(
+                //         'Greeting',
+                //         style: sfProDisplayMedium.copyWith(fontSize: 20),
+                //       ),
+                //       if (selectedTab == 'Greeting')
+                //         Container(
+                //           margin: const EdgeInsets.only(top: 4),
+                //           height: 4,
+                //           width: 20,
+                //           decoration: BoxDecoration(
+                //             shape: BoxShape.circle,
+                //             color: AppColors.white,
+                //           ),
+                //         ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 12),

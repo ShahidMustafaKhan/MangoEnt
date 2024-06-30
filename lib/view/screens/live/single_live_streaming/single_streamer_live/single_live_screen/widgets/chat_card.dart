@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:teego/parse/LiveMessagesModel.dart';
 import 'package:teego/utils/constants/typography.dart';
+
+import '../../../../../../../view_model/live_controller.dart';
+import '../../../../../../../view_model/live_messages_controller.dart';
 
 class ChatCard extends StatelessWidget {
   final LiveMessagesModel liveMessagesModel;
@@ -56,7 +61,7 @@ class ChatCard extends StatelessWidget {
 
       ],
     );
-    else
+    if(liveMessagesModel.getMessageType == LiveMessagesModel.messageTypeComment)
       return Container(
         child: Column(
           children: [
@@ -68,7 +73,7 @@ class ChatCard extends StatelessWidget {
                     padding: EdgeInsets.only(right: 10),
                     height: 25.h,
                     decoration: BoxDecoration(
-                      color: Color(0XFF08070B),
+                      color: Color(0XFF000000).withOpacity(0.6),
                       borderRadius: BorderRadius.circular(19),
                     ),
                     child: Row(
@@ -86,7 +91,15 @@ class ChatCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                         "${liveMessagesModel.getSenderName ?? ''}  ${liveMessagesModel.getMessage ?? ''}",
+                         "${liveMessagesModel.getSenderName ?? ''}  ",
+                          style: sfProDisplayRegular.copyWith(
+                            color: Color(0xffF5AF03),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Text(
+                          "${Get.find<LiveViewModel>().filterMessage(liveMessagesModel.getMessage ?? '')}",
                           style: sfProDisplayMedium.copyWith(
                             color: Colors.white,
                             fontSize: 10,
@@ -103,6 +116,61 @@ class ChatCard extends StatelessWidget {
           ],
         ),
       );
+
+    return Container(
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(right: 10),
+                  height: 25.h,
+                  decoration: BoxDecoration(
+                    color: Color(0XFF000000).withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(19),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      ClipRRect (
+                        borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                        child: Image.network(
+                          liveMessagesModel.getAuthorAvatarUrl!,
+                          width: 16.h,
+                          height: 16.h,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "${liveMessagesModel.getSenderName ?? ''}  ",
+                        style: sfProDisplayRegular.copyWith(
+                          color: Color(0xffF5AF03),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        "${Get.find<LiveViewModel>().filterMessage(liveMessagesModel.getMessage ?? '')}",
+                        style: sfProDisplayMedium.copyWith(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    );
 
   }
 }

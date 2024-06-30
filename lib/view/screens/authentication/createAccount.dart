@@ -34,7 +34,7 @@ class _CreateAccountState extends State<CreateAccount> {
   RxBool isFormDirty = false.obs;
   RxBool isPasswordObscure = false.obs;
   RxBool isConfirmPasswordObscure = false.obs;
-  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'dashboard']);
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   late SharedPreferences preferences;
   AuthViewModel authViewModel= Get.put(AuthViewModel());

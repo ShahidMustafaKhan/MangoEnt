@@ -246,7 +246,7 @@ class _NewUserState extends State<NewUser> {
                               AppButton(context, "Next", () {
                                 if (_formKey.currentState!.validate()) {
                                   if(userAvatar!.isEmpty){
-                                    QuickHelp.showAppNotificationAdvanced(title: "Please upload a profile picture", context: context);
+                                    QuickHelp.showAppNotificationAdvanced(title: "Please upload a dashboard picture", context: context);
                                   }
                                   else{
                                     String gender=genderController.selectedGender.value==Gender.male ? UserModel.keyGenderMale : genderController.selectedGender.value==Gender.female ? UserModel.keyGenderFemale : UserModel.keyGenderOther;

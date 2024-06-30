@@ -2,22 +2,23 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
+import '../../../../../../view_model/live_controller.dart';
+import '../../widgets/camera_off_widget.dart';
 
-class TwelvePerson extends StatefulWidget {
+class TwelvePerson extends StatelessWidget {
   final CameraController cameraController;
 
   const TwelvePerson({Key? key, required this.cameraController}) : super(key: key);
 
   @override
-  State<TwelvePerson> createState() => _TwelvePersonState();
-}
-
-class _TwelvePersonState extends State<TwelvePerson> {
-  @override
   Widget build(BuildContext context) {
+    LiveViewModel liveViewModel = Get.find();
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10),
@@ -33,9 +34,16 @@ class _TwelvePersonState extends State<TwelvePerson> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: AppColors.black.withOpacity(0.2),
-
+                          border: Border(
+                              bottom: BorderSide(color: AppColors.grey300 , width: 0)
+                          )
                       ),
-                      child: CameraPreview(widget.cameraController),
+                      child: Obx(() {
+                        if(liveViewModel.isCameraOn.value)
+                          return CameraPreview(cameraController);
+                        else
+                          return CameraOffPreviewWidget(radius: 16,);
+                      }),
                     ),
                   ),
                   Expanded(

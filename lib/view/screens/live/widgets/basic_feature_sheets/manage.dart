@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:teego/utils/constants/typography.dart';
+import 'package:teego/utils/routes/app_routes.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/widgets/custom_buttons.dart';
 import '../../../../../../../view_model/live_controller.dart';
+import '../../../../../helpers/quick_actions.dart';
+import '../../../../../parse/UserModel.dart';
+import '../../../../../utils/constants/status.dart';
+import '../../../../../view_model/userViewModel.dart';
+import '../../../userProfileView/widget/report_option_sheet.dart';
 import 'manage_modal.dart';
 
 class ManageSheet extends StatefulWidget {
-  const ManageSheet();
+  final UserModel user;
+  const ManageSheet(this.user);
 
   @override
   State<ManageSheet> createState() => _ManageSheetState();
@@ -41,18 +48,33 @@ class _ManageSheetState extends State<ManageSheet> {
                   switch (languages[index]) {
                     case 'Disable chat':
                       Get.back();
+                      Get.find<LiveViewModel>().addDisableChatUser(widget.user.getUid!);
+                      Get.find<LiveViewModel>().status=Status.Loading;
                       _showModal(context,
                           ManageModalSheet(initialTab: 'Disable Chat'));
                       break;
                     case 'Block permanently':
                       Get.back();
+                      Get.find<LiveViewModel>().addBlockUser(widget.user.getUid!);
+                      Get.find<UserViewModel>().addToBlockList(widget.user.getUid!);
+                      Get.find<LiveViewModel>().status=Status.Loading;
                       _showModal(
                           context, ManageModalSheet(initialTab: 'Blocked'));
                       break;
                     case 'Admin':
                       Get.back();
+                      Get.find<LiveViewModel>().addAdmin(widget.user.getUid!);
+                      Get.find<LiveViewModel>().status=Status.Loading;
                       _showModal(
                           context, ManageModalSheet(initialTab: 'Admin List'));
+                      break;
+                    case 'Report':
+                      Get.back();
+                      Get.toNamed(AppRoutes.chatReportScreen, arguments: widget.user);
+                      break;
+                    case 'Kick out':
+                      Get.back();
+                      Get.find<LiveViewModel>().addKickOutUser(widget.user.getUid!);
                       break;
                   }
                 },

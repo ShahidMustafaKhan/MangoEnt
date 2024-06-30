@@ -1,7 +1,13 @@
+import 'package:just_audio/just_audio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:teego/utils/constants/app_constants.dart';
+import '../../../../../parse/MusicModel.dart';
 import '../../../../../utils/theme/colors_constant.dart';
+import '../../../../../view_model/music_controller.dart';
 
 class LocalMusicWidget extends StatefulWidget {
   const LocalMusicWidget();
@@ -11,7 +17,8 @@ class LocalMusicWidget extends StatefulWidget {
 }
 
 class _LocalMusicWidgetState extends State<LocalMusicWidget> {
-  List<bool> isPlayingList = List.filled(6, false);
+  MusicController musicController= Get.find();
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,122 +53,117 @@ class _LocalMusicWidgetState extends State<LocalMusicWidget> {
             height: 3,
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                String singerName;
-                String musicName;
-                String time;
-                Widget trailingWidget;
+            child: FutureBuilder<List<MusicModel>>(
+                future: MusicController.getAudioData(), // Replace with your actual data fetching function
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator()); // Display a loading indicator while waiting for data.
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final musicModelList = snapshot.data; // Access the loaded data
+                    return ListView.builder(
+                      itemCount: musicModelList!.length,
+                      itemBuilder: (context, index) {
+                        final musicModel = musicModelList[index];
+                        String singerName= musicModel.getSingerName?? "";
+                        String musicName= musicModel.getAudioName!;
+                        String time= musicModel.getTime!;
 
-                switch (index) {
-                  case 0:
-                    musicName = "2 AM";
-                    singerName = "Arizona Zervas";
-                    time = "3:03";
-                    break;
-                  case 1:
-                    musicName = "You right";
-                    singerName = "Doja Cat, The Weekend";
-                    time = "3:58";
-                    break;
-                  case 2:
-                    musicName = "Baddest";
-                    singerName = "2 Chainz, Chris Brown";
-                    time = "3:51";
-                    break;
-                  case 3:
-                    musicName = "True Love";
-                    singerName = "Kanye West";
-                    time = "4:52";
-                    break;
-                  case 4:
-                    musicName = "Bye Bye";
-                    singerName = "Marshmello, Juice WRLD";
-                    time = "2:09";
-                    break;
-                  case 5:
-                    musicName = "Hands on you";
-                    singerName = "Austin George";
-                    time = "3:56";
-                    break;
-                  default:
-                    musicName = "";
-                    singerName = "";
-                    time = "";
-                    break;
-                }
 
-                if (isPlayingList[index]) {
-                  trailingWidget = Icon(Icons.play_arrow, color: Colors.yellow);
-                } else {
-                  trailingWidget = GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isPlayingList[index] = !isPlayingList[index];
-                      });
-                    },
-                    child: Image.asset(AppImagePath.musicIcon),
-                  );
-                }
-
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 10.w),
-                  child: Container(
-                    width: 343,
-                    height: 76,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: 1, color: AppColors.grey300),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: Row(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                musicName,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16.sp,
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 10.w),
+                          child: Obx(() {
+                              return Container(
+                                width: 343,
+                                height: 76,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(width: 1, color: AppColors.grey300),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    singerName,
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            musicName,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5.h,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                singerName,
+                                                style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              SizedBox(width: 5.w),
+                                              Text(
+                                                time,
+                                                style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Spacer(),
+
+
+                                    if (musicController
+                                        .isPlaying[index]
+                                        .value==true)
+                                      GestureDetector(
+                                          onTap:(){
+                                            musicController.player.pause();
+                                            musicController.togglePlayItemPressed(index);
+
+                                          },
+                                          child: Icon(Icons.play_arrow, color: Colors.yellow)),
+
+                                      if(musicController
+                                          .isPlaying[index]
+                                          .value==false)
+                                        GestureDetector(
+                                          onTap: () {
+                                              //
+                                              musicController.loadAudio(
+                                              musicModel
+                                                  .getAudioFile!.url!);
+                                              musicController.player.play();
+                                              musicController
+                                                  .togglePlayItemPressed(
+                                              index);
+
+                                          },
+                                          child: Image.asset(AppImagePath.musicIcon),
+                                        )
+
+
+                                    ],
                                   ),
-                                  SizedBox(width: 5.w),
-                                  Text(
-                                    time,
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                ),
+                              );
+                            }
                           ),
-                          Spacer(),
-                          trailingWidget,
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
+                        );
+                      },
+                    );}
+                }
             ),
           ),
         ],
@@ -169,3 +171,4 @@ class _LocalMusicWidgetState extends State<LocalMusicWidget> {
     );
   }
 }
+

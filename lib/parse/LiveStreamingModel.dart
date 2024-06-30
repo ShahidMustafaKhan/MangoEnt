@@ -15,13 +15,6 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   @override
   LiveStreamingModel clone(Map<String, dynamic> map) => LiveStreamingModel.clone()..fromJson(map);
 
-  static final String privacyTypeAnyone = "anyone";
-  static final String privacyTypeFriends = "friends";
-  static final String privacyTypeNoOne = "none";
-
-  static final String liveTypeParty = "party";
-  static final String liveTypeGoLive = "live";
-  static final String liveTypeBattle = "battle";
 
   static String keyCreatedAt = "createdAt";
   static String keyObjectId = "objectId";
@@ -46,6 +39,13 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   static final String keyPKCoHostLiveObject = "PKCoHostLive";
 
   static String keyViewsCount = "viewsCount";
+  static String keyCoinsCount = "coinsCount";
+  static String keyFansCount = "fansCount";
+  static String keyGifter = "gifterCount";
+  static String keyLiveTime = "liveTime";
+  static String keySubscriberGain = "subscriberGain";
+  static String keyComments = "comments";
+
 
   static String keyAuthorInvited = "AuthorInvited";
   static String keyAuthorInvitedUid = "AuthorInvitedUid";
@@ -172,6 +172,21 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   static final String keyYoutubeVideoId='youtubeVideoId';
   static final String keyYoutubeVideoPlaying='youtubeVideoPlaying';
 
+  static final String keyDisableRecord='disableRecord';
+  static final String keyDisableScreenShot='disableScreenShot';
+
+  static final String keyFilteredList='filteredList';
+
+  static final String keyDisableChat='disableChat';
+  static final String keyAdminList='adminList';
+  static final String keyBlockedList='blockedList';
+  static final String keyKickOutList='kickOutList';
+
+  static final String keyModePublic='Public';
+  static final String keyModeSubscribers='Subscribers';
+
+  static final String keyBackgroundImage='backgroundImage';
+
 
 
   UserModel? get getAuthor => get<UserModel>(keyAuthor);
@@ -207,24 +222,6 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   bool? get getIsPkBattleLive => get<bool>(keyPkBattleLive);
   set setIsPkBattleLive(bool isPkBattleLive) => set<bool>(keyPkBattleLive, isPkBattleLive);
 
-  bool? get getPkBannerStarted => get<bool>(keyPkBannerStarted);
-  set setPkBannerStarted(bool started) => set<bool>(keyPkBannerStarted, started);
-
-  bool? get getIsPkPrimaryHost => get<bool>(keyPrimaryHost);
-  set setIsPkPrimaryHost(bool isPkPrimaryHost) => set<bool>(keyPrimaryHost, isPkPrimaryHost);
-
-  bool? get getIsTimerOff => get<bool>(keyTimerOFF);
-  set setIsTimerOff (bool isOff) => set<bool>(keyTimerOFF, isOff);
-
-  bool? get getIsTimerIsOn => get<bool>(keyTimerIsOn);
-  set setIsTimerIsOn (bool isOn) => set<bool>(keyTimerIsOn, isOn);
-
-  int? get getTimer=> get<int>(keyTimer);
-  set setTimer(int timer) => set<int>(keyTimer, timer);
-
-  String? get getPKCohostUid => get<String>(keyPKCoHostUid);
-  set setPKCohostUid(String pkCohostUid) => set<String>(keyPKCoHostUid, pkCohostUid);
-
   int? get getSeatNumber=> get<int>(keyCoHostView);
   set setSeatNumber(int seatNumber) => set<int>(keyCoHostView, seatNumber);
 
@@ -246,8 +243,8 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   String? get getTitle => get<String>(keyTitle);
   set setTitle(String title) => set<String>(keyTitle, title);
 
-  // String? get getTags => get<String>(keyTags);
-  // set setTags(String tags) => set<String>(keyTags, tags);
+  String? get getBackgroundImage => get<String>(keyBackgroundImage);
+  set setBackgroundImage(String image) => set<String>(keyBackgroundImage, image);
 
   List? get getTags => get<List>(keyTags);
   set setTags(List tags) => set<List>(keyTags, tags);
@@ -776,6 +773,95 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
       return playing;
   }
   set setYoutubeVideoPlaying (bool value) => set<bool>(keyYoutubeVideoPlaying, value);
+
+  int? get getViewsCount=> get<int>(keyViewsCount);
+  set setViewsCount(int count) => setIncrement(keyViewsCount, count);
+
+  int? get getFansCount=> get<int>(keyFansCount);
+  set setFansCount(int count) => setIncrement(keyFansCount, count);
+
+  int? get getGifterCount=> get<int>(keyGifter);
+  set setGifterCount(int count) => setIncrement(keyGifter, count);
+
+  int? get getTotalCoins=> get<int>(keyCoinsCount);
+  set setTotalCoins(int count) => setIncrement(keyCoinsCount, count);
+
+  int? get getSubscriberGain=> get<int>(keySubscriberGain);
+  set setSubscriberGain(int count) => setIncrement(keySubscriberGain, count);
+
+  int? get getComments=> get<int>(keyComments);
+  set setComments(int count) => setIncrement(keyComments, count);
+
+  String? get getLiveTime=> get<String>(keyLiveTime);
+  set setLiveTime(String time) => set(keyLiveTime, time);
+
+  bool? get getDisableRecord => get<bool>(keyDisableRecord);
+  set setDisableRecord (bool view) => set<bool>(keyDisableRecord, view);
+
+  bool? get getDisableScreenShot => get<bool>(keyDisableScreenShot);
+  set setDisableScreenShot (bool view) => set<bool>(keyDisableScreenShot, view);
+
+  List<dynamic>? get getFilteredList{
+
+    List<dynamic>? filterList = get<List<dynamic>>(keyFilteredList);
+    if(filterList != null && filterList.length > 0){
+      return filterList;
+    } else {
+      return [];
+    }
+  }
+  set setFilteredList(String filterList) => setAdd(keyFilteredList, filterList);
+  set removeFilteredList(String filterList) => setRemove(keyFilteredList, filterList);
+
+
+  List<dynamic>? get getBlockedList{
+
+    List<dynamic>? filterList = get<List<dynamic>>(keyBlockedList);
+    if(filterList != null && filterList.length > 0){
+      return filterList;
+    } else {
+      return [];
+    }
+  }
+  set setBlockedList(int user) => setAddUnique(keyBlockedList, user);
+  set removeBlockedUser(int user) => setRemove(keyBlockedList, user);
+
+  List<dynamic>? get getAdminList{
+
+    List<dynamic>? filterList = get<List<dynamic>>(keyAdminList);
+    if(filterList != null && filterList.length > 0){
+      return filterList;
+    } else {
+      return [];
+    }
+  }
+  set setAdminList(int filterList) => setAdd(keyAdminList, filterList);
+  set removeAdminUser(int filterList) => setRemove(keyAdminList, filterList);
+
+  List<dynamic>? get getKickOutList{
+
+    List<dynamic>? filterList = get<List<dynamic>>(keyKickOutList);
+    if(filterList != null && filterList.length > 0){
+      return filterList;
+    } else {
+      return [];
+    }
+  }
+  set setKickOutList(int filterList) => setAdd(keyKickOutList, filterList);
+  set removeKickOutUser(int filterList) => setRemove(keyKickOutList, filterList);
+
+  List<dynamic>? get getDisableChatList{
+
+    List<dynamic>? filterList = get<List<dynamic>>(keyDisableChat);
+    if(filterList != null && filterList.length > 0){
+      return filterList;
+    } else {
+      return [];
+    }
+  }
+  set setDisableChatList(int filterList) => setAdd(keyDisableChat, filterList);
+  set removeDisableChatUser(int filterList) => setRemove(keyDisableChat, filterList);
+
 
 }
 

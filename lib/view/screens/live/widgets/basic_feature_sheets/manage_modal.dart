@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../../utils/constants/typography.dart';
 import '../../../../../../../utils/theme/colors_constant.dart';
 import '../../audio_live_streaming/widgets/guest_widget.dart';
@@ -63,7 +64,7 @@ class _ManageModalSheetState extends State<ManageModalSheet> {
                     children: [
                       Text(
                         'Disable Chat',
-                        style: sfProDisplayMedium.copyWith(fontSize: 20),
+                        style: sfProDisplayMedium.copyWith(fontSize: 18.sp),
                       ),
                       if (selectedTab == 'Disable Chat')
                         Container(
@@ -84,7 +85,7 @@ class _ManageModalSheetState extends State<ManageModalSheet> {
                     children: [
                       Text(
                         'Blocked',
-                        style: sfProDisplayMedium.copyWith(fontSize: 20),
+                        style: sfProDisplayMedium.copyWith(fontSize: 18.sp),
                       ),
                       if (selectedTab == 'Blocked')
                         Container(
@@ -105,7 +106,7 @@ class _ManageModalSheetState extends State<ManageModalSheet> {
                     children: [
                       Text(
                         'Admin List',
-                        style: sfProDisplayMedium.copyWith(fontSize: 20),
+                        style: sfProDisplayMedium.copyWith(fontSize: 18.sp),
                       ),
                       if (selectedTab == 'Admin List')
                         Container(

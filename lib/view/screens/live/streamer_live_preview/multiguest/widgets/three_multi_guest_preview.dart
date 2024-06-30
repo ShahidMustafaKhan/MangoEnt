@@ -4,22 +4,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:teego/view/screens/live/streamer_live_preview/widgets/camera_off_widget.dart';
 import 'package:teego/view_model/live_controller.dart';
 
 import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
 
-class ThreePerson extends StatefulWidget {
+class ThreePerson extends StatelessWidget {
   final CameraController cameraController;
   const ThreePerson({Key? key, required this.cameraController}) : super(key: key);
 
   @override
-  State<ThreePerson> createState() => _ThreePersonState();
-}
-
-class _ThreePersonState extends State<ThreePerson> {
-  @override
   Widget build(BuildContext context) {
+    LiveViewModel liveViewModel = Get.find();
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10),
@@ -31,8 +28,17 @@ class _ThreePersonState extends State<ThreePerson> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: AppColors.black.withOpacity(0.2),
+                  border: Border(
+                    right: BorderSide(color: AppColors.grey300 , width: 0)
+                  )
                 ),
-                child: CameraPreview(widget.cameraController),
+                child: Obx(() {
+                  if(liveViewModel.isCameraOn.value)
+                    return CameraPreview(cameraController);
+                  else
+                    return CameraOffPreviewWidget(radius: 34,);
+                  }
+                ),
               ),
             ),
             Expanded(

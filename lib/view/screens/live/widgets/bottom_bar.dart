@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:teego/view/screens/live/widgets/subscrption/susbcription_audience_sheet.dart';
 import 'package:teego/view_model/live_controller.dart';
 import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
 import '../../../../../../view_model/zego_controller.dart';
+import '../../../../helpers/quick_actions.dart';
+import '../../../../helpers/quick_help.dart';
 import '../../../../utils/constants/typography.dart';
 import '../../../../utils/global_variables.dart';
 import '../single_live_streaming/single_audience_live/widgets/audience_gift_sheet.dart';
@@ -38,6 +41,7 @@ class BottomBar extends StatelessWidget {
                   children: [
                     if(liveViewModel.role == ZegoLiveRole.audience)
                       GestureDetector(
+                        onTap: ()=> openBottomSheet(Subscribe(), context),
                         child: CircleAvatar(
                           backgroundColor: Colors.black.withOpacity(0.5),
                           child: Image.asset(AppImagePath.subscriber, width: 25, height: 25),
@@ -45,9 +49,19 @@ class BottomBar extends StatelessWidget {
                       ),
                     if(liveViewModel.role == ZegoLiveRole.audience)
                       const SizedBox(width: 8),
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withOpacity(0.5),
-                      child: Image.asset(AppImagePath.chat, width: 22, height: 22),
+                    GestureDetector(
+                      onTap: (){
+                        if(Get.find<LiveViewModel>().isUserInChatDisableList()==true){
+                          QuickHelp.showAppNotificationAdvanced(title: 'The streamer has disabled your access to the chat feature.', context: context);
+                        }
+                        else{
+                          Get.find<LiveViewModel>().chatField.value=true;
+                        }
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Colors.black.withOpacity(0.5),
+                        child: Image.asset(AppImagePath.chat, width: 22, height: 22),
+                      ),
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
@@ -61,7 +75,7 @@ class BottomBar extends StatelessWidget {
                               topRight: Radius.circular(20),
                             ),
                           ),
-                          backgroundColor: AppColors.grey900,
+                          backgroundColor: AppColors.navBarColor,
                           builder: (context) => liveViewModel.role == ZegoLiveRole.audience ? BasicAudienceFeatureSheet() : BasicFeatureSheet(),
                         );
                       },
@@ -210,16 +224,16 @@ class BottomBar extends StatelessWidget {
                       GestureDetector(
                         onTap: (){
                           if(liveViewModel.isAudioLive)
-                          for (final element in zegoController.liveAudioRoomManager.seatList) {
-                            if (element.currentUser.value?.userID ==
-                                ZEGOSDKManager.instance.currentUser?.userID) {
-                              zegoController.liveAudioRoomManager.leaveSeat(element.seatIndex).then((value) {
-                                zegoController.liveAudioRoomManager.roleNoti.value = ZegoLiveRole.audience;
-                                zegoController.isApplyStateNoti.value = false;
-                                ZEGOSDKManager().expressService.stopPublishingStream();
-                              });
+                            for (final element in zegoController.liveAudioRoomManager.seatList) {
+                              if (element.currentUser.value?.userID ==
+                                  ZEGOSDKManager.instance.currentUser?.userID) {
+                                zegoController.liveAudioRoomManager.leaveSeat(element.seatIndex).then((value) {
+                                  zegoController.liveAudioRoomManager.roleNoti.value = ZegoLiveRole.audience;
+                                  zegoController.isApplyStateNoti.value = false;
+                                  ZEGOSDKManager().expressService.stopPublishingStream();
+                                });
+                              }
                             }
-                          }
                           else if(liveViewModel.isMultiGuest)
                             zegoController.endCoHost();
                         },
@@ -269,9 +283,9 @@ class BottomBar extends StatelessWidget {
 
                   ],
                 );
-            }
+              }
           );
-      }
+        }
     );
   }
 }

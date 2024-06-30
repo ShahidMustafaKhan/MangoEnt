@@ -8,9 +8,11 @@ import 'package:teego/view_model/live_controller.dart';
 import '../../../../../../../view_model/gift_contoller.dart';
 import '../../../../../../../view_model/battle_controller.dart';
 import '../../../../../view_model/live_messages_controller.dart';
+import '../../../../../view_model/music_controller.dart';
 import '../../../../../view_model/zego_controller.dart';
 import '../../../../widgets/base_scaffold.dart';
 import '../../single_live_streaming/single_audience_live/widgets/gift_animation_view.dart';
+import '../../widgets/background_image.dart';
 import '../../widgets/for_you_widget.dart';
 import '../audio_live_widgets.dart';
 
@@ -20,6 +22,7 @@ class StreamerAudioLive extends StatelessWidget  {
   @override
   Widget build(BuildContext context) {
     final GiftViewModel giftViewModel = Get.put(GiftViewModel());
+    final MusicController musicController = Get.put(MusicController());
     ZegoController zegoController = Get.put(ZegoController(ZegoLiveRole.host, LiveStreamingModel.keyTypeAudioLive));
     final LiveMessagesViewModel liveMessagesViewModel = Get.put(LiveMessagesViewModel(Get.find<LiveViewModel>()));
 
@@ -31,6 +34,7 @@ class StreamerAudioLive extends StatelessWidget  {
             return Container(
               child: Stack(
                 children: [
+                  BackgroundImage(),
                   AudioLiveWidget(),
                   Align(
                       alignment: Alignment.bottomCenter,

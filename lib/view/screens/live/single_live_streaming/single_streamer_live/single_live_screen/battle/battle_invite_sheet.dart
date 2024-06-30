@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:teego/helpers/quick_help.dart';
@@ -73,6 +74,25 @@ class _BattleInviteSheetState extends State<BattleInviteSheet> {
                   style: sfProDisplayBold.copyWith(fontSize: 18),
                 ),
                 const SizedBox(height: 24),
+                if(controller.popularAllModelList.isEmpty)
+                  Column(
+                    children: [
+                      Container(
+                        height: 200.h,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("*  ", style: sfProDisplayBlack.copyWith(color: Colors.red),),
+                            Text("No host is currently live", style: sfProDisplayMedium.copyWith(
+                              fontSize: 14.sp,
+
+                            ),),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                if(controller.popularAllModelList.isNotEmpty)
                 ...List.generate(
                   controller.popularAllModelList.length,
                   (index) => GestureDetector(

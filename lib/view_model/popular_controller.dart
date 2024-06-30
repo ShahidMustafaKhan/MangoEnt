@@ -11,6 +11,7 @@ import '../helpers/quick_help.dart';
 import '../model/popular_card_model.dart';
 import '../parse/LiveStreamingModel.dart';
 import '../parse/UserModel.dart';
+import '../parse/UserModel.dart';
 import '../utils/constants/status.dart';
 
 class PopularViewModel extends GetxController {
@@ -18,6 +19,7 @@ class PopularViewModel extends GetxController {
   late Timer _timer;
 
   String tempImagePath='https://wallpapers.com/images/featured/hd-a5u9zq0a0ymy2dug.jpg';
+  String tempImagePath1='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSi-9Q5sx5ZaCLtCieoMMf_PITwvg9SYnwALQ&s';
 
   RxBool isAllTapSelected = true.obs;
 
@@ -58,7 +60,7 @@ class PopularViewModel extends GetxController {
     queryBuilder.whereNotEqualTo(
         LiveStreamingModel.keyAuthorUid, Get.find<UserViewModel>().currentUser.getUid);
     queryBuilder.whereNotContainedIn(
-        LiveStreamingModel.keyAuthor, Get.find<UserViewModel>().currentUser.getBlockedUsers!);
+        LiveStreamingModel.keyAuthorUid, Get.find<UserViewModel>().currentUser.getBlockedUsersIds!);
     queryBuilder.whereValueExists(LiveStreamingModel.keyAuthor, true);
     queryBuilder.whereDoesNotMatchQuery(
         LiveStreamingModel.keyAuthor, queryUsers);
@@ -114,10 +116,10 @@ class PopularViewModel extends GetxController {
                   name: liveModel.getAuthor!.getFullName!,
                   avatar: liveModel.getAuthor!.getAvatar!.url!,
                   flag: QuickActions.getCountryFlag(liveModel.getAuthor!),
-                  country: '${QuickActions.getCountryCode(liveModel.getAuthor!)} No.2',
+                  country: '${QuickActions.getCountryCode(liveModel.getAuthor!)} ',
                   liveModel: liveModel,
-                  achievementCount: liveModel.getAuthor!.getDiamondsTotal ?? 0,
-                  image: liveModel.getImage!=null ? liveModel.getImage!.url! : tempImagePath);
+                  achievementCount: liveModel.getAuthor!.getCoins ?? 0,
+                  image: liveModel.getImage!=null ? liveModel.getImage!.url! : tempImagePath1);
 
       tempModelList.add(popularModel);
     });
@@ -139,10 +141,10 @@ class PopularViewModel extends GetxController {
           name: liveModel.getAuthor!.getFullName!,
           avatar: liveModel.getAuthor!.getAvatar!.url!,
           flag: AppImagePath.pakistanFlag,
-          country: 'PK No.2',
+          country: '${QuickActions.getCountryCode(liveModel.getAuthor!)} ',
           liveModel: liveModel,
-          achievementCount: liveModel.getAuthor!.getDiamondsTotal ?? 0,
-          image: liveModel.getImage!=null ? liveModel.getImage!.url! : tempImagePath);
+          achievementCount: liveModel.getAuthor!.getCoins ?? 0,
+          image: liveModel.getImage!=null ? liveModel.getImage!.url! : tempImagePath1);
 
       tempModelList.add(popularModel);
     });
@@ -202,5 +204,4 @@ class PopularViewModel extends GetxController {
 
 
 }
-
 

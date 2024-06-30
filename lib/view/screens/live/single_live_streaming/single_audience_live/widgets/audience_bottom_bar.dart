@@ -11,7 +11,7 @@ import '../../../../../../utils/constants/app_constants.dart';
 import '../../../../../../utils/theme/colors_constant.dart';
 import '../share_friends/share_friends_sheet.dart';
 import 'audience_list_sheet.dart';
-import '../../../widgets/basic_audience_feature_sheet.dart';
+import 'basic_audience_feature_sheet.dart';
 
 class AudienceBottomBar extends StatelessWidget {
 

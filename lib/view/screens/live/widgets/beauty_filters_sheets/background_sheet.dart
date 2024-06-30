@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:teego/utils/theme/colors_constant.dart';
+import 'package:teego/view_model/live_controller.dart';
 import '../../../../../utils/constants/app_constants.dart';
 
 class BackgroundWidget extends StatelessWidget {
@@ -7,9 +11,12 @@ class BackgroundWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LiveViewModel liveViewModel = Get.find();
+    RxInt selectedIndex = 30.obs;
+
     final List<String> stickerPaths = [
       AppImagePath.sticker1,
-      AppImagePath.background1,
+      // AppImagePath.background1,
       AppImagePath.background2,
       AppImagePath.background3,
       AppImagePath.background4,
@@ -23,6 +30,24 @@ class BackgroundWidget extends StatelessWidget {
       AppImagePath.background12,
       AppImagePath.background13,
       AppImagePath.background14,
+      AppImagePath.background2,
+    ];
+
+    final List<String> stickerPathsPng = [
+      "assets/png/background/bg1.png",
+      "assets/png/background/bg2.png",
+      "assets/png/background/bg3.png",
+      "assets/png/background/bg4.png",
+      "assets/png/background/bg5.png",
+      "assets/png/background/bg6.png",
+      "assets/png/background/bg7.png",
+      "assets/png/background/bg8.png",
+      "assets/png/background/bg9.png",
+      "assets/png/background/bg10.png",
+      "assets/png/background/bg11.png",
+      "assets/png/background/bg3.png",
+      "assets/png/background/bg4.png",
+      "assets/png/background/bg1.png",
     ];
 
     return Column(
@@ -38,40 +63,62 @@ class BackgroundWidget extends StatelessWidget {
             ),
             itemCount: stickerPaths.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                width: 55,
-                height: 55,
-                decoration: BoxDecoration(
-                  color: Color(0xff323232),
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Image.asset(
-                        stickerPaths[index],
-                        fit: BoxFit.cover,
+              return GestureDetector(
+                onTap: (){
+                  selectedIndex.value = index;
+
+                  if(index==0)
+                    liveViewModel.backgroundImage.value = '';
+
+
+                  if(index>0)
+                  liveViewModel.backgroundImage.value = stickerPathsPng[index-1];
+
+                  liveViewModel.liveStreamingModel.setBackgroundImage = stickerPathsPng[index-1];
+                  liveViewModel.liveStreamingModel.save();
+                },
+                child: Obx(() {
+                    return Container(
+                      width: 55,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: Color(0xff323232),
+                        border: Border.all(
+                          width: 2,
+                          color: index == selectedIndex.value ? AppColors.yellowColor : Colors.transparent
+                        ),
+                        borderRadius: BorderRadius.circular(4.r),
                       ),
-                    ),
-                    if (index >= 4 && index <= 14)
-                      Positioned(
-                        bottom: 4,
-                        right: 4,
-                        child: Container(
-                          width: 8.77.w,
-                          height: 9.5.h,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(1.46.r),
-                          ),
-                          child: Center(
+                      child: Stack(
+                        children: [
+                          Center(
                             child: Image.asset(
-                              AppImagePath.arrowDown,
+                              stickerPaths[index],
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
+                          if (index >= 4 && index <= 14)
+                            Positioned(
+                              bottom: 4,
+                              right: 4,
+                              child: Container(
+                                width: 8.77.w,
+                                height: 9.5.h,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(1.46.r),
+                                ),
+                                child: Center(
+                                  child: Image.asset(
+                                    AppImagePath.arrowDown,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                  ],
+                    );
+                  }
                 ),
               );
             },

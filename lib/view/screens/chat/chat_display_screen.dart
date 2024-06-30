@@ -131,6 +131,7 @@ class _ChatView extends State<ChatView> {
             if(chatListViewModel.messagesResults.isNotEmpty && chatListViewModel.status!=Status.Loading)
             Expanded(
               child: ListView.builder(
+                padding: EdgeInsets.only(left: 5.w, right: 5.w),
                 // itemCount: chatListViewModel.messagesResults.length,
                 itemCount: chatListViewModel.messagesResults.length,
                 itemBuilder: (context, index) {
@@ -160,8 +161,8 @@ class _ChatView extends State<ChatView> {
                             children: [
                               QuickActions.avatarWidget(
                                 chatUser,
-                                width: 60.w,
-                                height: 60.w,
+                                width: 57.w,
+                                height: 57.w,
                               ),
                               SizedBox(width: 10.w),
                               Expanded(

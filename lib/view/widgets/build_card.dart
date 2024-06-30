@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/utils/permission/go_live_permission.dart';
 
 
+import '../../helpers/quick_actions.dart';
 import '../../parse/LiveStreamingModel.dart';
 import '../../utils/constants/app_constants.dart';
 import '../../utils/constants/typography.dart';
+import '../../view_model/subscription_model.dart';
 import '../../view_model/trending_controller.dart';
 
 class BuildCard extends StatelessWidget {
@@ -34,7 +37,16 @@ class BuildCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: ()=> LivePermissionHandler.checkPermission(liveModel.getStreamingType, context, liveStreamingModel: liveModel),
+      onTap: (){
+        if(liveModel.getMode == LiveStreamingModel.keyModePublic)
+        LivePermissionHandler.checkPermission(liveModel.getStreamingType, context, liveStreamingModel: liveModel);
+        else if(liveModel.getMode == LiveStreamingModel.keyModeSubscribers)
+          if(Get.find<SubscriptionViewModel>().isStreamerSubscribed(liveModel.getAuthor!)==true)
+            LivePermissionHandler.checkPermission(liveModel.getStreamingType, context, liveStreamingModel: liveModel);
+          else
+            QuickHelp.showAppNotificationAdvanced(title: "Subscribers only. Please subscribe to join the live stream!", context: context);
+
+      },
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.w),
@@ -44,29 +56,33 @@ class BuildCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              padding: EdgeInsets.all(4.w),
-              margin: EdgeInsets.all(4.w),
-              width: 84.w,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Colors.black, Colors.black.withOpacity(0.4)]),
-                  borderRadius: BorderRadius.all(Radius.circular(5.r))),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SvgPicture.asset(
-                    cFlag,
-                    height: 15.h,
-                    width: 15.w,
+            if(liveModel.getAuthor!.getHideMyLocation == false)
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(4.w),
+                  margin: EdgeInsets.all(4.w),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Colors.black, Colors.black.withOpacity(0.4)]),
+                      borderRadius: BorderRadius.all(Radius.circular(5.r))),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        cFlag,
+                        height: 15.h,
+                        width: 15.w,
+                      ),
+                      SizedBox(width: 9.w,),
+                      Text(
+                          cName,
+                          style: sfProDisplaySemiBold.copyWith(color: Colors.white, fontSize: 12.sp)
+                      )
+                    ],
                   ),
-                  Text(
-                      cName,
-                      style: sfProDisplaySemiBold.copyWith(color: Colors.white, fontSize: 12.sp)
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
             Container(
               padding: EdgeInsets.all(4.w),
@@ -108,16 +124,21 @@ class BuildCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    height: 40.h,
-                    width: 40.w,
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        border: Border.all(
-                            width: 2.w, color: CupertinoColors.systemYellow),
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: NetworkImage(avatar), fit: BoxFit.cover)),
+                  GestureDetector(
+                    onTap: (){
+                      goToProfile(otherProfile: true, mUser: liveModel.getAuthor);
+                    },
+                    child: Container(
+                      height: 40.h,
+                      width: 40.w,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          border: Border.all(
+                              width: 2.w, color: CupertinoColors.systemYellow),
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: NetworkImage(avatar), fit: BoxFit.cover)),
+                    ),
                   )
                 ],
               ),

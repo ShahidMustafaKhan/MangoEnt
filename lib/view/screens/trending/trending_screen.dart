@@ -4,10 +4,8 @@ import 'package:teego/view/screens/trending/trending_toggle_button_list.dart';
 import 'package:teego/view/screens/trending/widgets/following.dart';
 import 'package:teego/view/screens/trending/widgets/for_you.dart';
 import 'package:teego/view/screens/trending/widgets/post.dart';
-
 import '../../../parse/UserModel.dart';
 import '../../../view_model/trending_tab_bar_controller.dart';
-
 
 class TrendingView extends StatelessWidget {
   final TrendingTabBarViewModel trendingTabBarViewModel =
@@ -19,22 +17,9 @@ class TrendingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          Obx(() {
-            return SizedBox(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              child: TrendingToggleButtonList(
-                selected: trendingTabBarViewModel.selectedId.value,
-                callback: (index) {
-                  trendingTabBarViewModel.selectedId.value = index;
-                },
-                categories: trendingTabBarViewModel.categories,
-              ),
-            );
-          }),
-          Expanded(
+          Positioned.fill(
             child: Obx(() {
               if (trendingTabBarViewModel.isLoading.value) {
                 return const Center(
@@ -54,6 +39,23 @@ class TrendingView extends StatelessWidget {
                 }
               }
             }),
+          ),
+          Column(
+            children: [
+              Obx(() {
+                return SizedBox(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  child: TrendingToggleButtonList(
+                    selected: trendingTabBarViewModel.selectedId.value,
+                    callback: (index) {
+                      trendingTabBarViewModel.selectedId.value = index;
+                    },
+                    categories: trendingTabBarViewModel.categories,
+                  ),
+                );
+              }),
+            ],
           ),
         ],
       ),

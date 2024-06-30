@@ -10,6 +10,7 @@ import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
 import 'package:teego/view/widgets/custom_buttons.dart';
 import 'package:teego/view_model/chat_controller.dart';
+import 'package:teego/view_model/report_controller.dart';
 
 class ChatReportScreen extends StatefulWidget {
   const ChatReportScreen({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class ChatReportScreen extends StatefulWidget {
 class _ChatReportScreenState extends State<ChatReportScreen> {
   List<bool> _selectedStates = List.generate(11, (index) => false);
 
-  ChatViewModel chatViewModel = Get.find();
+  ReportController reportController = Get.put(ReportController(Get.arguments));
 
   TextEditingController reasonEditingController = TextEditingController();
 
@@ -44,7 +45,7 @@ class _ChatReportScreenState extends State<ChatReportScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      chatViewModel.uploadPhoto=null;
+                      reportController.uploadPhoto=null;
                       Get.back();
                     },
                     child: Icon(
@@ -80,11 +81,14 @@ class _ChatReportScreenState extends State<ChatReportScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                         ),
-                        child: Image.asset(
-                          AppImagePath.profilePic,
-                          height: double.infinity,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(44.r)),
+                          child: Image.network(
+                            reportController.mUser!.getAvatar!.url!,
+                            height: double.infinity,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       SizedBox(width: 10.w),
@@ -92,12 +96,12 @@ class _ChatReportScreenState extends State<ChatReportScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            chatViewModel.mUser!.getFullName ?? '',
+                            reportController.mUser!.getFullName ?? '',
                             style: TextStyle(
                                 fontSize: 16.sp, fontWeight: FontWeight.w400),
                           ),
                           Text(
-                            "id: ${chatViewModel.mUser!.getUid}",
+                            "id: ${reportController.mUser!.getUid}",
                             style: TextStyle(
                                 fontSize: 12.sp, fontWeight: FontWeight.w400),
                           )
@@ -132,13 +136,13 @@ class _ChatReportScreenState extends State<ChatReportScreen> {
                     ],
                   ),
                   SizedBox(height: 20.h),
-                  GetBuilder<ChatViewModel>(
-                      init: chatViewModel,
+                  GetBuilder<ReportController>(
+                      init: reportController,
                       builder: (controller) {
                         return Row(
                         children: [
                           GestureDetector(
-                            onTap : ()=> chatViewModel.choosePhotoFromGallery(context, upload: true),
+                            onTap : ()=> reportController.choosePhotoFromGallery(context, upload: true),
                             child: Container(
                               height: 58.h,
                               width: 58.w,
@@ -148,11 +152,11 @@ class _ChatReportScreenState extends State<ChatReportScreen> {
                                     color: Colors.yellow,
                                   )),
                               child: Center(
-                                child: chatViewModel.uploadPhoto == null
+                                child: reportController.uploadPhoto == null
                                       ? Icon(
                                     Icons.add,
                                     color: Colors.white,
-                                  ) : chatViewModel.uploadPhoto is File ? Image.file(File(chatViewModel.uploadPhoto), fit: BoxFit.fill) : Image.memory(chatViewModel.uploadPhoto, fit: BoxFit.fill,),
+                                  ) : reportController.uploadPhoto is File ? Image.file(File(reportController.uploadPhoto), fit: BoxFit.fill) : Image.memory(reportController.uploadPhoto, fit: BoxFit.fill,),
                                   ),
                             ),
                           ),
@@ -215,7 +219,7 @@ class _ChatReportScreenState extends State<ChatReportScreen> {
                   PrimaryButton(
                     onTap: () {
                       if(reasonEditingController.text.isNotEmpty){
-                        chatViewModel.uploadPhoto=null;
+                        reportController.uploadPhoto=null;
                         QuickHelp.showAppNotification(title: 'Report Submitted successfully!', context: context, isError: false);
                         Get.back();
                         Get.back();

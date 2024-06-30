@@ -13,12 +13,8 @@ class Assets {
   static const String mangoEntDeveloper = '.env';
   static const String pngLeft = 'assets/png/left.png';
   static const String pngPopular = 'assets/png/popular.png';
-  static const String pngPostPlaceholder = 'assets/png/post-placeholder.png';
   static const String pngPostPlaceholder1 = 'assets/png/post-placeholder_1.png';
-  static const String pngPostPlaceholder2 = 'assets/png/post-placeholder_2.png';
-  static const String pngPostPlaceholder3 = 'assets/png/post-placeholder_3.png';
-  static const String pngProfile = 'assets/png/profile.png';
-  static const String pngRight = 'assets/png/right.png';
+  static const String pngProfile = 'assets/png/dashboard.png';
   static const String pngVs = 'assets/png/vs.png';
   static const String svgApple = 'assets/svg/apple.svg';
   static const String svgBangladeshFlag = 'assets/svg/bangladesh_flag.svg';

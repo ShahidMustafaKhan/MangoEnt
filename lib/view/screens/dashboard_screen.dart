@@ -3,14 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:teego/utils/routes/app_routes.dart';
-import 'package:teego/view/screens/profile/profile_screen.dart';
+import 'package:teego/utils/theme/colors_constant.dart';
+import 'package:teego/view/screens/dashboard/profile_dashboard_screen.dart';
+import 'package:teego/view/screens/reels/reels_home_screen.dart';
 import 'package:teego/view/screens/trending/trending_screen.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
 import 'package:teego/view_model/ranking_controller.dart';
 import 'package:teego/view_model/userViewModel.dart';
 import '../../parse/UserModel.dart';
 import '../../utils/constants/app_constants.dart';
+import '../../view_model/cameraController.dart';
 import '../../view_model/chat_list_controller.dart';
+import '../../view_model/communityController.dart';
+import '../../view_model/storeController.dart';
+import '../../view_model/subscription_model.dart';
 import 'chat/chat_display_screen.dart';
 import 'chat/chat_screen.dart';
 import 'home/home_screen/home_screen.dart';
@@ -20,7 +26,7 @@ import 'live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 
 class DashboardView extends StatefulWidget {
 
-  DashboardView({Key? key}) : super(key: key);
+  const DashboardView({Key? key}) : super(key: key);
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -33,6 +39,10 @@ class _DashboardViewState extends State<DashboardView> {
   late UserViewModel userViewModel = Get.find();
   RankingViewModel rankingViewModel = Get.put(RankingViewModel());
   ChatListViewModel chatListViewModel = Get.put(ChatListViewModel());
+  StoreController storeController = Get.put(StoreController());
+  // CameraLiveController cameraLiveController = Get.put(CameraLiveController());
+  SubscriptionViewModel subscriptionViewModel = Get.put(SubscriptionViewModel());
+  CommunityController communityController = Get.put(CommunityController());
 
 
   @override
@@ -42,12 +52,14 @@ class _DashboardViewState extends State<DashboardView> {
 
     _screens = [
       HomeView(currentUser: currentUser,),
-      TrendingView(),
+      ReelsHomeScreen(currentUser: currentUser,),
+      // TrendingView(),
       const ChatView(),
-      const ProfileView(),
+      const ProfileDashBoardScreen(),
     ];
 
     userViewModel.getFollowers();
+
 
     super.initState();
   }
@@ -60,7 +72,7 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   Color _getIconColor(int index) {
-    return _selectedIndex == index ? const Color(0xffF9c034) : Colors.grey;
+    return _selectedIndex == index ? const Color(0xffF9C034) : AppColors.white;
   }
 
   void goToLiveScreen(){
@@ -72,7 +84,10 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    userViewModel.getDeviceName(context);
     return BaseScaffold(
+      topSafeArea:  _selectedIndex == 1 ? true : null ,
+      // topSafeArea:  _selectedIndex == 1 ? true : null ,
       body: Stack(
         children: [
           _screens[_selectedIndex],
@@ -89,7 +104,7 @@ class _DashboardViewState extends State<DashboardView> {
                       painter: BNBCustomPainter(),
                     ),
                     Center(
-                      heightFactor: 0.6,
+                      heightFactor: 0.7,
                       child: FloatingActionButton(
                         onPressed: () {
                           goToLiveScreen();
@@ -160,10 +175,12 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                               ),
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  currentUser!.getAvatar!.url!,
-                                )
-                              ),
+                                  backgroundImage: NetworkImage(
+                                    Get.find<UserViewModel>()
+                                        .currentUser
+                                        .getAvatar!
+                                        .url!,
+                                  )),
                             ),
                           ),
                         ],
@@ -185,17 +202,28 @@ class BNBCustomPainter extends CustomPainter {
       ..color = Color(0xff252626)
       ..style = PaintingStyle.fill;
     Path path = Path()..moveTo(0, 20);
-    path.quadraticBezierTo(size.width * 0.20, 0, size.width * 0.35, 0);
-    path.quadraticBezierTo(size.width * 0.40, 0, size.width * 0.40, 20);
+
+
+    Paint borderPaint = Paint()
+      ..color = Color(0xff454646)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
+
+    path.quadraticBezierTo(size.width * 0.40, 5, size.width * 0.34, 7);
+    path.quadraticBezierTo(size.width * 0.40, 2, size.width * 0.40, 20);
     path.arcToPoint(Offset(size.width * 0.60, 20),
         radius: Radius.circular(10.0), clockwise: false);
 
-    path.quadraticBezierTo(size.width * 0.60, 0, size.width * 0.65, 0);
-    path.quadraticBezierTo(size.width * 0.80, 0, size.width, 20);
+    path.quadraticBezierTo(size.width * 0.60, 0, size.width * 0.65, 4);
+    path.quadraticBezierTo(size.width * 0.60, 2, size.width, 20);
     path.lineTo(size.width, size.height);
+
     path.lineTo(0, size.height);
     path.close();
-    canvas.drawShadow(path, Colors.black, 5, true);
+    canvas.drawShadow(path, Colors.black.withOpacity(0.10), 20, true);
+
+    canvas.drawPath(path, borderPaint);
 
     canvas.drawPath(path, paint);
   }

@@ -10,6 +10,7 @@ import '../../../../../view_model/gift_contoller.dart';
 import '../../../../../view_model/live_messages_controller.dart';
 import '../../../../../view_model/zego_controller.dart';
 import '../../single_live_streaming/single_audience_live/widgets/gift_animation_view.dart';
+import '../../widgets/background_image.dart';
 import '../../widgets/for_you_widget.dart';
 import '../../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import '../multi_live_widgets.dart';
@@ -43,6 +44,7 @@ class AudienceMultiLive extends StatelessWidget {
         return Container(
           child: Stack(
             children: [
+              BackgroundImage(),
               MultiLiveWidget(),
               Align(
                 alignment: Alignment.bottomCenter,

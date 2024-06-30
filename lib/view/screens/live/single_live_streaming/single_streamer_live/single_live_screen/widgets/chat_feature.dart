@@ -8,12 +8,14 @@ import '../../../../../../../view_model/battle_controller.dart';
 import 'chat_card.dart';
 
 class ChatFeature extends StatelessWidget {
-  ChatFeature();
+  final double height;
+  ChatFeature({this.height = 185});
+
   Widget build(BuildContext context) {
     final LiveMessagesViewModel liveMessagesViewModel = Get.find();
     return GetBuilder<LiveMessagesViewModel>(init: liveMessagesViewModel ,builder: (liveMessagesViewModel) {
           return Container(
-                  height: 185.h,
+                  height: height.h,
                   child: ListView.separated(
                     physics: AlwaysScrollableScrollPhysics(),
                     shrinkWrap: true,

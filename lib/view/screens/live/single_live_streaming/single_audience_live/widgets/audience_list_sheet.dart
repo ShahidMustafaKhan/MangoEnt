@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:teego/helpers/quick_actions.dart';
+import 'package:teego/view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import 'package:teego/view_model/live_controller.dart';
 import '../../../../../../parse/UserModel.dart';
 import '../../../../../../utils/constants/app_constants.dart';
@@ -118,7 +119,7 @@ class AudienceListSheet extends StatelessWidget {
                               ),
                             ),
                             backgroundColor: AppColors.grey500,
-                            builder: (context) => AudienceDetailSheet(user),
+                            builder: (context) => AudienceDetailSheet(user, viewer: liveViewModel.role == ZegoLiveRole.host ? true : false,),
                           );
                         },
                         child: Padding(
@@ -150,7 +151,8 @@ class AudienceListSheet extends StatelessWidget {
                                     children: [
                                       Text(user.getFullName ?? ''),
                                       const SizedBox(width: 16),
-                                      SvgPicture.asset(
+                                      if(user.getHideMyLocation == false)
+                                        SvgPicture.asset(
                                         QuickActions.getCountryFlag(user),
                                         width: 24,
                                         height: 17,

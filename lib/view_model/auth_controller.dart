@@ -87,8 +87,15 @@ class AuthViewModel extends GetxController {
         QuickHelp.showAppNotificationAdvanced(
             context: context, title: "not_connected");
       } else {
+        print(error.toString());
+        print(error.toString());
+        print(error.toString());
+        print(error.toString());
+        print(error.toString());
+        print(error.toString());
+        print(error.toString());
         QuickHelp.showAppNotificationAdvanced(
-            context: context, title: "auth.gg_login_error");
+            context: context, title: error.toString());
       }
 
 

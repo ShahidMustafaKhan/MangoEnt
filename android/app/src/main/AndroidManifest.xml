@@ -21,6 +21,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
 
     <!--Storage-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -80,7 +83,8 @@
             android:launchMode="singleTop"
              android:theme="@style/Theme.AppCompat"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
+            android:hardwareAccelerated="false"
+            android:largeHeap="true"
             android:requestLegacyExternalStorage="true"
             android:windowSoftInputMode="adjustResize"
             android:showWhenLocked="true"

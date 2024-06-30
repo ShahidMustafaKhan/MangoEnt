@@ -35,39 +35,42 @@ class _PopularTrendingWidgetState extends State<PopularTrendingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: popularViewModel.popularAllModelList.isNotEmpty ? MainAxisAlignment.start : MainAxisAlignment.center,
-      children: [
-        if(popularViewModel.popularAllModelList.isNotEmpty)
-          Padding(
-          padding: EdgeInsets.symmetric(vertical: 12.h),
-          child: GridView.count(
-            padding: EdgeInsets.only(bottom: 65.h),
-            physics: const AlwaysScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            crossAxisSpacing: 12.w,
-            mainAxisSpacing: 12.w,
-            shrinkWrap: true,
-            children: List.generate(popularViewModel.popularTrendingModelList.length,
-                    (index) {
-                  return BuildCard(
-                    cFlag: popularViewModel.popularTrendingModelList[index].flag,
-                    cName: popularViewModel.popularTrendingModelList[index].country,
-                    imagePath: popularViewModel.popularTrendingModelList[index].image,
-                    liveModel: popularViewModel.popularTrendingModelList[index].liveModel,
-                    count:
-                    popularViewModel.popularTrendingModelList[index].achievementCount,
-                    name: popularViewModel.popularTrendingModelList[index].name,
-                    avatar: popularViewModel.popularTrendingModelList[index].avatar
-                  );
-                }),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 17),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: popularViewModel.popularAllModelList.isNotEmpty ? MainAxisAlignment.start : MainAxisAlignment.center,
+        children: [
+          if(popularViewModel.popularAllModelList.isNotEmpty)
+            Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.h),
+            child: GridView.count(
+              padding: EdgeInsets.only(bottom: 65.h),
+              physics: const AlwaysScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              crossAxisSpacing: 12.w,
+              mainAxisSpacing: 12.w,
+              shrinkWrap: true,
+              children: List.generate(popularViewModel.popularTrendingModelList.length,
+                      (index) {
+                    return BuildCard(
+                      cFlag: popularViewModel.popularTrendingModelList[index].flag,
+                      cName: popularViewModel.popularTrendingModelList[index].country,
+                      imagePath: popularViewModel.popularTrendingModelList[index].image,
+                      liveModel: popularViewModel.popularTrendingModelList[index].liveModel,
+                      count:
+                      popularViewModel.popularTrendingModelList[index].achievementCount,
+                      name: popularViewModel.popularTrendingModelList[index].name,
+                      avatar: popularViewModel.popularTrendingModelList[index].avatar
+                    );
+                  }),
+            ),
           ),
-        ),
 
-        if(popularViewModel.popularAllModelList.isEmpty)
-          NothingIsHere()
-      ],
+          if(popularViewModel.popularAllModelList.isEmpty)
+            NothingIsHere(),
+        ],
+      ),
     );
   }
 

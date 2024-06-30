@@ -53,6 +53,7 @@ class MusicModel extends ParseObject implements ParseCloneable {
   static String keyAudioName = "audioName";
   static String keySingerName = "singerName";
   static String keyThumbnail= "thumbnail";
+  static String keyTime= "time";
 
 
 
@@ -68,6 +69,9 @@ class MusicModel extends ParseObject implements ParseCloneable {
 
   String? get getSingerName => get<String>(keySingerName);
   set setSingerName(String name) => set<String>(keySingerName, name);
+
+  String? get getTime => get<String>(keyTime);
+  set setTime(String time) => set<String>(keyTime, time);
 
 
 

@@ -23,7 +23,10 @@ import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/parse/PostsModel.dart';
 import 'package:teego/parse/RankingModel.dart';
 import 'package:teego/parse/ReportModel.dart';
+import 'package:teego/parse/SubscriptionModel.dart';
 import 'package:teego/parse/TimerModel.dart';
+import 'package:teego/parse/WhisperListModel.dart';
+import 'package:teego/parse/WhisperModel.dart';
 import 'package:teego/parse/WithdrawModel.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -88,6 +91,8 @@ void main() async {
     LiveMessagesModel.keyTableName: () => LiveMessagesModel(),
     MessageModel.keyTableName: () => MessageModel(),
     MessageListModel.keyTableName: () => MessageListModel(),
+    WhisperModel.keyTableName: () => WhisperModel(),
+    WhisperListModel.keyTableName: () => WhisperListModel(),
     WithdrawModel.keyTableName: () => WithdrawModel(),
     PaymentsModel.keyTableName: () => PaymentsModel(),
     InvitedUsersModel.keyTableName: () => InvitedUsersModel(),
@@ -95,7 +100,8 @@ void main() async {
     ReplyModel.keyTableName: () => ReplyModel(),
     ReportModel.keyTableName: () => ReportModel(),
     BattleModel.keyTableName: () => BattleModel(),
-    TimerModel.keyTableName: () => TimerModel()
+    TimerModel.keyTableName: () => TimerModel(),
+    SubscriptionModel.keyTableName: () => SubscriptionModel()
   };
 
   await Parse().initialize(

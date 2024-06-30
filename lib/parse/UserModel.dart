@@ -183,6 +183,14 @@ class UserModel extends ParseUser implements ParseCloneable {
   static final String keyAge = "age";
   static final String keyGender = "gender";
   static final String keyAvatar = "avatar";
+  static final String keyAvatar1 = "avatar1";
+  static final String keyAvatar2 = "avatar2";
+  static final String keyAvatar3 = "avatar3";
+  static final String keyAvatar4 = "avatar4";
+  static final String keyAvatar5 = "avatar5";
+  static final String keyAvatar6 = "avatar6";
+  static final String keyAvatar7 = "avatar7";
+  static final String keyAvatar8 = "avatar8";
   static final String keyCover = "cover";
   static final String keyPreference = "preference";
   static final String keyInterest = "interest";
@@ -212,11 +220,13 @@ class UserModel extends ParseUser implements ParseCloneable {
   static final String keyLocation = "location";
   static final String keyCity = "city";
   static final String keyHideMyLocation = "hideLocation";
+  static final String keyHideBirthday = "hideBirthday";
   static final String keyLastOnline = "lastOnline";
   static final String keyUserStatus = "activationStatus";
   static final String keyUserAccountDeleted = "accountDeleted";
   static final String keyUserAccountDeletedReason = "accountDeletedReason";
   static final String keyPopularity = "popularity";
+  static final String keyUserVerified = "isVerified";
 
   // User filter preferences
   static final String keyPrefLocationType = "prefLocationType";
@@ -234,8 +244,7 @@ class UserModel extends ParseUser implements ParseCloneable {
   static final String keyPremiumType = "premiumType";
   static final String keyCoins = "credit";
   static final String keyCoinsSent = "creditSent";
-  static final String keyDiamonds = "diamonds";
-  static final String keyDiamondsTotal = "diamondsTotal";
+  static final String keyCoinsTotal = "coins";
 
   static final String keyDiamondsAgency = "diamondsAgency";
   static final String keyDiamondsAgencyTotal = "diamondsAgencyTotal";
@@ -268,9 +277,10 @@ class UserModel extends ParseUser implements ParseCloneable {
   static final String keyPrivacyShowDistance = "privacyShowDistance";
   static final String keyPrivacyShowStatusOnline = "privacyShowOnlineStatus";
 
-  // Edit profile
+  // Edit dashboard
   static final String keyWhatIWant = "profile_honestly_want";
   static final String keyRelationship = "profile_relationship";
+  static final String keyRelationshipStatus = "relationStatus";
   static final String keySexuality = "profile_sexuality";
   static final String keyHeight = "profile_body_height";
   static final String keyBodyType = "profile_body_type";
@@ -333,6 +343,10 @@ class UserModel extends ParseUser implements ParseCloneable {
 
   static String keyIsAvatarSelected = "avatarSelected";
   static String keySelectedAvatarId = "avatarId";
+
+  static String keyDevice = "device";
+
+  static String keySubscriptionAnnouncement= "subscriptionAnnouncement";
 
 
   String? get getSessionToken => get<String>(keySessionToken);
@@ -400,6 +414,30 @@ class UserModel extends ParseUser implements ParseCloneable {
 
   ParseFileBase? get getAvatar => get<ParseFileBase>(keyAvatar);
   set setAvatar(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar, parseFileBase);
+
+  ParseFileBase? get getAvatar1 => get<ParseFileBase>(keyAvatar1);
+  set setAvatar1(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar1, parseFileBase);
+
+  ParseFileBase? get getAvatar2 => get<ParseFileBase>(keyAvatar2);
+  set setAvatar2(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar2, parseFileBase);
+
+  ParseFileBase? get getAvatar3 => get<ParseFileBase>(keyAvatar3);
+  set setAvatar3(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar3, parseFileBase);
+
+  ParseFileBase? get getAvatar4 => get<ParseFileBase>(keyAvatar4);
+  set setAvatar4(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar4, parseFileBase);
+
+  ParseFileBase? get getAvatar5 => get<ParseFileBase>(keyAvatar5);
+  set setAvatar5(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar5, parseFileBase);
+
+  ParseFileBase? get getAvatar6 => get<ParseFileBase>(keyAvatar6);
+  set setAvatar6(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar6, parseFileBase);
+
+  ParseFileBase? get getAvatar7 => get<ParseFileBase>(keyAvatar7);
+  set setAvatar7(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar7, parseFileBase);
+
+  ParseFileBase? get getAvatar8 => get<ParseFileBase>(keyAvatar8);
+  set setAvatar8(ParseFileBase parseFileBase) => set<ParseFileBase>(keyAvatar8, parseFileBase);
 
   ParseFileBase? get getCover => get<ParseFileBase>(keyCover);
   set setCover(ParseFileBase parseFileBase) => set<ParseFileBase>(keyCover, parseFileBase);
@@ -483,6 +521,18 @@ class UserModel extends ParseUser implements ParseCloneable {
     bool? disabled = get<bool>(keyUserStatus);
 
     if(disabled != null && disabled){
+      return true;
+    }  else {
+      return false;
+    }
+  }
+
+  set setVerified(bool verified) => set<bool>(keyUserVerified, verified);
+
+  bool get isVerified {
+    bool? verified = get<bool>(keyUserVerified);
+
+    if(verified != null && verified){
       return true;
     }  else {
       return false;
@@ -792,26 +842,26 @@ class UserModel extends ParseUser implements ParseCloneable {
   }
   set setBlockedUsers(List<UserModel> blockedUsers) => set<List<UserModel>>(keyBlockedUsers, blockedUsers);
 
-  List<dynamic>? get getBlockedUsersIDs{
-
-    List<dynamic>? users = get<List<dynamic>>(keyBlockedUserIDs);
-    if(users != null){
-      return users;
-    } else {
-      return [];
-    }
-  }
+  // List<dynamic>? get getBlockedUsersIDs{
+  //
+  //   List<dynamic>? users = get<List<dynamic>>(keyBlockedUserIDs);
+  //   if(users != null){
+  //     return users;
+  //   } else {
+  //     return [];
+  //   }
+  // }
 
   set setBlockedUsersIDs(List<dynamic> blockedUsersIDs) => set<List<dynamic>>(keyBlockedUserIDs, blockedUsersIDs);
 
-  set setBlockedUserIds(String blockedUser) {
-    List<String> user = [];
+  set setBlockedUserIds(int blockedUser) {
+    List<dynamic> user = [];
     user.add(blockedUser);
     setAddAllUnique(keyBlockedUserIDs, user);
   }
 
-  set removeBlockedUserIds(String blockedUser) {
-    List<String> user = [];
+  set removeBlockedUserIds(int blockedUser) {
+    List<int> user = [];
     user.add(blockedUser);
 
     setRemoveAll(keyBlockedUserIDs, user);
@@ -819,7 +869,7 @@ class UserModel extends ParseUser implements ParseCloneable {
 
   List<dynamic>? get getBlockedUsersIds{
 
-    List<String>? users = get<List<String>>(keyBlockedUsers);
+    List<dynamic>? users = get<List<dynamic>>(keyBlockedUserIDs);
     if(users != null){
       return users;
     } else {
@@ -975,7 +1025,18 @@ class UserModel extends ParseUser implements ParseCloneable {
       return "";
     }
   }
-  set setRelationship(String relationship) => set<String>(keyRelationship, relationship);
+  set setRelationship(String relationship) => set<String>(keyRelationshipStatus, relationship);
+
+  String? get getRelationshipStatus {
+
+    String? relationship = get<String>(keyRelationshipStatus);
+    if(relationship != null){
+      return relationship;
+    } else {
+      return null;
+    }
+  }
+  set setRelationshipStatus(String relationship) => set<String>(keyRelationshipStatus, relationship);
 
 
   String? get getSecondaryPassword => get<String>(keySecondaryPassword);
@@ -1101,35 +1162,39 @@ class UserModel extends ParseUser implements ParseCloneable {
   }
   set setHideMyLocation(bool hideMyLocation) => set<bool>(keyHideMyLocation, hideMyLocation);
 
+  bool? get getHideMyBirthday {
+
+    bool? hideMyBirthday = get<bool>(keyHideBirthday);
+    if(hideMyBirthday != null){
+      return hideMyBirthday;
+    } else {
+      return false;
+    }
+  }
+  set setHideMyBirthday(bool hideMyBirthday) => set<bool>(keyHideBirthday, hideMyBirthday);
+
+
   ParseGeoPoint? get getGeoPoint => get<ParseGeoPoint>(keyGeoPoint);
   set setGeoPoint(ParseGeoPoint geoPoint) => set<ParseGeoPoint>(keyGeoPoint, geoPoint);
 
   int? get getAge => get<int>(keyAge);
   set setAge(int age) => set<int>(keyAge, age);
 
-  int? get getDiamonds {
+  int get getCoins {
 
-    int? token = get<int>(keyDiamonds);
+    dynamic token = get<dynamic>(keyCoinsTotal);
+
     if(token != null){
-      return token;
+      if(token is int){
+        return token;
+      }
+      return 0;
     } else {
       return 0;
     }
   }
-  set setDiamonds(int diamonds) => setIncrement(keyDiamonds, diamonds);
-  set removeDiamonds(int diamonds) => setDecrement(keyDiamonds, diamonds);
-
-  int? get getDiamondsTotal {
-
-    int? token = get<int>(keyDiamondsTotal);
-    if(token != null){
-      return token;
-    } else {
-      return 0;
-    }
-  }
-  set setDiamondsTotal(int diamondsTotal) => setIncrement(keyDiamondsTotal, diamondsTotal);
-  set decrementDiamondsTotal(int diamondsTotal) => setDecrement(keyDiamondsTotal, diamondsTotal);
+  set setCoins(int diamondsTotal) => setIncrement(keyCoinsTotal, diamondsTotal);
+  set decrementCoins(int diamondsTotal) => setDecrement(keyCoinsTotal, diamondsTotal);
 
   int? get getPayouts {
 
@@ -1182,10 +1247,12 @@ class UserModel extends ParseUser implements ParseCloneable {
       return [];
     }
   }
-  set resetFollowers(List followerList) => setAddAll(keyFollowers, followerList);
+  set resetFollowers(List followerList) => set(keyFollowers, followerList);
 
   set setFollowers(String authorId) => setAddUnique(keyFollowers, authorId);
   set removeFollowers(String authorId) => setRemove(keyFollowers, authorId);
+
+  set removeAllFollowers(List followerList) => setRemoveAll(keyFollowers, followerList);
 
   bool? get getReceiveChatRequest{
     bool? receiveChatRequest = get<bool>(keyReceiveChatRequest);
@@ -1487,4 +1554,12 @@ class UserModel extends ParseUser implements ParseCloneable {
   }
   set setDiamondsAgencyTotal(int diamonds) => setIncrement(keyDiamondsAgencyTotal, diamonds);
   set removeDiamondsAgencyTotal(int diamonds) => setDecrement(keyDiamondsAgencyTotal, diamonds);
+
+  String? get getDevice => get<String>(keyDevice);
+  set setDevice(String device) => set<String>(keyDevice, device);
+
+
+  String? get getSubscribeAnnouncement => get<String>(keySubscriptionAnnouncement);
+  set setSubscriptionAnnouncement(String announcement) => set<String>(keySubscriptionAnnouncement, announcement);
+
 }

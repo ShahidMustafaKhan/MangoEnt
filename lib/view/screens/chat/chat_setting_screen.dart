@@ -224,7 +224,7 @@ class _ChatSettingScreenState extends State<ChatSettingScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(AppRoutes.chatReportScreen);
+                    Get.toNamed(AppRoutes.chatReportScreen, arguments: chatViewModel.mUser);
                   },
                   child: Row(
                     children: [

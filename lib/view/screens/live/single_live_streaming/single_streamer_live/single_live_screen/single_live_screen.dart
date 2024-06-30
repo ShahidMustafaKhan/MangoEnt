@@ -7,7 +7,9 @@ import 'package:teego/view_model/live_controller.dart';
 import '../../../../../../view_model/gift_contoller.dart';
 import '../../../../../../view_model/battle_controller.dart';
 import '../../../../../../view_model/live_messages_controller.dart';
+import '../../../../../../view_model/music_controller.dart';
 import '../../../../../widgets/base_scaffold.dart';
+import '../../../widgets/background_image.dart';
 import '../../../widgets/for_you_widget.dart';
 import '../../../zegocloud/widgets/zegocloud_preview.dart';
 import '../../../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
@@ -24,6 +26,7 @@ class SingleLiveScreen extends StatefulWidget  {
 class _SingleLiveScreenState extends State<SingleLiveScreen> with WidgetsBindingObserver {
   final BattleViewModel battleViewModel = Get.put(BattleViewModel());
   final GiftViewModel giftViewModel = Get.put(GiftViewModel());
+  final MusicController musicController = Get.put(MusicController());
   final LiveMessagesViewModel liveMessagesViewModel = Get.put(LiveMessagesViewModel(Get.find<LiveViewModel>()));
 
   @override
@@ -51,6 +54,7 @@ class _SingleLiveScreenState extends State<SingleLiveScreen> with WidgetsBinding
               return Container(
                   child: Stack(
                     children: [
+                      BackgroundImage(),
                       if(streamerViewModel.isBattleView==false)
                         ZegoCloudPreview(role:ZegoLiveRole.host),
                         SingleStreamerLiveItemWidget(),

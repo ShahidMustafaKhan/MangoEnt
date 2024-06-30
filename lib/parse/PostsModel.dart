@@ -165,6 +165,7 @@ class PostsModel extends ParseObject implements ParseCloneable {
   set setLikes(String likeAuthorId) => setAddUnique(keyLikes, likeAuthorId);
   set removeLike(String likeAuthorId) => setRemove(keyLikes, likeAuthorId);
 
+
   List<dynamic>? get getSaves{
 
     List<dynamic> save = [];
@@ -209,7 +210,17 @@ class PostsModel extends ParseObject implements ParseCloneable {
   UserModel? get getLastDiamondAuthor => get<UserModel>(keyLastDiamondAuthor);
   set setLastDiamondAuthor(UserModel author) => set<UserModel>(keyLastDiamondAuthor, author);
 
-  List<dynamic>? get getShares => get<List<dynamic>>(keyShare);
+  List<dynamic>? get getShares{
+
+    List<dynamic> save = [];
+
+    List<dynamic>? saves = get<List<dynamic>>(keyShare);
+    if(saves != null && saves.length > 0){
+      return saves;
+    } else {
+      return save;
+    }
+  }
   set setShares(String shareAuthorId) => setAdd(keyShare, shareAuthorId);
 
   int? get getDiamonds => get<int>(keyDiamonds);

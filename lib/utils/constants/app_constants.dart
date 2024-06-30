@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppInfo {
@@ -21,10 +23,7 @@ class AppImagePath {
   static const pakistanFlag = "assets/svg/pakistan_flag.svg";
   static const americanFlag = "assets/svg/america_flags.svg";
   static const canadaFlag = "assets/svg/canada_flag.svg";
-  static const cardImage1 = "assets/png/post-placeholder.png";
   static const cardImage2 = "assets/png/post-placeholder_1.png";
-  static const cardImage3 = "assets/png/post-placeholder_2.png";
-  static const cardImage4 = "assets/png/post-placeholder_3.png";
   static const logo = "assets/png/logo.png";
   static const diamond = "assets/svg/diamond.svg";
   static const searchIcon = "assets/svg/searchIcon.svg";
@@ -37,8 +36,7 @@ class AppImagePath {
   static const splashIcon = "assets/svg/MangoEntLogo.svg";
   static const nothingIsHere = "assets/png/worldwide.png";
 
-  /// Single live screen images
-  static const singleLiveBgImage = "assets/png/streamer/single_live_pic.png";
+  /// Single live screen png/dashboard
   static const gemStone = "assets/png/streamer/gem_stone.png";
   static const wishBadge = "assets/png/streamer/wish_badge.png";
   static const profileBorder = "assets/png/streamer/profile_border.png";
@@ -118,7 +116,6 @@ class AppImagePath {
   static const bearCastleImage = "assets/png/audience/gifts/bear_castle.png";
   static const yachtIslandImage = "assets/png/audience/gifts/yacht_island.png";
   static const babyDragonImage = "assets/png/audience/gifts/baby_dragon.png";
-  static const flyingPhoenixImage = "assets/png/audience/gifts/flying_phoenix.png";
   static const heartsImage = "assets/png/audience/gifts/hearts.png";
   static const kissingImage = "assets/png/audience/gifts/kissing_gift.png";
   static const motorCycleImage = "assets/png/audience/gifts/motorcycle_entry.png";
@@ -155,8 +152,6 @@ class AppImagePath {
   static const loseEmojiJson = "assets/animations/battle/lose emoji.json";
   static const winEmojiJson = "assets/animations/battle/win emoji.json";
   static const drawEmojiJson = "assets/animations/battle/draw emoji.json";
-  static const versusJson = "assets/animations/battle/versus.json";
-  static const versus2Json = "assets/animations/battle/versus2.json";
 
   static const indexAnimation= "assets/svga/index.svga";
 
@@ -193,14 +188,14 @@ class AppImagePath {
   static const hand_wave = "assets/png/streamer/hand_wave.png";
   static const end_call = "assets/png/audience/end_call.png";
 
-  // Game View Images
+  // Game View png/dashboard
 
   static const mobileIcon = "assets/png/game/mobileIcon.png";
   static const pcIcon = "assets/png/game/pcIcon.png";
   static const verticalDisplay = "assets/png/game/verticalDisplay.png";
   static const horizontalDisplay = "assets/png/game/horizontalDisplay.png";
 
-  // popular screen images
+  // popular screen png/dashboard
 
   static const popularBadge = "assets/png/home/popularBadge.png";
   static const trendPic = "assets/png/home/trend-pic.png";
@@ -244,19 +239,19 @@ class AppImagePath {
   static const Turkey = "assets/svg/Middle_East_Region_Flags/Turkey.svg";
   static const UAE = "assets/svg/Middle_East_Region_Flags/UAE.svg";
 
-  // top streams images
+  // top streams png/dashboard
   static const red_redemption = "assets/png/top_streams/red_redemption.png";
   static const bravery = "assets/png/top_streams/bravery.png";
   static const just_chatting = "assets/png/top_streams/just_chatting.png";
   static const world_of_war = "assets/png/top_streams/world_of_war.png";
   static const baldurs = "assets/png/top_streams/baldurs.png";
 
-  // game view images
+  // game view png/dashboard
   static const category1 = "assets/png/home/category1.png";
   static const category2 = "assets/png/home/category2.png";
   static const heart_image = "assets/png/home/heart_image.png";
 
-  // Trophy screen images
+  // Trophy screen png/dashboard
 
   static const rankPerson1 = "assets/png/home/rankPerson1.png";
   static const rankPerson2 = "assets/png/home/rankPerson2.png";
@@ -267,14 +262,25 @@ class AppImagePath {
 
   // Trending screen images
 
-  static const post = "assets/png/trending/post.png";
+  static const post = "assets/png/trending/ic_post_new.png";
+  static const post_logo = "assets/png/trending/post.png";
   static const notification = "assets/png/trending/notification.png";
   static const post_img = "assets/png/trending/post-img.png";
   static const ic_heart = "assets/png/trending/ic_heart.png";
   static const ic_comment = "assets/png/trending/ic_comment.png";
   static const ic_send = "assets/png/trending/ic_send.png";
+  static const reel_img = "assets/png/trending/reel_img.png";
+  static const reel_comment = "assets/png/trending/reel_comment.png";
+  static const reel_music = "assets/png/trending/reel_music.png";
+  static const reel_tip = "assets/png/trending/reel_tip.png";
+  static const emoji1 = "assets/png/trending/emoji1.png";
+  static const emoji2 = "assets/png/trending/emoji2.png";
+  static const emoji3 = "assets/png/trending/emoji3.png";
+  static const emoji4 = "assets/png/trending/emoji4.png";
+  static const reportConfirmation =
+      "assets/png/trending/reportConfirmation.png";
 
-  //  single live create sticker sheet images
+  //  single live create sticker sheet png/dashboard
 
   static const sticker1 = "assets/png/streamer/liveCreate/sticker1.png";
   static const sticker2 = "assets/png/streamer/liveCreate/sticker2.png";
@@ -310,7 +316,7 @@ class AppImagePath {
   static const background13 = "assets/png/streamer/liveCreate/background13.png";
   static const background14 = "assets/png/streamer/liveCreate/background14.png";
 
-  // filter screen images
+  // filter screen png/dashboard
 
   static const filter1 = "assets/png/streamer/liveCreate/filter1.png";
   static const filter2 = "assets/png/streamer/liveCreate/filter2.png";
@@ -327,7 +333,7 @@ class AppImagePath {
   static const filter13 = "assets/png/streamer/liveCreate/filter13.png";
   static const filter14 = "assets/png/streamer/liveCreate/filter14.png";
 
-  // beauty screen images
+  // beauty screen png/dashboard
 
   static const facey = "assets/png/streamer/liveCreate/facey.png";
   static const eyes = "assets/png/streamer/liveCreate/eyes.png";
@@ -357,17 +363,17 @@ class AppImagePath {
   static const dislike = "assets/png/streamer/liveStreamer/dislike.png";
   static const report = "assets/png/streamer/liveStreamer/report.png";
 
-  // end screen images
+  // end screen png/dashboard
 
   static const twIcon = "assets/png/streamer/liveStreamer/twIcon.png";
   static const tIcon = "assets/png/streamer/liveStreamer/tIcon.png";
   static const fIcon = "assets/png/streamer/liveStreamer/fIcon.png";
 
-  // multi guest streamer extra sheet images
+  // multi guest streamer extra sheet png/dashboard
 
   static const boost = "assets/png/streamer/multiGuestStreamer/boostIcon.png";
 
-  // chat screen images
+  // chat screen png/dashboard
 
   static const chatScreenIcon = "assets/png/Chat/chatScreenIcon.png";
   static const deleteCrossIcon = "assets/png/Chat/deleteCrossIcon.png";
@@ -376,8 +382,119 @@ class AppImagePath {
   static const chatPhoto = "assets/png/Chat/chatPhoto.png";
   static const chatMic = "assets/png/Chat/chatMic.png";
 
+  // user dashboard png/dashboard
+
+  static const share = "assets/png/userProfile/share.png";
+  static const message = "assets/png/userProfile/message.png";
+  static const blue_tick = "assets/png/userProfile/blue_tick.png";
+  static const live = "assets/png/userProfile/live.png";
+  static const user = "assets/png/userProfile/user.png";
+  static const play = "assets/png/userProfile/play.png";
+  static const kIcon = "assets/png/userProfile/kIcon.png";
+  static const layerIcon = "assets/png/userProfile/layerIcon.png";
+  static const mobileButton = "assets/png/userProfile/mobileButton.png";
+  static const moonIcon = "assets/png/userProfile/moonIcon.png";
+  static const settingIcon = "assets/png/userProfile/settingIcon.png";
+  static const tile1 = "assets/png/userProfile/tile1.png";
+  static const tile2 = "assets/png/userProfile/tile2.png";
+  static const transaction = "assets/png/userProfile/transaction.png";
+  static const bag = "assets/png/userProfile/bag.png";
+  static const podium = "assets/png/userProfile/podium.png";
+  static const fans = "assets/png/userProfile/fans.png";
+  static const subscription = "assets/png/userProfile/subscription.png";
+  static const subscriberImage = "assets/png/userProfile/subscriberImage.png";
+
+
+// streamer dashboard png/dashboard
+
+  static const yellow_tick = "assets/png/streamerProfile/yellow_tick.png";
+  static const edit_profile = "assets/png/streamerProfile/edit_profile.png";
+  static const editTextIcon = "assets/png/streamerProfile/editTextIcon.png";
+  static const dropDownIcon = "assets/png/streamerProfile/dropDownIcon.png";
+
+  // setting screen images
+
+  static const insecure = "assets/png/setting/insecure.png";
+  static const phone = "assets/png/setting/phone.png";
+  static const email = "assets/png/setting/email.png";
+  static const changePassword = "assets/png/setting/changePassword.png";
+  static const loginMethod = "assets/png/setting/loginMethod.png";
+  static const selfBan = "assets/png/setting/selfBan.png";
+  static const succeed = "assets/png/setting/succeed.png";
+  static const changeEmail = "assets/png/setting/changeEmail.png";
+  static const changePasswordImage =
+      "assets/png/setting/changePasswordImage.png";
+  static const gIcon = "assets/png/setting/gIcon.png";
+
+
+  // room decor
+
+  static const roomDecor1 = "assets/png/room_decor/room_decor_1.png";
+  static const roomDecor2 = "assets/png/room_decor/room_decor_2.png";
+  static const roomDecor3 = "assets/png/room_decor/room_decor_3.png";
+  static const roomDecor4 = "assets/png/room_decor/room_decor_4.png";
+  static const roomDecor5 = "assets/png/room_decor/room_decor_5.png";
+  static const roomDecor6 = "assets/png/room_decor/room_decor_6.png";
+  static const roomDecor7 = "assets/png/room_decor/room_decor_7.png";
+
+
+  // avatar frame
+
+  static const avatarFrameOrange = "assets/svg/avatar_frame/avatar_frame_orange.svg";
+  static const avatarFrameWhite = "assets/svg/avatar_frame/avatar_frame_white.svg";
+  static const avatarFramePurple1 = "assets/svg/avatar_frame/avatar_frame_purple1.svg";
+  static const avatarFramePurple2 = "assets/svg/avatar_frame/avatar_frame_purple2.svg";
+
+
 
 }
+
+const String darkIcon = "assets/png/dashboard/darkIcon.png";
+const String mars = "assets/png/dashboard/mars.png";
+const String pakistan = "assets/png/dashboard/pakistan.png";
+const String nav = "assets/png/dashboard/Nav.png";
+const String icon1 = "assets/png/dashboard/icon1.png";
+const String img = "assets/png/dashboard/img_20240317_203747.png";
+const String walletIcon = "assets/png/dashboard/wallet_icon.png";
+const String walletTile = "assets/png/dashboard/wallet_tile.png";
+const String storeIcon = "assets/png/dashboard/store_icon.png";
+const String storeTile = "assets/png/dashboard/store_tile.png";
+const String transaction = "assets/png/dashboard/transaction.png";
+const String bag = "assets/png/dashboard/bag.png";
+const String level = "assets/png/dashboard/level.png";
+const String topfans = "assets/png/dashboard/topFans.png";
+const String subscription = "assets/png/dashboard/subscription.png";
+const String subscriber = "assets/png/dashboard/subscrption.png";
+const String coin = "assets/png/dashboard/coin.png";
+const String transactionIcon = "assets/png/dashboard/transaIcon.png";
+const String back = "assets/png/dashboard/back.png";
+const String paypal = "assets/png/dashboard/paypal.png";
+const String helcium = "assets/png/dashboard/helcium.png";
+const String xe = "assets/png/dashboard/xe.png";
+const String stripe = "assets/png/dashboard/stripe.png";
+const String wise = "assets/png/dashboard/wise.png";
+const String venmo = "assets/png/dashboard/venmo.png";
+const String check = "assets/png/dashboard/check.png";
+const String avatar = "assets/png/dashboard/avatar.png";
+const String gift = "assets/png/dashboard/gift.png";
+const String storeCover = "assets/png/dashboard/store_cover.png";
+const String room = "assets/png/dashboard/room.png";
+const String chat = "assets/png/dashboard/chat.png";
+const String batch = "assets/png/dashboard/batch.png";
+const String incomeIcon = "assets/png/dashboard/income.png";
+const String outGoIcon = "assets/png/dashboard/outgo.png";
+const String ride = "assets/png/dashboard/ride.png";
+const String heart = "assets/png/dashboard/heart.png";
+const String castle = "assets/png/dashboard/castle.png";
+const String star = "assets/png/dashboard/star.png";
+const String ribon = "assets/png/dashboard/ribon.png";
+const String chest = "assets/png/dashboard/Chest.png";
+const String levelCover = "assets/png/dashboard/level_cover.png";
+const String badge = "assets/png/dashboard/badge.png";
+const String diamond = "assets/png/dashboard/diamond.png";
+const String diamond1 = "assets/png/dashboard/diamon.png";
+const String celebration = "assets/png/dashboard/celebration.png";
+const String upload = "assets/png/dashboard/upload.png";
 
 class SubLists {
   static final List<String> categoryItems = [
@@ -396,4 +513,15 @@ class Dimension{
   //padding
 
 
+}
+
+const Color amberColor = Color(0xffF9C034);
+
+enum CheckoutEnum {
+  paypal,
+  venmo,
+  stripe,
+  xe,
+  wise,
+  helcim,
 }

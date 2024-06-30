@@ -110,7 +110,7 @@ class CommentsModel extends ParseObject implements ParseCloneable {
     return reports;
   }
 
-  set setReport(String report) => setAdd(keyReport, report);
+  set setReport(String report) => setAddUnique(keyReport, report);
 
   set removeReport(String report) => setRemove(keyReport, report);
 

@@ -49,6 +49,8 @@ class BattleModel extends ParseObject implements ParseCloneable {
 
   static final String keyTimerModel='timerModel';
 
+  static final String keyBackgroundImage='backgroundImage';
+
 
 
 
@@ -206,7 +208,8 @@ class BattleModel extends ParseObject implements ParseCloneable {
   }
   set setTeamBGift(Map<String,dynamic> gift) => setAdd(keyTeamBGiftsList, gift);
 
-
+  String? get getBackgroundImage => get<String>(keyBackgroundImage);
+  set setBackgroundImage(String image) => set<String>(keyBackgroundImage, image);
 
 
 

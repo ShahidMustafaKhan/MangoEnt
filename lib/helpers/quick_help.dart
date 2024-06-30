@@ -1975,11 +1975,14 @@ class QuickHelp {
     );
   }
 
-   static CongratulationOnReceivingXpDialog(double fem, double ffem, BuildContext context, int xp, UserModel userModel, Function() onClickOnDone, {Function()? then, bool goBack=false, String? title}){
+   static congratulationOnReceivingXpDialog(BuildContext context, int xp, UserModel userModel, Function() onClickOnDone, {Function()? then, bool goBack=false, String? title}){
     return showDialog(
         context: context,
         barrierDismissible:false,
         builder: (BuildContext context2) {
+          double baseWidth = 375;
+          double fem = MediaQuery.of(context).size.width / baseWidth;
+          double ffem = fem * 0.97;
           return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -1993,7 +1996,6 @@ class QuickHelp {
               child: Stack(
                 children: [
                   Positioned(
-                    // bghrM (1:5263)
                     left: 0 * fem,
                     top: 25.6090011597 * fem,
                     child: Align(
@@ -2011,7 +2013,6 @@ class QuickHelp {
                   ),
 
                   Positioned(
-                    // flyingcommentsgfitswillbeputin (1:5264)
                     left: 45 * fem,
                     top: 350.0869140625 * fem,
                     child: Align(
@@ -2032,7 +2033,6 @@ class QuickHelp {
                     ),
                   ),
                   Positioned(
-                    // ribbontfw (1:5265)
                     left: 60.6328125 * fem,
                     top: 0 * fem,
                     child: Container(
@@ -2041,7 +2041,6 @@ class QuickHelp {
                       child: Stack(
                         children: [
                           Positioned(
-                            // label11crq (1:5266)
                             left: 0 * fem,
                             top: 0 * fem,
                             child: Align(
@@ -2049,7 +2048,7 @@ class QuickHelp {
                                 width: 175.54 * fem,
                                 height: 47.76 * fem,
                                 child: Image.asset(
-                                  'assets/dino/label-11.png',
+                                  'assets/png/label.png',
                                   width: 175.54 * fem,
                                   height: 47.76 * fem,
                                 ),
@@ -2057,7 +2056,6 @@ class QuickHelp {
                             ),
                           ),
                           Positioned(
-                            // dailycheckinWSR (1:5273)
                             left: 37.3671875 * fem,
                             top: 8.0869140625 * fem,
                             child: Align(
@@ -2082,7 +2080,6 @@ class QuickHelp {
                     ),
                   ),
                   Positioned(
-                    // popbuttonC4M (1:5274)
                     left: 99 * fem,
                     top: 299.0869140625 * fem,
                     child: InkWell(
@@ -2126,7 +2123,6 @@ class QuickHelp {
                     ),
                   ),
                   Positioned(
-                    // congratsCiZ (1:5275)
                     left: 37 * fem,
                     top: 78.0869140625 * fem,
                     child: Align(
@@ -2147,7 +2143,6 @@ class QuickHelp {
                     ),
                   ),
                   Positioned(
-                    // xpp1hfK (1:5276)
                     left: 147 * fem,
                     top: 176.0869140625 * fem,
                     child: Align(
@@ -2155,19 +2150,18 @@ class QuickHelp {
                         width: 50 * fem,
                         height: 52.37 * fem,
                         child: Image.asset(
-                          'assets/dino/xpp-1.png',
+                          'assets/png/xp.png',
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
                   Positioned(
-                    // youhavecheckedin0dayspzq (1:5312)
                     left: 0 * fem,
                     top: 10.0870056152 * fem,
                     child: Align(
                       child: Lottie.asset(
-                        'assets/animation/congragulations.json',
+                        'assets/animations/congragulations.json',
                         // Replace with the path to your Lottie animation JSON file
                         width: 300,
                         height: 300,
@@ -2180,7 +2174,6 @@ class QuickHelp {
                     ),
                   ),
                   Positioned(
-                    // youhavecheckedin0dayspzq (1:5312)
                     left: 100 * fem,
                     top: 190.0870056152 * fem,
                     child: Align(
