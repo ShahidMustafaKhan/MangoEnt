@@ -26,18 +26,18 @@ class ProfileTopBar extends StatelessWidget {
     return GetBuilder<UserViewModel>(
         init: userViewModel,
         builder: (userViewModel) {
-          if(controller.otherProfile==true)
-            cover = controller.profile!.getCover != null ? controller.profile!.getCover!.url! : "https://i.pinimg.com/736x/72/5c/d9/725cd95818f384e81833a4923f1d1493.jpg";
-          else
-            cover = userViewModel.currentUser.getCover != null ? userViewModel.currentUser!.getCover!.url! : "https://i.pinimg.com/736x/72/5c/d9/725cd95818f384e81833a4923f1d1493.jpg";
+          // if(controller.otherProfile==true)
+          //   cover = controller.profile!.getCover != null ? controller.profile!.getCover!.url! : "https://i.pinimg.com/736x/72/5c/d9/725cd95818f384e81833a4923f1d1493.jpg";
+          // else
+          //   cover = userViewModel.currentUser.getCover != null ? userViewModel.currentUser!.getCover!.url! : "https://i.pinimg.com/736x/72/5c/d9/725cd95818f384e81833a4923f1d1493.jpg";
           return Column(
           children: [
             Stack(
               children: [
                 GestureDetector(
                   onTap: (){
-                    if(controller.otherProfile==false)
-                    PermissionHandler.checkPermission(false, context);
+                    // if(controller.otherProfile==false)
+                    // PermissionHandler.checkPermission(false, context);
 
                   },
                   child: Container(
@@ -45,7 +45,7 @@ class ProfileTopBar extends StatelessWidget {
                     height: 240.h,
                     color: Colors.red,
                     child: Image.network(
-                      cover,
+                      controller.profile!.getAvatar!.url!,
                       height: double.infinity,
                       width: double.infinity,
                       fit: BoxFit.cover,

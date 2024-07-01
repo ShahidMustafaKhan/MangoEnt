@@ -42,12 +42,11 @@ import '../../comments.dart';
 // ignore: must_be_immutable
 class DefaultVideoInfoWidget extends StatefulWidget {
   PostsModel? postModel;
-  UserModel? currentUser;
   int? currentIndex;
   final bool singleReel;
 
 
-  DefaultVideoInfoWidget({this.postModel, this.currentUser, this.currentIndex, this.singleReel=false});
+  DefaultVideoInfoWidget({this.postModel, this.currentIndex, this.singleReel=false});
 
   @override
   State<DefaultVideoInfoWidget> createState() => _DefaultVideoInfoWidgetState();
@@ -64,6 +63,8 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   RxInt selectedGiftIndex=0.obs;
 
   RxInt userTotalDiamonds=0.obs;
+  UserViewModel userViewModel = Get.find();
+
 
 
 
@@ -81,12 +82,12 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   @override
   void initState() {
     // setupCounterLiveUser();
-    if (widget.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)) {
+    if (userViewModel.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)) {
       followingUser.value = true;
     } else {
      followingUser.value = false;
     }
-    userTotalDiamonds.value=widget.currentUser!.getCoins!;
+    userTotalDiamonds.value=userViewModel.currentUser!.getCoins!;
     // TODO: implement initState
     super.initState();
   }
@@ -97,11 +98,13 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
     double baseWidth = 375;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    if (widget.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)) {
+
+    if (userViewModel.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)) {
       following = true;
     } else {
       following = false;
     }
+    
 
 
     return Stack(children: [
@@ -122,7 +125,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 dotPrimaryColor: kPrimaryColor,
                 dotSecondaryColor: kPrimaryColor,
               ),
-              isLiked: widget.postModel!.getLikes!.contains(widget.currentUser!.objectId),
+              isLiked: widget.postModel!.getLikes!.contains(userViewModel.currentUser!.objectId),
               likeCountAnimationType: LikeCountAnimationType.all,
               likeBuilder: (bool isLiked) {
                 return Container(
@@ -157,7 +160,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 print("Liked: $isLiked");
 
                 if (isLiked) {
-                  widget.postModel!.removeLike = widget.currentUser!.objectId!;
+                  widget.postModel!.removeLike = userViewModel.currentUser!.objectId!;
 
                   widget.postModel!.save().then((value) {
                     widget.postModel = value.results!.first as PostsModel;
@@ -167,8 +170,8 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
 
                   return Future.value(false);
                 } else {
-                  widget.postModel!.setLikes = widget.currentUser!.objectId!;
-                  widget.postModel!.setLastLikeAuthor = widget.currentUser!;
+                  widget.postModel!.setLikes = userViewModel.currentUser!.objectId!;
+                  widget.postModel!.setLastLikeAuthor = userViewModel.currentUser!;
 
                   widget.postModel!.save().then((value) {
                     widget.postModel = value.results!.first as PostsModel;
@@ -195,7 +198,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 dotPrimaryColor: kPrimaryColor,
                 dotSecondaryColor: kPrimaryColor,
               ),
-              isLiked: widget.postModel!.getLikes!.contains(widget.currentUser!.objectId),
+              isLiked: widget.postModel!.getLikes!.contains(userViewModel.currentUser!.objectId),
               likeCountAnimationType: LikeCountAnimationType.all,
               likeBuilder: (bool isLiked) {
                 return Image.asset(AppImagePath.reel_comment);
@@ -239,7 +242,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
               //   dotPrimaryColor: kPrimaryColor,
               //   dotSecondaryColor: kPrimaryColor,
               // ),
-              isLiked: widget.postModel!.getLikes!.contains(widget.currentUser!.objectId),
+              isLiked: widget.postModel!.getLikes!.contains(userViewModel.currentUser!.objectId),
               likeCountAnimationType: LikeCountAnimationType.all,
               likeBuilder: (bool isLiked) {
                 return Padding(
@@ -274,7 +277,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 Uri? uri= await DynamicLinkService().createDynamicLink(widget.postModel!.objectId, reels: true);
                 if(uri!=null){
                   Share.share("Come and check ${widget.postModel!.getAuthor!.getFirstName!}'s reel in #MangoEnt! ${uri.host}${uri.path}").then((value){
-                    widget.postModel!.setShares = widget.currentUser!.objectId!;
+                    widget.postModel!.setShares = userViewModel.currentUser!.objectId!;
 
                     widget.postModel!.save().then((value) {
                       widget.postModel = value.results!.first as PostsModel;
@@ -513,7 +516,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                       top: 0*fem,
                       child: InkWell(
                         onTap: (){
-                          // QuickHelp.goToNavigatorScreen(context, ProfileMoments(currentUser: widget.postModel!.getAuthor , mProfile: widget.currentUser, otherProfile: true,));
+                          // QuickHelp.goToNavigatorScreen(context, ProfileMoments(currentUser: widget.postModel!.getAuthor , mProfile: userViewModel.currentUser, otherProfile: true,));
                         },
                         child: Align(
                           child: SizedBox(
@@ -541,21 +544,21 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                       left: 27.3*fem,
                       bottom: 0*fem,
                       right: -5*fem,
-                      child: widget.currentUser!.objectId!=widget.postModel!.getAuthor!.objectId?GestureDetector(
+                      child: userViewModel.currentUser!.objectId!=widget.postModel!.getAuthor!.objectId?GestureDetector(
                         behavior: HitTestBehavior.opaque ,
                         onTap: (){
-                          if(widget.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)){
+                          if(userViewModel.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)){
                             print(following);
 
-                            widget.currentUser!.removeFollowing=widget.postModel!.getAuthor!.objectId!;
-                            widget.currentUser!.save();
+                            userViewModel.currentUser!.removeFollowing=widget.postModel!.getAuthor!.objectId!;
+                            userViewModel.currentUser!.save();
 
 
                           }
                           else{
 
-                            widget.currentUser!.setFollowing=widget.postModel!.getAuthor!.objectId!;
-                            widget.currentUser!.save();
+                            userViewModel.currentUser!.setFollowing=widget.postModel!.getAuthor!.objectId!;
+                            userViewModel.currentUser!.save();
 
                           }
 
@@ -596,7 +599,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 dotPrimaryColor: Colors.red,
                 dotSecondaryColor: Colors.red,
               ),
-              isLiked: widget.postModel!.getLikes!.contains(widget.currentUser!.objectId),
+              isLiked: widget.postModel!.getLikes!.contains(userViewModel.currentUser!.objectId),
               likeCountAnimationType: LikeCountAnimationType.all,
               likeBuilder: (bool isLiked) {
                 return Container(
@@ -632,7 +635,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 print("Liked: $isLiked");
 
                 if (isLiked) {
-                  widget.postModel!.removeLike = widget.currentUser!.objectId!;
+                  widget.postModel!.removeLike = userViewModel.currentUser!.objectId!;
 
                   widget.postModel!.save().then((value) {
                     widget.postModel = value.results!.first as PostsModel;
@@ -642,8 +645,8 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
 
                   return Future.value(false);
                 } else {
-                  widget.postModel!.setLikes = widget.currentUser!.objectId!;
-                  widget.postModel!.setLastLikeAuthor = widget.currentUser!;
+                  widget.postModel!.setLikes = userViewModel.currentUser!.objectId!;
+                  widget.postModel!.setLastLikeAuthor = userViewModel.currentUser!;
 
                   widget.postModel!.save().then((value) {
                     widget.postModel = value.results!.first as PostsModel;
@@ -1229,7 +1232,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
               int total;
                 total= selectedGiftIndex.value==0 ? 5: selectedGiftIndex.value==1 ? 10 : 15;
                 if(userTotalDiamonds.value>=total){
-                  updateDiamondRecord(widget.postModel!, widget.currentUser!, total);
+                  updateDiamondRecord(widget.postModel!, userViewModel.currentUser!, total);
                 }
                 else{
                   QuickHelp.showAppNotificationAdvanced(title: 'Insufficient Balance!', context: context, isError: false);
@@ -1341,7 +1344,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   /// Show user name and the time video uploaded
 
   goToProfile(BuildContext context, {UserModel? author}){
-    if (author!.objectId == widget.currentUser!.objectId!) {
+    if (author!.objectId == userViewModel.currentUser!.objectId!) {
       // QuickHelp.goToNavigatorScreen(
       //   context,
       //   ReelsVideosScreen(
@@ -1411,7 +1414,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
           ],
         ),
         Visibility(
-          visible: widget.currentUser!.objectId != widget.postModel!.getAuthor!.objectId,
+          visible: userViewModel.currentUser!.objectId != widget.postModel!.getAuthor!.objectId,
           child: _followWidget(context),
         ),
       ],
@@ -1492,7 +1495,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   _deleteLike(PostsModel postsModel) async {
     QueryBuilder<NotificationsModel> queryBuilder =
         QueryBuilder<NotificationsModel>(NotificationsModel());
-    queryBuilder.whereEqualTo(NotificationsModel.keyAuthor, widget.currentUser);
+    queryBuilder.whereEqualTo(NotificationsModel.keyAuthor, userViewModel.currentUser);
     queryBuilder.whereEqualTo(NotificationsModel.keyPost, postsModel);
 
     ParseResponse parseResponse = await queryBuilder.query();
@@ -1504,7 +1507,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   }
 
   _likePost(PostsModel post) {
-    QuickActions.createOrDeleteNotification(widget.currentUser!, post.getAuthor!,
+    QuickActions.createOrDeleteNotification(userViewModel.currentUser!, post.getAuthor!,
         NotificationsModel.notificationTypeLikedReels,
         post: post);
   }
@@ -1543,7 +1546,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Visibility(
-                      visible: widget.currentUser!.objectId != post.getAuthorId,
+                      visible: userViewModel.currentUser!.objectId != post.getAuthorId,
                       child: ButtonWithIcon(
                         text: "feed.report_post"
                             .tr(namedArgs: {"name": author.getFullName!}),
@@ -1565,10 +1568,10 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                       ),
                     ),
                     Visibility(
-                        visible: widget.currentUser!.objectId != post.getAuthorId,
+                        visible: userViewModel.currentUser!.objectId != post.getAuthorId,
                         child: Divider()),
                     Visibility(
-                      visible: widget.currentUser!.objectId != post.getAuthorId,
+                      visible: userViewModel.currentUser!.objectId != post.getAuthorId,
                       child: ButtonWithIcon(
                         text: "feed.block_user"
                             .tr(namedArgs: {"name": author.getFullName!}),
@@ -1597,11 +1600,11 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                       ),
                     ),
                     Visibility(
-                        visible: widget.currentUser!.objectId != post.getAuthorId,
+                        visible: userViewModel.currentUser!.objectId != post.getAuthorId,
                         child: Divider()),
                     Visibility(
-                      visible: widget.currentUser!.objectId == post.getAuthorId ||
-                          widget.currentUser!.isAdmin!,
+                      visible: userViewModel.currentUser!.objectId == post.getAuthorId ||
+                          userViewModel.currentUser!.isAdmin!,
                       child: ButtonWithIcon(
                         text: "feed.delete_post".tr(),
                         iconURL: "assets/svg/config.svg",
@@ -1619,11 +1622,11 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                       ),
                     ),
                     Visibility(
-                        visible: widget.currentUser!.objectId == post.getAuthorId ||
-                            widget.currentUser!.isAdmin!,
+                        visible: userViewModel.currentUser!.objectId == post.getAuthorId ||
+                            userViewModel.currentUser!.isAdmin!,
                         child: Divider()),
                     Visibility(
-                      visible: widget.currentUser!.isAdmin!,
+                      visible: userViewModel.currentUser!.isAdmin!,
                       child: ButtonWithIcon(
                         text: "feed.suspend_user".tr(),
                         iconURL: "assets/svg/config.svg",
@@ -1641,7 +1644,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                       ),
                     ),
                     Visibility(
-                        visible: widget.currentUser!.isAdmin!, child: Divider()),
+                        visible: userViewModel.currentUser!.isAdmin!, child: Divider()),
                   ],
                 ),
               ),
@@ -1682,7 +1685,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                   ),
                   Visibility(visible: true, child: Divider()),
                   Visibility(
-                    visible: widget.currentUser!.isAdmin!,
+                    visible: userViewModel.currentUser!.isAdmin!,
                     child: ButtonWithIcon(
                       text: "feed.suspend_user".tr(),
                       iconURL: "assets/svg/config.svg",
@@ -1699,7 +1702,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                       },
                     ),
                   ),
-                  Visibility(visible: widget.currentUser!.isAdmin!, child: Divider()),
+                  Visibility(visible: userViewModel.currentUser!.isAdmin!, child: Divider()),
                 ],
               ),
             ),
@@ -1710,12 +1713,12 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
     Navigator.of(context).pop();
     QuickHelp.showLoadingDialog(context);
 
-    widget.currentUser!.setBlockedUser = author;
-    widget.currentUser!.setBlockedUserIds = author.getUid!;
+    userViewModel.currentUser!.setBlockedUser = author;
+    userViewModel.currentUser!.setBlockedUserIds = author.getUid!;
 
-    ParseResponse response = await widget.currentUser!.save();
+    ParseResponse response = await userViewModel.currentUser!.save();
     if (response.success) {
-      widget.currentUser = response.results!.first as UserModel;
+      userViewModel.currentUser = response.results!.first as UserModel;
 
       QuickHelp.hideLoadingDialog(context);
       //QuickHelp.goToNavigator(context, BlockedUsersScreen.route);
@@ -1857,10 +1860,10 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   _saveReport(BuildContext context, String reason, PostsModel post) async {
     QuickHelp.showLoadingDialog(context);
 
-    widget.currentUser?.setReportedPostIDs = post.objectId;
-    widget.currentUser?.setReportedPostReason = reason;
+    userViewModel.currentUser?.setReportedPostIDs = post.objectId;
+    userViewModel.currentUser?.setReportedPostReason = reason;
 
-    ParseResponse response = await widget.currentUser!.save();
+    ParseResponse response = await userViewModel.currentUser!.save();
     if (response.success) {
       QuickHelp.hideLoadingDialog(context);
       //setState(() {});
@@ -1871,7 +1874,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
     ParseResponse parseResponse = await QuickActions.report(
         type: ReportModel.reportTypePost,
         message: reason,
-        accuser: widget.currentUser!,
+        accuser: userViewModel.currentUser!,
         accused: post.getAuthor!,
         postsModel: post);
 
@@ -1979,11 +1982,11 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
 
   bool showPost(PostsModel post) {
     if (post.getExclusive!) {
-      if (post.getAuthorId == widget.currentUser!.objectId) {
+      if (post.getAuthorId == userViewModel.currentUser!.objectId) {
         return true;
-      } else if (post.getPaidBy!.contains(widget.currentUser!.objectId)) {
+      } else if (post.getPaidBy!.contains(userViewModel.currentUser!.objectId)) {
         return true;
-      } else if (widget.currentUser!.isAdmin!) {
+      } else if (userViewModel.currentUser!.isAdmin!) {
         return true;
       } else {
         return false;
@@ -1994,25 +1997,25 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   }
 
   void followOrUnfollow() async {
-    if (widget.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)) {
-      widget.currentUser!.removeFollowing = widget.postModel!.getAuthor!.objectId!;
+    if (userViewModel.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)) {
+      userViewModel.currentUser!.removeFollowing = widget.postModel!.getAuthor!.objectId!;
 
       following = false;
     } else {
-      widget.currentUser!.setFollowing = widget.postModel!.getAuthor!.objectId!;
+      userViewModel.currentUser!.setFollowing = widget.postModel!.getAuthor!.objectId!;
 
       following = true;
     }
 
-    await widget.currentUser!.save();
+    await userViewModel.currentUser!.save();
 
     ParseResponse parseResponse = await QuickCloudCode.followUser(
         isFollowing: false,
-        author: widget.currentUser!,
+        author: userViewModel.currentUser!,
         receiver: widget.postModel!.getAuthor!);
 
     if (parseResponse.success) {
-      QuickActions.createOrDeleteNotification(widget.currentUser!,
+      QuickActions.createOrDeleteNotification(userViewModel.currentUser!,
           widget.postModel!.getAuthor!, NotificationsModel.notificationTypeFollowers);
     }
   }
@@ -2060,7 +2063,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
             ),
 
             Expanded(
-              child: Comments(postModel: widget.postModel!,currentUser: widget.currentUser,reels: true,),
+              child: Comments(postModel: widget.postModel!,currentUser: userViewModel.currentUser,reels: true,),
             ),
           ],
         ),
@@ -2202,7 +2205,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                             dotPrimaryColor: kPrimaryColor,
                             dotSecondaryColor: kPrimaryColor,
                           ),
-                          isLiked: widget.postModel!.getLikes!.contains(widget.currentUser!.objectId),
+                          isLiked: widget.postModel!.getLikes!.contains(userViewModel.currentUser!.objectId),
                           likeCountAnimationType: LikeCountAnimationType.all,
                           likeBuilder: (bool isLiked) {
                             return Container(
@@ -2223,7 +2226,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                             print("Liked: $isLiked");
 
                             if (isLiked) {
-                              widget.postModel!.removeLike = widget.currentUser!.objectId!;
+                              widget.postModel!.removeLike = userViewModel.currentUser!.objectId!;
 
                               widget.postModel!.save().then((value) {
                                 widget.postModel = value.results!.first as PostsModel;
@@ -2233,8 +2236,8 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
 
                               return Future.value(false);
                             } else {
-                              widget.postModel!.setLikes = widget.currentUser!.objectId!;
-                              widget.postModel!.setLastLikeAuthor = widget.currentUser!;
+                              widget.postModel!.setLikes = userViewModel.currentUser!.objectId!;
+                              widget.postModel!.setLastLikeAuthor = userViewModel.currentUser!;
 
                               widget.postModel!.save().then((value) {
                                 widget.postModel = value.results!.first as PostsModel;
@@ -2290,7 +2293,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if(widget.currentUser!.objectId != widget.postModel!.getAuthorId)
+                    if(userViewModel.currentUser!.objectId != widget.postModel!.getAuthorId)
                       GestureDetector(
                       onTap : ()=> Get.toNamed(AppRoutes.chatReportScreen, arguments: widget.postModel!.getAuthor),
                       child: Center(
@@ -2304,12 +2307,12 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                         ),
                       ),
                     ),
-                    if(widget.currentUser!.objectId != widget.postModel!.getAuthorId)
+                    if(userViewModel.currentUser!.objectId != widget.postModel!.getAuthorId)
                       Divider(
                       thickness: 0.1,
                       color: AppColors.grey,
                     ),
-                    if(widget.currentUser!.objectId == widget.postModel!.getAuthorId)
+                    if(userViewModel.currentUser!.objectId == widget.postModel!.getAuthorId)
                     GestureDetector(
                       onTap: ()=> _deletePost(context, widget.postModel!),
                       child: Center(
@@ -2323,7 +2326,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                         ),
                       ),
                     ),
-                    if(widget.currentUser!.objectId == widget.postModel!.getAuthorId)
+                    if(userViewModel.currentUser!.objectId == widget.postModel!.getAuthorId)
                       Divider(
                       thickness: 0.1,
                       color: AppColors.grey,
@@ -2381,9 +2384,9 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
     QuickHelp.showLoadingDialog(context);
 
     CommentsModel comment = CommentsModel();
-    comment.setAuthor = widget.currentUser!;
+    comment.setAuthor = userViewModel.currentUser!;
     comment.setText = text;
-    comment.setAuthorId = widget.currentUser!.objectId!;
+    comment.setAuthorId = userViewModel.currentUser!.objectId!;
     comment.setPostId = post.objectId!;
     comment.setPost = post;
 
@@ -2394,7 +2397,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
 
     QuickHelp.hideLoadingDialog(context);
 
-    QuickActions.createOrDeleteNotification(widget.currentUser!, post.getAuthor!,
+    QuickActions.createOrDeleteNotification(userViewModel.currentUser!, post.getAuthor!,
         NotificationsModel.notificationTypeCommentReels,
         post: post);
   }

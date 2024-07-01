@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:teego/utils/routes/app_routes.dart';
+import 'package:teego/view/screens/onBoarding.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
 import '../../../helpers/quick_help.dart';
 import '../../../utils/constants/app_constants.dart';
@@ -364,7 +369,11 @@ class SettingScreen extends StatelessWidget {
                                                 .logout(deleteLocalUserData: true)
                                                 .then((value) {
                                               QuickHelp.hideLoadingDialog(context);
-                                              Get.offAllNamed(AppRoutes.onBoarding);
+                                              clearCache();
+
+                                              Get.offAllNamed(
+                                                AppRoutes.onBoarding,
+                                              );
                                             }).onError(
                                                   (error, stackTrace) {
                                                 QuickHelp.hideLoadingDialog(context);
@@ -391,4 +400,14 @@ class SettingScreen extends StatelessWidget {
       ],
     ));
   }
+  void clearCache() async {
+    try {
+      Directory cacheDir = await getTemporaryDirectory();
+      cacheDir.deleteSync(recursive: true);
+      print('Cache cleared successfully.');
+    } catch (e) {
+      print('Failed to clear cache: $e');
+    }
+  }
+
 }

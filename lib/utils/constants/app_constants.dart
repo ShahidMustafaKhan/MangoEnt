@@ -15,7 +15,7 @@ class AppInfo {
 
 class AppImagePath {
   static const bangladeshFlag = "assets/svg/bangladesh_flag.svg";
-  static const englandFlag = "assets/svg/england_flag.svg";
+  static const englandFlag = "assets/svg/Europe_Region_Flags/UK.svg";
   static const franceFlag = "assets/svg/france_flag.svg";
   static const saudiFlag = "assets/svg/saudia_flag.svg";
   static const swedishFlag = "assets/svg/swedish_flag.svg";

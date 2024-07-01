@@ -37,6 +37,7 @@ class _TipSheetState extends State<TipSheet> {
           children: [
             SizedBox(height: 30.h),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "Reward This Moment",
@@ -45,16 +46,16 @@ class _TipSheetState extends State<TipSheet> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Spacer(),
-                Text(
-                  "More",
-                  style:
-                      TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(Icons.arrow_forward_ios, size: 20.sp),
-                ),
+                // Spacer(),
+                // Text(
+                //   "More",
+                //   style:
+                //       TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                // ),
+                // GestureDetector(
+                //   onTap: () => Navigator.pop(context),
+                //   child: Icon(Icons.arrow_forward_ios, size: 20.sp),
+                // ),
               ],
             ),
             SizedBox(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:teego/view/widgets/region_widgets.dart';
@@ -18,25 +19,45 @@ class Explore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 17),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 16.h,
-            ),
-            RegionWidget(),
+      child: Obx(() {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 17),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: trendingViewModel.chosenCountry.value.isEmpty ? 16.h : 20.h,
+                ),
+                if(trendingViewModel.chosenCountry.value.isEmpty)
+                RegionWidget(),
 
-            Text(
-              "Trending",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16.sp),
-            ),
+                GestureDetector(
+                  onTap: (){
+                    trendingViewModel.chosenCountry.value = '';
+                    trendingViewModel.chosenCountryFlag.value = '';
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        trendingViewModel.chosenCountry.value.isEmpty ? "Trending" : trendingViewModel.chosenCountry.value,
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16.sp),
+                      ),
 
-            TrendingWidget(),
-          ],
-        ),
+                      SizedBox(width: 12.w),
+                      if(trendingViewModel.chosenCountryFlag.value.isNotEmpty)
+                      SvgPicture.asset(trendingViewModel.chosenCountryFlag.value, height: 19.h, width: 26.13.w,),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height:  trendingViewModel.chosenCountry.value.isNotEmpty ? 20.h : 0,),
+
+                TrendingWidget(),
+              ],
+            ),
+          );
+        }
       ),
     );
   }

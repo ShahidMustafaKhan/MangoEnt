@@ -8,6 +8,7 @@ import '../../model/country_model.dart';
 import '../../utils/constants/app_constants.dart';
 import '../../utils/constants/typography.dart';
 import '../../view_model/region_controller.dart';
+import '../../view_model/trending_controller.dart';
 
 class MoreRegionWidget extends StatefulWidget {
   MoreRegionWidget({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
   late final AsiaRegionViewModel asiaRegionViewModel;
   late final EuropeRegionViewModel europeRegionViewModel;
   late final MiddleEastRegionViewModel middleEastRegionViewModel;
+  TrendingViewModel trendingViewModel = Get.find();
   String selectedRegion = "America"; 
 
   @override
@@ -162,9 +164,17 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
       shrinkWrap: true,
       padding: EdgeInsets.symmetric(vertical: 17.h),
       children: List.generate(modelList.length, (index) {
-        return buildCountries(
-          cFlag: modelList[index].flag,
-          cName: modelList[index].name,
+        return GestureDetector(
+          onTap: (){
+            trendingViewModel.chosenCountryFlag.value = modelList[index].flag;
+            trendingViewModel.chosenCountry.value = modelList[index].name;
+            trendingViewModel.updateListForChosenCountry(modelList[index].name);
+            Get.back();
+          },
+          child: buildCountries(
+            cFlag: modelList[index].flag,
+            cName: modelList[index].name,
+          ),
         );
       }),
     );

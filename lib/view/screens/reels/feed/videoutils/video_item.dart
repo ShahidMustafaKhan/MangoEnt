@@ -327,7 +327,6 @@ class _VideoItemWidgetState<V extends VideoInfo>
               text: widget.videoInfo.songName,
               likes: widget.videoInfo.likes,*/
         postModel: widget.videoInfo.postModel,
-        currentUser: widget.videoInfo.currentUser,
         currentIndex: widget.currentPageIndex,
         singleReel: widget.singleReel,
       ),

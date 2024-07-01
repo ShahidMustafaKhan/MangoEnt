@@ -34,7 +34,7 @@ class _CreateAccountState extends State<CreateAccount> {
   RxBool isFormDirty = false.obs;
   RxBool isPasswordObscure = false.obs;
   RxBool isConfirmPasswordObscure = false.obs;
-  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'dashboard']);
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   late SharedPreferences preferences;
   AuthViewModel authViewModel= Get.put(AuthViewModel());
@@ -284,8 +284,8 @@ class _CreateAccountState extends State<CreateAccount> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "I already have an account ",
-                    style: sfProDisplayRegular.copyWith(color: AppColors.dHintColor, fontSize: 14)),
+                        "I already have an account ",
+                        style: sfProDisplayRegular.copyWith(color: AppColors.dHintColor, fontSize: 14)),
                     GestureDetector(
                       onTap: () {
                         Get.toNamed(AppRoutes.login);

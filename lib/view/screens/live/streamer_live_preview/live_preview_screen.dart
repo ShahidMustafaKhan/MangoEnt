@@ -57,7 +57,7 @@ class LivePreviewScreen extends StatelessWidget {
             hideNavigator.value=true;
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
           }
-          return !cameraReady.value ?  Container(color: Colors.black,child: Center(child: CircularProgressIndicator(color: AppColors.yellowColor,)),) : Container(
+          return  Container(
             child: Stack(
               children: [
                 if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex] || liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.gameLiveIndex] || liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
@@ -71,7 +71,7 @@ class LivePreviewScreen extends StatelessWidget {
                   Positioned.fill(top:0, bottom:0, child: Container(color: Color(0xFF12323A),)),
                 BackgroundImage(),
                   if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
-                    CameraPreviewWidget(cameraController),
+                    !cameraReady.value ?  Container(color: Colors.black) : CameraPreviewWidget(cameraController),
                 if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                   CameraOffPreviewWidget(),
 
@@ -85,7 +85,7 @@ class LivePreviewScreen extends StatelessWidget {
                       const SizedBox(height: 45),
                       RoomAnnouncementCard(),
                       const SizedBox(height: 16),
-                      LiveViewTopMenu(cameraController: cameraController,),
+                      LiveViewTopMenu(cameraController: cameraReady.value==true ? cameraController : null,),
                       const SizedBox(height: 4),
                       if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.audioLiveIndex])
                       Expanded(child: AudioEmptyPreview()),
@@ -93,7 +93,7 @@ class LivePreviewScreen extends StatelessWidget {
                       LanguageCard(),
                       if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.singleLiveIndex])
                         Spacer(),
-                      if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex])
+                      if(liveViewModel.selectedLiveType.value==liveViewModel.bottomTab[liveViewModel.multiLiveIndex] )
                         Expanded(child: MultiGuestPreview(cameraController: cameraController,)),
                       LiveBottomCard(liveViewModel),
                       const SizedBox(height: 16),

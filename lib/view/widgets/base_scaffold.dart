@@ -12,6 +12,7 @@ import '../screens/dashboard_screen.dart';
 
 class BaseScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
+  final bool resizeToAvoidBottomInset;
   final Widget body;
   final EdgeInsetsGeometry padding;
   final bool bottomNavigationBar;
@@ -26,7 +27,7 @@ class BaseScaffold extends StatelessWidget {
       this.appBar,
       this.bottomNavigationBar = false,
       this.safeArea = false,
-      this.endDrawer, this.extendBodyBehindAppBar=false, this.topSafeArea,
+      this.endDrawer, this.extendBodyBehindAppBar=false, this.topSafeArea, this.resizeToAvoidBottomInset=true,
       }) : super(key: key);
 
   @override
@@ -43,7 +44,7 @@ class BaseScaffold extends StatelessWidget {
                 stops: Get.isDarkMode ? const [0.7, 0.9] : null,
                 colors: Get.isDarkMode ? AppColors.darkBGGradientColor : AppColors.lightBGGradientColor)),
         child: Scaffold(
-          resizeToAvoidBottomInset: true,
+          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
           extendBodyBehindAppBar: extendBodyBehindAppBar,
           appBar: appBar,
           body: SafeArea(

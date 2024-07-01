@@ -84,6 +84,7 @@ class BuildCard extends StatelessWidget {
                 ),
               ],
             ),
+            Spacer(),
             Container(
               padding: EdgeInsets.all(4.w),
               decoration: BoxDecoration(

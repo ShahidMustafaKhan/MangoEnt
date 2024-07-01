@@ -42,6 +42,7 @@ class _DispatchScreenState extends State<DispatchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    userViewModel.currentUser = widget.currentUser!;
 
     if(widget.currentUser != null){
 

@@ -40,6 +40,7 @@ class AudienceMultiLive extends StatelessWidget {
 
     return BaseScaffold(
       safeArea: true,
+      resizeToAvoidBottomInset: false,
       body: GetBuilder<GiftViewModel>(init: giftViewModel, builder: (giftViewModel) {
         return Container(
           child: Stack(

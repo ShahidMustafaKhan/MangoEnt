@@ -56,10 +56,10 @@
               "client_type": 3
             },
             {
-              "client_id": "95114049968-1ti6rab5g3q3hsmll2ne6crbthl5o9aj.apps.googleusercontent.com",
+              "client_id": "95114049968-e33n78d8a5jnjs5s4h18rnblslta1qkp.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.livestream.mangoEnt"
+                "bundle_id": "com.livestreaming.hilite"
               }
             }
           ]
@@ -148,10 +148,10 @@
               "client_type": 3
             },
             {
-              "client_id": "95114049968-1ti6rab5g3q3hsmll2ne6crbthl5o9aj.apps.googleusercontent.com",
+              "client_id": "95114049968-e33n78d8a5jnjs5s4h18rnblslta1qkp.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.livestream.mangoEnt"
+                "bundle_id": "com.livestreaming.hilite"
               }
             }
           ]
@@ -160,42 +160,26 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:95114049968:android:88f780056caa84dbfa3e75",
+        "mobilesdk_app_id": "1:95114049968:android:7b63d777033d7169fa3e75",
         "android_client_info": {
-          "package_name": "com.livestream.mangoEnt"
+          "package_name": "com.livestream.hype"
         }
       },
       "oauth_client": [
         {
-          "client_id": "95114049968-3g9eot58gv63aklaqlnelct9nl6vf3q9.apps.googleusercontent.com",
+          "client_id": "95114049968-ct49urc3tk3e6u4e8nc682dun3b3vql0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.livestream.mangoEnt",
-            "certificate_hash": "4dae605ab529b1986505635055f230cd8e529c65"
+            "package_name": "com.livestream.hype",
+            "certificate_hash": "ad83027736f8f4acc0bec68aca8e2958c0a1a498"
           }
         },
         {
-          "client_id": "95114049968-a2m5pgkor6op6qh07iv17j7luvr8d3f4.apps.googleusercontent.com",
+          "client_id": "95114049968-nkckfq3m1s5cj040e88cv7eqec6ndee6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.livestream.mangoEnt",
-            "certificate_hash": "f9e718765c969a595e7aa13414701780050bf6b5"
-          }
-        },
-        {
-          "client_id": "95114049968-j83btlnr96ufsqtcd8dv7k9f3o2vgbb3.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.livestream.mangoEnt",
-            "certificate_hash": "2753f05bd18a603353779dd9a3aadf144419ec15"
-          }
-        },
-        {
-          "client_id": "95114049968-lq1924rgs57j0vrlp7aoeqctstes17d1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.livestream.mangoEnt",
-            "certificate_hash": "60ad725a1fa1eddd1f1cc9c39e4815ac3599ca88"
+            "package_name": "com.livestream.hype",
+            "certificate_hash": "8fcda0ef9173b41edaa501d3e8c4ad2cdbdddc0b"
           }
         },
         {
@@ -216,10 +200,54 @@
               "client_type": 3
             },
             {
-              "client_id": "95114049968-1ti6rab5g3q3hsmll2ne6crbthl5o9aj.apps.googleusercontent.com",
+              "client_id": "95114049968-e33n78d8a5jnjs5s4h18rnblslta1qkp.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.livestream.mangoEnt"
+                "bundle_id": "com.livestreaming.hilite"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95114049968:android:88f780056caa84dbfa3e75",
+        "android_client_info": {
+          "package_name": "com.livestream.mangoEnt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95114049968-j83btlnr96ufsqtcd8dv7k9f3o2vgbb3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.livestream.mangoEnt",
+            "certificate_hash": "2753f05bd18a603353779dd9a3aadf144419ec15"
+          }
+        },
+        {
+          "client_id": "95114049968-96rva3fomoueknueqt0fhnq5osbg857u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSQhPJF3S4tDMIKKlbZ7jj2tsOrMKNXTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95114049968-96rva3fomoueknueqt0fhnq5osbg857u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "95114049968-e33n78d8a5jnjs5s4h18rnblslta1qkp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.livestreaming.hilite"
               }
             }
           ]

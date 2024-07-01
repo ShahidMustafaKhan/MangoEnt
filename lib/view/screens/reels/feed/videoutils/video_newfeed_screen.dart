@@ -149,6 +149,7 @@ class _VideoNewFeedScreenState <V extends VideoInfo>
   Widget build(BuildContext context) {
     return BaseScaffold(
       topSafeArea: true,
+      resizeToAvoidBottomInset: false,
       body: _renderVideoPageView(),
     );
   }

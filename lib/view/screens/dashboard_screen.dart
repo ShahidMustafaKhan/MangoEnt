@@ -51,8 +51,8 @@ class _DashboardViewState extends State<DashboardView> {
     currentUser = userViewModel.currentUser;
 
     _screens = [
-      HomeView(currentUser: currentUser,),
-      ReelsHomeScreen(currentUser: currentUser,),
+      HomeView(),
+      ReelsHomeScreen(),
       // TrendingView(),
       const ChatView(),
       const ProfileDashBoardScreen(),
@@ -63,6 +63,7 @@ class _DashboardViewState extends State<DashboardView> {
 
     super.initState();
   }
+
 
 
   void _onItemTapped(int index) {
@@ -85,7 +86,9 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     userViewModel.getDeviceName(context);
+    communityController.getListVideo();
     return BaseScaffold(
+      resizeToAvoidBottomInset: false,
       topSafeArea:  _selectedIndex == 1 ? true : null ,
       // topSafeArea:  _selectedIndex == 1 ? true : null ,
       body: Stack(

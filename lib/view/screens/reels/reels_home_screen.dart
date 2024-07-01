@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' hide Trans;
@@ -7,6 +8,7 @@ import 'package:preload_page_view/preload_page_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:teego/view_model/communityController.dart';
+import 'package:teego/view_model/userViewModel.dart';
 
 import '../../../helpers/quick_actions.dart';
 import '../../../helpers/quick_help.dart';
@@ -29,11 +31,10 @@ import 'feed/videoutils/video_newfeed_screen.dart';
 class ReelsHomeScreen<V extends VideoInfo> extends StatefulWidget {
   static String route = "/home/reels";
 
-  UserModel? currentUser;
   PostsModel? post;
   SharedPreferences? preferences;
 
-  ReelsHomeScreen({this.currentUser, this.post, this.preferences});
+  ReelsHomeScreen({this.post, this.preferences});
 
   @override
   _ReelsHomeScreenState createState() => _ReelsHomeScreenState();
@@ -56,6 +57,7 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
 
     _tabController = TabController(length: 2, vsync: this);
     _pageController = PreloadPageController(keepPage: true);
+    communityController.getListVideo();
     super.initState();
   }
 
@@ -67,6 +69,8 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    UserViewModel userViewModel = Get.find();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -79,7 +83,7 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
             showAppBar: true,
             backgroundColor: kTransparentColor,
             centerTitle: true,
-            child: reelsVideoWidget(),
+            child: reelsVideoWidget(userViewModel.currentUser),
             // leftWidget: IconButton(
             //   icon: Icon(Icons.arrow_back),
             //   onPressed: () {
@@ -101,7 +105,7 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
     );
   }
 
-  Widget initTabs() {
+  Widget initTabs(UserModel? currentUser) {
     return PreloadPageView.builder(
       scrollDirection: Axis.horizontal,
       controller: _pageController,
@@ -114,15 +118,15 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
       },
       itemBuilder: (context, index) {
         if (index == 0) {
-          return reelsVideoWidget(exclusive: false);
+          return reelsVideoWidget(currentUser!, exclusive: false);
         } else {
-          return reelsVideoWidget(exclusive: true);
+          return reelsVideoWidget(currentUser! ,exclusive: true);
         }
       },
     );
   }
 
-  Widget reelsVideoWidget({bool? exclusive}) {
+  Widget reelsVideoWidget(UserModel? currentUser, {bool? exclusive}) {
     return Container(
       color: kContentColorLightTheme,
       child: VideoNewFeedScreen<VideoInfo>(
@@ -151,15 +155,15 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
         pageChanged: (page, user, post) {
           print("Page changed $page, ${user.objectId}, ${post.objectId}");
 
-          setViewer(post);
+          setViewer(post, currentUser);
         },
       ),
     );
   }
 
-  setViewer(PostsModel post) async {
-    if (widget.currentUser!.objectId! != post.getAuthor!.objectId!) {
-      post.setViewer = widget.currentUser!.objectId!;
+  setViewer(PostsModel post, UserModel? currentUser) async {
+    if (currentUser!.objectId! != post.getAuthor!.objectId!) {
+      post.setViewer = currentUser.objectId!;
       post.addView = 1;
       await post.save();
     }
@@ -198,9 +202,9 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
     } else {
       //queryBuilder.whereEqualTo(PostsModel.keyExclusive, isExclusive);
       queryBuilder.whereNotContainedIn(
-          PostsModel.keyAuthor, widget.currentUser!.getBlockedUsers!);
+          PostsModel.keyAuthor, Get.find<UserViewModel>().currentUser.getBlockedUsers!);
       queryBuilder.whereNotContainedIn(
-          PostsModel.keyObjectId, widget.currentUser!.getReportedPostIDs!);
+          PostsModel.keyObjectId, Get.find<UserViewModel>().currentUser.getReportedPostIDs!);
 
       queryBuilder.whereDoesNotMatchQuery(PostsModel.keyAuthor, queryUsers);
       //queryBuilder.setAmountToSkip(skip!);
@@ -226,7 +230,7 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
               songName: postsModel.getText,
               likes: postsModel.getLikes,*/
               postModel: postsModel,
-              currentUser: widget.currentUser,
+              currentUser: Get.find<UserViewModel>().currentUser,
               url: postsModel.getVideo!
                   .url); //"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"); //postsModel.getVideo!.url);
 

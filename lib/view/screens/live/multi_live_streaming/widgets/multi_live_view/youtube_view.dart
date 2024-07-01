@@ -64,11 +64,11 @@ class _YoutubeViewState extends State<YoutubeView> {
     super.initState();
   }
 
-  void dispose() {
-    youtubeController.youtubePlayerController.dispose();
-    youtubeController.youtubePlayerController.removeListener(() { });
-    super.dispose();
-  }
+  // void dispose() {
+  //   youtubeController.youtubePlayerController.dispose();
+  //   youtubeController.youtubePlayerController.removeListener(() { });
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     ZegoController zegoController = Get.find();

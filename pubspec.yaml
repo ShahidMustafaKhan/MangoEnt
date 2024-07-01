@@ -3,7 +3,7 @@ description: Live Streaming app
 
 publish_to: 'none'
 
-version: 1.0.1
+version: 1.0.4
 
 environment:
   sdk: ">=2.13.0 <3.0.3"
@@ -114,7 +114,8 @@ dependencies:
   flutter_facebook_auth: ^5.0.8
 
   #payments:
-  purchases_flutter: ^4.10.4
+#  purchases_flutter: ^4.10.4
+  purchases_flutter: ^6.29.4
 
   # fake name
 #  faker: ^2.1.0
@@ -175,7 +176,7 @@ dependencies:
   just_audio: ^0.9.31
 
   flutter_keyboard_visibility:
-  ed_screen_recorder:
+#  ed_screen_recorder:
   screenshot: ^1.1.0
   carousel_slider: ^4.2.1
 

@@ -78,7 +78,7 @@ class SingleStreamerLiveItemWidget extends StatelessWidget {
                                             children: [
                                               SizedBox(height: 8.h),
                                               Padding(
-                                                padding: EdgeInsets.only(left: 20, right: 10.w,bottom: 10.h),
+                                                padding: EdgeInsets.only(left: 15.w, right: 10.w,bottom: 10.h),
                                                 child: ChatFeature(height: 200,),
                                               ),
                                             ],
@@ -129,15 +129,7 @@ class SingleStreamerLiveItemWidget extends StatelessWidget {
                       ),
                   ],
                 ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                        child: Obx(() {
-                          if(liveViewModel.chatField.value==true && battleViewModel.isBattleView == true)
-                            return ChatTextField();
-                          else
-                            return SizedBox();
-                        }),
-                      ),
+
 
               ],
             );

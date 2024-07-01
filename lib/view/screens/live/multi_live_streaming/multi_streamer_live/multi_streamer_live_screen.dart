@@ -30,6 +30,7 @@ class StreamerMultiLive extends StatelessWidget  {
       onWillPop: () => Get.find<LiveViewModel>().closeAlert(context),
       child: BaseScaffold(
         safeArea: true,
+        resizeToAvoidBottomInset: false,
         body: GetBuilder<GiftViewModel>(builder: (giftViewModel) {
             return Container(
               child: Stack(

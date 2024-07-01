@@ -17,6 +17,7 @@ class TrendingViewModel extends GetxController {
   late Timer _timer;
 
   List<TrendingModel> trendingModelList = [];
+  List<TrendingModel> countryTrendingModelList = [];
 
   Status status = Status.Loading;
 
@@ -24,6 +25,9 @@ class TrendingViewModel extends GetxController {
 
   LiveQuery liveQuery = LiveQuery();
   Subscription? subscription;
+
+  RxString chosenCountry = ''.obs;
+  RxString chosenCountryFlag = ''.obs;
 
 
   Future<void> loadLive() async {
@@ -77,7 +81,8 @@ class TrendingViewModel extends GetxController {
           name: liveModel.getAuthor!.getFullName!,
           avatar: liveModel.getAuthor!.getAvatar!.url!,
           flag: QuickActions.getCountryFlag(liveModel.getAuthor!),
-          country: '${QuickActions.getCountryCode(liveModel.getAuthor!)} ',
+          countryCode: '${QuickActions.getCountryCode(liveModel.getAuthor!)} ',
+          country: '${liveModel.getAuthor!.getCountry ?? 'Pakistan'}',
           liveModel: liveModel,
           achievementCount: liveModel.getAuthor!.getCoins ?? 0,
           image: liveModel.getImage!=null ? liveModel.getImage!.url! : tempImagePath);
@@ -88,6 +93,18 @@ class TrendingViewModel extends GetxController {
     trendingModelList=tempModelList;
 
   }
+
+  void updateListForChosenCountry(String name) {
+    countryTrendingModelList = [];
+    for (var value in trendingModelList) {
+      if (name == value.country) {
+        countryTrendingModelList.add(value);
+      }
+    }
+    update();
+  }
+
+
 
   subscribeLiveStreamingModel() async {
     QueryBuilder query =
@@ -101,11 +118,6 @@ class TrendingViewModel extends GetxController {
     subscription = await liveQuery.client.subscribe(query);
 
     subscription!.on(LiveQueryEvent.update, (value) async {
-
-      if(kDebugMode){
-        print('*** livestreaming UPDATE ***');
-        print('*** livestreaming UPDATE ***');
-      }
 
       loadLive();
 

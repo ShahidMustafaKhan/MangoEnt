@@ -14,7 +14,6 @@ class ScreenRecordingSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LiveViewModel liveViewModel = Get.find();
-    RecordingController recordingController = Get.find();
 
     return SizedBox(
       height: 250,

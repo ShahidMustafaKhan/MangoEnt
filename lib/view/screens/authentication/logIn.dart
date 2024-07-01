@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +11,7 @@ import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/utils/constants/typography.dart';
 import 'package:teego/utils/routes/app_routes.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
+import 'package:teego/view/screens/authentication/social_login.dart';
 import 'package:teego/view/widgets/appButton.dart';
 import 'package:teego/view/widgets/app_text_field.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
@@ -31,14 +34,13 @@ class _LogInState extends State<LogIn> {
   RxBool isPasswordObscure = false.obs;
   final _formKey = GlobalKey<FormState>();
   RxBool isFormDirty = false.obs;
-  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'dashboard']);
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   late SharedPreferences preferences;
-  AuthViewModel authViewModel= Get.put(AuthViewModel());
+  AuthViewModel authViewModel = Get.put(AuthViewModel());
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     name = TextEditingController();
     password = TextEditingController();
@@ -65,7 +67,9 @@ class _LogInState extends State<LogIn> {
         child: Obx(() {
           return Form(
             key: _formKey,
-            autovalidateMode: isFormDirty.value ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+            autovalidateMode: isFormDirty.value
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
             child: Column(
               children: [
                 Align(
@@ -85,13 +89,12 @@ class _LogInState extends State<LogIn> {
                     autoValidateMode: AutovalidateMode.disabled,
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: SvgPicture.asset(
-                          "assets/svg/person.svg"),
+                      child: SvgPicture.asset("assets/svg/person.svg"),
                     ),
-                    validator: (value){
+                    validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your name';
-                      } else if (UsernameChecker.isNotValid(value)){
+                      } else if (UsernameChecker.isNotValid(value)) {
                         return 'Username must be 3-20 characters & cannot start with number';
                       }
                       return null;
@@ -109,8 +112,7 @@ class _LogInState extends State<LogIn> {
                     isPrefixIcon: true,
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: SvgPicture.asset(
-                          "assets/svg/lock.svg"),
+                      child: SvgPicture.asset("assets/svg/lock.svg"),
                     ),
                     autoValidateMode: AutovalidateMode.disabled,
                     isSuffixIcon: true,
@@ -121,12 +123,14 @@ class _LogInState extends State<LogIn> {
                       onPressed: () {
                         isPasswordObscure.value = !isPasswordObscure.value;
                       },
-                      icon: Icon(isPasswordObscure.value ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                      icon: Icon(isPasswordObscure.value
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined),
                     ),
-                    validator: (value){
+                    validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter password';
-                      } else if (PasswordChecker.isNotValid(value)){
+                      } else if (PasswordChecker.isNotValid(value)) {
                         return 'Password should be 8+ characters with at least 1 number';
                       }
                       return null;
@@ -142,15 +146,17 @@ class _LogInState extends State<LogIn> {
                           Get.toNamed(AppRoutes.forgotPassword);
                         },
                         child: Text("Forgot Password?",
-                            style: sfProDisplayRegular.copyWith(fontSize: 12, color: AppColors.yellow)))),
+                            style: sfProDisplayRegular.copyWith(
+                                fontSize: 12, color: AppColors.yellow)))),
 
                 SizedBox(
                   height: 90.h,
                 ),
                 AppButton(context, "LogIn", () {
-                  if(_formKey.currentState!.validate()){
+                  if (_formKey.currentState!.validate()) {
                     // Get.snackbar('VALIDATION', 'Login Fields are validated.');
-                    authViewModel.signInWithUserName(context, preferences, name.text, password.text);
+                    authViewModel.signInWithUserName(
+                        context, preferences, name.text, password.text);
                   } else {
                     isFormDirty.value = true;
                   }
@@ -159,7 +165,8 @@ class _LogInState extends State<LogIn> {
                   height: 90.h,
                 ),
                 Text("- OR Continue with -",
-                    style: sfProDisplayRegular.copyWith(color: AppColors.dHintColor, fontSize: 12)),
+                    style: sfProDisplayRegular.copyWith(
+                        color: AppColors.dHintColor, fontSize: 12)),
                 const SizedBox(
                   height: 16,
                 ),
@@ -168,25 +175,30 @@ class _LogInState extends State<LogIn> {
                   children: [
                     SocialButton(
                       path: "assets/svg/google.svg",
-                      onTap: (){
-                        authViewModel.signInWithGoogle(_googleSignIn, firebaseAuth, context, preferences);
+                      onTap: () {
+                        authViewModel.signInWithGoogle(
+                            _googleSignIn, firebaseAuth, context, preferences);
+                      },
+                    ),
+                      SocialButton(
+                        path: "assets/svg/apple.svg",
+                        onTap: () {
+                          SocialLogin.loginApple(context, preferences);
+                        },
+                      ),
+                    SocialButton(
+                      path: "assets/svg/fb.svg",
+                      onTap: () {
+                        SocialLogin.loginFacebook(context, preferences);
                       },
                     ),
                     SocialButton(
-                      path: "assets/svg/apple.svg",
-                      onTap: (){},
-                    ),
-                    SocialButton(
-                      path: "assets/svg/fb.svg",
-                      onTap: (){},
-                    ),
-                    SocialButton(
                       path: "assets/svg/tiktok.svg",
-                      onTap: (){},
+                      onTap: () {},
                     ),
                     SocialButton(
                       path: "assets/svg/twitch.svg",
-                      onTap: (){},
+                      onTap: () {},
                     ),
                   ],
                 ),
@@ -197,9 +209,9 @@ class _LogInState extends State<LogIn> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "I don’t have an account ",
-                    style: sfProDisplayRegular.copyWith(color: AppColors.dHintColor, fontSize: 14)),
+                    Text("I don’t have an account ",
+                        style: sfProDisplayRegular.copyWith(
+                            color: AppColors.dHintColor, fontSize: 14)),
                     GestureDetector(
                       onTap: () {
                         Get.toNamed(AppRoutes.createAccount);
@@ -209,8 +221,7 @@ class _LogInState extends State<LogIn> {
                           children: [
                             TextSpan(
                                 text: 'Create an account',
-                                style: sfProDisplayMedium
-                                    .copyWith(
+                                style: sfProDisplayMedium.copyWith(
                                   fontSize: 14,
                                   color: AppColors.yellow,
                                   decoration: TextDecoration.underline,

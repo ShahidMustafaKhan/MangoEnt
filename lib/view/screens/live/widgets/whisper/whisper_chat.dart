@@ -56,7 +56,6 @@ class _WhisperChatState extends State<WhisperChat> {
 
   @override
   Widget build(BuildContext context) {
-    whisperViewModel.loadMessages();
     return GetBuilder<WhisperListViewModel>(
         builder: (controller) {
           return GetBuilder<WhisperViewModel>(
@@ -206,9 +205,9 @@ class _WhisperChatState extends State<WhisperChat> {
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                 ),
-                                                child: chatMessage.getAuthor.getAvatar!=null ? ClipOval(
+                                                child: widget.mUser!.getAvatar!=null ? ClipOval(
                                                   child: Image.network(
-                                                    chatMessage.getAuthor!.getAvatar!.url!,
+                                                    widget.mUser!.getAvatar!.url!,
                                                     height: double.infinity,
                                                     width: double.infinity,
                                                     fit: BoxFit.cover,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/view_model/userViewModel.dart';
 import 'package:teego/view_model/zego_controller.dart';
@@ -119,7 +120,7 @@ class _BattleInviteSheetState extends State<BattleInviteSheet> {
                                   Text(controller.popularAllModelList[index].name),
                                   const SizedBox(width: 16),
                                   SvgPicture.asset(
-                                    AppImagePath.franceFlag,
+                                    controller.popularAllModelList[index].flag,
                                     width: 24,
                                     height: 17,
                                   ),

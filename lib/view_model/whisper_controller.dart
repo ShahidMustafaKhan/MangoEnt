@@ -10,6 +10,7 @@ import 'package:teego/parse/WhisperListModel.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view_model/live_controller.dart';
 import 'package:teego/view_model/userViewModel.dart';
+import 'package:teego/view_model/whisper_list_controller.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../helpers/quick_help.dart';
@@ -66,25 +67,25 @@ class WhisperViewModel extends GetxController {
       }
     }
   }
-
-  setupLiveQuery() async {
-    if (subscription == null) {
-      subscription = await liveQuery.client.subscribe(queryBuilder);
-    }
-
-    subscription!.on(LiveQueryEvent.create, (WhisperModel message) {
-      if (message.getAuthorId == mUser!.objectId) {
-        results.add(message);
-        update();
-      } else {
-        update();
-      }
-    });
-
-    subscription!.on(LiveQueryEvent.update, (WhisperModel message) {
-      _objectUpdated(message);
-    });
-  }
+  //
+  // setupLiveQuery() async {
+  //   if (subscription == null) {
+  //     subscription = await liveQuery.client.subscribe(queryBuilder);
+  //   }
+  //
+  //   subscription!.on(LiveQueryEvent.create, (WhisperModel message) {
+  //     if (message.getAuthorId == mUser!.objectId) {
+  //       results.add(message);
+  //       // update();
+  //     } else {
+  //       // update();
+  //     }
+  //   });
+  //
+  //   subscription!.on(LiveQueryEvent.update, (WhisperModel message) {
+  //     _objectUpdated(message);
+  //   });
+  // }
 
   Future<List<dynamic>?> loadMessages() async {
 
@@ -105,7 +106,7 @@ class WhisperViewModel extends GetxController {
     queryBuilder.whereEqualTo(WhisperModel.keyLiveStreamingId, Get.find<LiveViewModel>().liveStreamingModel.objectId);
 
 
-    setupLiveQuery();
+    // setupLiveQuery();
 
     queryBuilder.includeObject([
       WhisperModel.keyCall,
@@ -161,7 +162,6 @@ class WhisperViewModel extends GetxController {
       }
 
       results.insert(0, message as dynamic);
-      onTap();
 
 
       await message.save();
@@ -169,10 +169,10 @@ class WhisperViewModel extends GetxController {
 
       _saveList(message);
 
-      SendNotifications.sendPush(
-          currentUser!, mUser!, SendNotifications.typeChat,
-          message: getMessageType(messageType, currentUser!.getFullName!,
-              message: messageText));
+      // SendNotifications.sendPush(
+      //     currentUser!, mUser!, SendNotifications.typeChat,
+      //     message: getMessageType(messageType, currentUser!.getFullName!,
+      //         message: messageText));
     }
   }
 

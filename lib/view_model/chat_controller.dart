@@ -84,6 +84,7 @@ class ChatViewModel extends GetxController {
       if (message.getAuthorId == mUser!.objectId) {
           results.add(message);
           update();
+
       } else {
         update();
       }
@@ -165,7 +166,7 @@ class ChatViewModel extends GetxController {
       }
 
       results.insert(0, message as dynamic);
-      onTap();
+      update();
 
 
       await message.save();
@@ -173,10 +174,10 @@ class ChatViewModel extends GetxController {
 
       _saveList(message);
 
-      SendNotifications.sendPush(
-          currentUser!, mUser!, SendNotifications.typeChat,
-          message: getMessageType(messageType, currentUser!.getFullName!,
-              message: messageText));
+      // SendNotifications.sendPush(
+      //     currentUser!, mUser!, SendNotifications.typeChat,
+      //     message: getMessageType(messageType, currentUser!.getFullName!,
+      //         message: messageText));
     }
   }
 

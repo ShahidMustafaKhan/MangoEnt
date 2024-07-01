@@ -29,7 +29,6 @@ class AudienceBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RecordingController recordingController = Get.put(RecordingController());
     BattleViewModel battleViewModel = Get.find();
     ZegoController zegoController = Get.find();
     LiveViewModel liveViewModel = Get.find();
@@ -41,7 +40,7 @@ class AudienceBottomBar extends StatelessWidget {
               valueListenable: ZegoLiveStreamingManager.instance.currentUserRoleNoti,
               builder: (context, role, _) {
                 return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.only(left: battleViewModel.isBattleView ? 15 : 20, right:20),
               child: Row(
                 children: [
                   GestureDetector(

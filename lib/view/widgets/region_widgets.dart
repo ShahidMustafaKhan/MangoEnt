@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../utils/constants/typography.dart';
 import '../../view_model/region_controller.dart';
+import '../../view_model/trending_controller.dart';
 import 'more_regions.dart';
 
 
@@ -14,6 +15,7 @@ class RegionWidget extends StatelessWidget {
   RegionWidget({Key? key}) : super(key: key);
 
   final RegionViewModel regionViewModel = Get.put(RegionViewModel());
+  final TrendingViewModel trendingViewModel = Get.put(TrendingViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +47,7 @@ class RegionWidget extends StatelessWidget {
                 Icon(
                   Icons.arrow_forward_ios_outlined,
                   color: Colors.white,
-                  size: 17.w
-                  ,
+                  size: 17.w,
                 )
               ],
             ),
@@ -55,9 +56,16 @@ class RegionWidget extends StatelessWidget {
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(vertical: 17.h),
               children: List.generate(controller.countryModelList.length, (index) {
-                return buildCountries(
-                  cFlag: controller.countryModelList[index].flag,
-                  cName: controller.countryModelList[index].name,
+                return GestureDetector(
+                  onTap :(){
+                    trendingViewModel.chosenCountryFlag.value= controller.countryModelList[index].flag;
+                    trendingViewModel.chosenCountry.value= controller.countryModelList[index].name;
+                    trendingViewModel.updateListForChosenCountry(controller.countryModelList[index].name);
+                  },
+                  child: buildCountries(
+                    cFlag: controller.countryModelList[index].flag,
+                    cName: controller.countryModelList[index].name,
+                  ),
                 );
               }),
             ),

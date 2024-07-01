@@ -19,7 +19,7 @@ import '../../single_live_streaming/single_streamer_live/single_live_screen/widg
 
 
 class LiveViewTopMenu extends StatelessWidget {
-  final CameraController cameraController;
+  final CameraController? cameraController;
   LiveViewTopMenu({Key? key, required this.cameraController}) : super(key: key);
 
   @override
@@ -152,7 +152,10 @@ class LiveViewTopMenu extends StatelessWidget {
                                   return Visibility(
                                     visible : liveViewModel.selectedLiveType.value != LiveStreamingModel.keyTypeAudioLive,
                                     child: GestureDetector(
-                                      onTap:()=> liveViewModel.toggleCamera(cameraController),
+                                      onTap:(){
+                                        if(cameraController!=null)
+                                        liveViewModel.toggleCamera(cameraController!);
+                                      },
                                       child: Obx(() {
                                           return Padding(
                                             padding: const EdgeInsets.only(bottom: 1.0),

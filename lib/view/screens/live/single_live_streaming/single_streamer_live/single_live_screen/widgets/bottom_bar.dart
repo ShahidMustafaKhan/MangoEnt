@@ -27,7 +27,6 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    RecordingController recordingController = Get.put(RecordingController());
     ZegoController zegoController = Get.find();
     return GetBuilder<LiveViewModel>(builder: (liveViewModel) {
       return  GetBuilder<BattleViewModel>(builder: (controller) {
@@ -36,7 +35,7 @@ class BottomBar extends StatelessWidget {
               builder: (context, coHostList, _) {
                 int length = coHostList.length;
                 return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.only(left: controller.isBattleView ? 15 : 20, right:20),
                 child: Row(
                   children: [
                     GestureDetector(

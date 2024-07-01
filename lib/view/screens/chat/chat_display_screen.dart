@@ -129,9 +129,11 @@ class _ChatView extends State<ChatView> {
                   }),
 
             if(chatListViewModel.messagesResults.isNotEmpty && chatListViewModel.status!=Status.Loading)
-            Expanded(
+            Container(
+              height: 650.h,
               child: ListView.builder(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                shrinkWrap: true,
+                padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 35.h),
                 // itemCount: chatListViewModel.messagesResults.length,
                 itemCount: chatListViewModel.messagesResults.length,
                 itemBuilder: (context, index) {

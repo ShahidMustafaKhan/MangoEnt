@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:teego/view/screens/home/popular.dart';
+import 'package:teego/view_model/userViewModel.dart';
 
 import '../../../../parse/UserModel.dart';
 import '../../../../view_model/tab_bar_controller.dart';
@@ -13,12 +14,12 @@ import '../game/game.dart';
 
 class HomeView extends StatelessWidget {
   final TabBarViewModel tabBarViewModel = Get.put(TabBarViewModel());
-  final UserModel? currentUser;
 
-  HomeView({Key? key, this.currentUser}) : super(key: key);
+  HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    UserViewModel userViewModel = Get.find();
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,15 +43,15 @@ class HomeView extends StatelessWidget {
                 );
               } else {
                 if (tabBarViewModel.selectedId.value == 0) {
-                  return Popular(currentUser: currentUser,);
+                  return Popular(currentUser: userViewModel.currentUser,);
                 } else if (tabBarViewModel.selectedId.value == 1) {
                   return const Game();
                 } else if (tabBarViewModel.selectedId.value == 2) {
-                  return Explore(currentUser: currentUser,);
+                  return Explore(currentUser: userViewModel.currentUser,);
                 } else if (tabBarViewModel.selectedId.value == 3) {
                   return Battle();
                 } else {
-                  return Popular(currentUser: currentUser,);
+                  return Popular(currentUser: userViewModel.currentUser,);
                 }
               }
             }),

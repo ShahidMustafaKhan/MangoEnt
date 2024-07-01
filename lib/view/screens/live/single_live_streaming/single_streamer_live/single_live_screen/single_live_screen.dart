@@ -10,6 +10,7 @@ import '../../../../../../view_model/live_messages_controller.dart';
 import '../../../../../../view_model/music_controller.dart';
 import '../../../../../widgets/base_scaffold.dart';
 import '../../../widgets/background_image.dart';
+import '../../../widgets/chat_text_field.dart';
 import '../../../widgets/for_you_widget.dart';
 import '../../../zegocloud/widgets/zegocloud_preview.dart';
 import '../../../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
@@ -45,10 +46,12 @@ class _SingleLiveScreenState extends State<SingleLiveScreen> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
+    final LiveViewModel liveViewModel = Get.find();
     return WillPopScope(
       onWillPop: () => Get.find<LiveViewModel>().closeAlert(context),
       child: BaseScaffold(
         safeArea: true,
+        resizeToAvoidBottomInset: false,
         body: GetBuilder<BattleViewModel>(builder: (streamerViewModel)  {
             return GetBuilder<GiftViewModel>(builder: (giftViewModel) {
               return Container(
@@ -62,6 +65,16 @@ class _SingleLiveScreenState extends State<SingleLiveScreen> with WidgetsBinding
                           alignment: Alignment.bottomCenter,
                           child: GiftAnimationView(giftViewModel: giftViewModel,)
                       ),
+                      if(battleViewModel.isBattleView == false)
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Obx(() {
+                            if(liveViewModel.chatField.value==true && battleViewModel.isBattleView == true)
+                              return ChatTextField();
+                            else
+                              return SizedBox();
+                          }),
+                        ),
                     ],
                   ),
                 );

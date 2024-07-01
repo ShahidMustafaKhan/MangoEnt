@@ -11,6 +11,7 @@ import '../../../../../view_model/gift_contoller.dart';
 import '../../../../../view_model/battle_controller.dart';
 import '../../../../../view_model/live_messages_controller.dart';
 import '../../widgets/background_image.dart';
+import '../../widgets/chat_text_field.dart';
 import '../../widgets/for_you_widget.dart';
 import '../../zegocloud/widgets/zegocloud_preview.dart';
 import '../../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
@@ -42,6 +43,7 @@ class SingleLiveAudienceScreen extends StatelessWidget {
 
     return BaseScaffold(
       safeArea: true,
+      resizeToAvoidBottomInset: false,
       body: GetBuilder<GiftViewModel>(init: giftViewModel, builder: (giftViewModel) {
         return Container(
           child: Stack(
@@ -53,6 +55,16 @@ class SingleLiveAudienceScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: GiftAnimationView(giftViewModel: giftViewModel,)
+              ),
+              if(battleViewModel.isBattleView == false)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Obx(() {
+                  if(liveViewModel.chatField.value==true && battleViewModel.isBattleView == true)
+                    return ChatTextField();
+                  else
+                    return SizedBox();
+                }),
               ),
             ],
           ),
