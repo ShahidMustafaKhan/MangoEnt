@@ -44,6 +44,8 @@ class SearchController extends GetxController {
 
   }
 
+
+
   Future<void> _loadApiData(List<dynamic> result) async{
     List<UserModel> tempModelList = [];
 

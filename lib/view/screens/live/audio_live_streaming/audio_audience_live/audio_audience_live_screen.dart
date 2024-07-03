@@ -9,6 +9,7 @@ import '../../../../../parse/LiveStreamingModel.dart';
 import '../../../../../view_model/gift_contoller.dart';
 import '../../../../../view_model/live_messages_controller.dart';
 import '../../../../../view_model/zego_controller.dart';
+import '../../multi_live_streaming/widgets/gift_received_widget.dart';
 import '../../single_live_streaming/single_audience_live/widgets/gift_animation_view.dart';
 import '../../widgets/background_image.dart';
 import '../../widgets/for_you_widget.dart';
@@ -50,6 +51,8 @@ class AudienceAudioLive extends StatelessWidget {
               Align(
                   alignment: Alignment.bottomCenter,
                   child: GiftAnimationView(giftViewModel: giftViewModel,)),
+              GiftReceivedWidget(),
+
             ],
           ),
         );

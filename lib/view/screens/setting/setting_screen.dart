@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/utils/routes/app_routes.dart';
 import 'package:teego/view/screens/onBoarding.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
@@ -20,6 +22,7 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserViewModel userViewModel = Get.find();
     return BaseScaffold(
         body: Column(
       children: [
@@ -90,6 +93,7 @@ class SettingScreen extends StatelessWidget {
                           TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
                     ),
                     Spacer(),
+                    if(userViewModel.ifGoogleAccountConnected())
                     Container(
                       width: 24.w,
                       height: 24.h,
@@ -97,7 +101,7 @@ class SettingScreen extends StatelessWidget {
                           shape: BoxShape.circle, color: AppColors.white),
                       child: Center(
                           child: Image.asset(
-                        AppImagePath.fIcon,
+                        AppImagePath.gIcon,
                         height: 12.h,
                         width: 12.w,
                       )),
@@ -226,16 +230,21 @@ class SettingScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Text(
-                    "Clear Cache",
-                    style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
-                  ),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios)
-                ],
+              GestureDetector(
+                onTap: (){
+                  QuickActions.showAlertDialog(context, "Are you sure you want to clear cache?", () => clearCache().then((value) => Get.back()));
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      "Clear Cache",
+                      style:
+                          TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                    ),
+                    Spacer(),
+                    Icon(Icons.arrow_forward_ios)
+                  ],
+                ),
               ),
               SizedBox(
                 height: 10.h,
@@ -400,7 +409,7 @@ class SettingScreen extends StatelessWidget {
       ],
     ));
   }
-  void clearCache() async {
+  Future<void> clearCache() async {
     try {
       Directory cacheDir = await getTemporaryDirectory();
       cacheDir.deleteSync(recursive: true);

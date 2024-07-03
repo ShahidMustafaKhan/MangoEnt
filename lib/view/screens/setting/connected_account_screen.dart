@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
+import 'package:teego/view_model/userViewModel.dart';
 import '../../../utils/constants/app_constants.dart';
 import '../../../utils/theme/colors_constant.dart';
 
@@ -10,6 +11,7 @@ class ConnectedAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserViewModel userViewModel = Get.find();
     return BaseScaffold(
         body: Column(
       children: [
@@ -59,6 +61,48 @@ class ConnectedAccount extends StatelessWidget {
                               shape: BoxShape.circle, color: AppColors.white),
                           child: Center(
                             child: Image.asset(
+                              AppImagePath.gIcon,
+                              height: 11.h,
+                              width: 11.w,
+                            ),
+                          )),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Text(
+                        "Google",
+                        style: TextStyle(
+                            fontSize: 16.sp, fontWeight: FontWeight.w400),
+                      ),
+                      Spacer(),
+                      Text(
+                          userViewModel.ifGoogleAccountConnected() ? 'Connected' : "Not Connected",
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.red),
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Divider(color: Color(0xff494848)),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                          height: 24.h,
+                          width: 24.w,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: AppColors.white),
+                          child: Center(
+                            child: Image.asset(
                               AppImagePath.fIcon,
                               height: 11.h,
                               width: 11.w,
@@ -74,11 +118,11 @@ class ConnectedAccount extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(
-                        "Connected",
+                        "Not Connected",
                         style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
-                            color: Colors.yellow),
+                            color: Colors.red),
                       ),
                       SizedBox(
                         width: 10.w,
@@ -116,11 +160,11 @@ class ConnectedAccount extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(
-                        "Connected",
+                        "Not Connected",
                         style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
-                            color: Colors.yellow),
+                            color: Colors.red),
                       ),
                       SizedBox(
                         width: 10.w,

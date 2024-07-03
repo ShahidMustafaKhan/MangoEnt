@@ -3,15 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:teego/helpers/quick_actions.dart';
+import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
+import 'package:teego/view_model/userViewModel.dart';
 
 class LoginMethod extends StatelessWidget {
   const LoginMethod({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    UserViewModel userViewModel = Get.find();
     return BaseScaffold(
         body: Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
@@ -46,17 +50,13 @@ class LoginMethod extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.yellowBtnColor, width: 1.5),
             ),
-            child: Image.asset(
-              AppImagePath.profilePic,
-              height: double.infinity,
-              width: double.infinity,
-            ),
+            child: QuickActions.avatarWidget(userViewModel.currentUser)
           ),
           SizedBox(
             height: 15.h,
           ),
           Text(
-            "LLOUISE DNLO",
+            "${userViewModel.currentUser.getFullName}",
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 16.sp,
@@ -69,7 +69,7 @@ class LoginMethod extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "id: 0125124",
+                "id: ${userViewModel.currentUser.getUid}",
                 style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
               ),
               SizedBox(

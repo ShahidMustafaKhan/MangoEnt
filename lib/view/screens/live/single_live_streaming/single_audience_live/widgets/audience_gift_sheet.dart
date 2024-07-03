@@ -35,6 +35,8 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
   int selectedIndex = 0;
   bool all = false;
   String selectedGift = '';
+  String selectedGiftName = '';
+  String selectedGiftPath = '';
   String selectedGiftMp3 = '';
   String selectedQuantity = '99';
   late int selectedCoin ;
@@ -45,7 +47,14 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
   @override
   void initState() {
     battleViewModel = widget.battleViewModel;
+    Get.find<LiveViewModel>().receiverUid = Get.find<LiveViewModel>().liveStreamingModel.getAuthorUid ?? 0 ;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    Get.find<LiveViewModel>().receiverUid=null;
+    super.dispose();
   }
 
 
@@ -95,6 +104,7 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                     ),
                                   ),
                                   const Spacer(),
+                                  if(battleViewModel!.battleModel.getHost!=null)
                                   GestureDetector(
                                     onTap: (){
                                       setState(() {
@@ -262,6 +272,8 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                         onSelect: () {
                                           setState(() {
                                             selectedGift = AppImagePath.lamborghini;
+                                            selectedGiftPath = AppImagePath.lamborghiniImage;
+                                            selectedGiftName = "Lamborghini";
                                             selectedGiftMp3 = AppImagePath.lamborghiniMp3;
                                             selectedCoin=10;
                                           });
@@ -284,6 +296,8 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                           setState(() {
                                             selectedGift = AppImagePath.bearCastle;
                                             selectedGiftMp3 = AppImagePath.bearCastleMp3;
+                                            selectedGiftPath = AppImagePath.bearCastleImage;
+                                            selectedGiftName = "Bear Castle";
                                             selectedCoin=1000;
                                           });
                                           // Get.back();
@@ -304,6 +318,8 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                           setState(() {
                                             selectedGift = AppImagePath.yachtIsland;
                                             selectedGiftMp3 = AppImagePath.yachtIslandMp3;
+                                            selectedGiftPath = AppImagePath.yachtIslandImage;
+                                            selectedGiftName = "Yacht Island";
                                             selectedCoin=100;
                                           });
                                           // Get.back();
@@ -328,6 +344,8 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                           setState(() {
                                             selectedGift = AppImagePath.babyDragon;
                                             selectedGiftMp3 = AppImagePath.babyDragonMp3;
+                                            selectedGiftPath = AppImagePath.babyDragonImage;
+                                            selectedGiftName = "Baby Dragon";
                                             selectedCoin=220;
                                           });
                                           // Get.back();
@@ -368,6 +386,8 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                           setState(() {
                                             selectedGift = AppImagePath.hearts;
                                             selectedGiftMp3 = AppImagePath.heartMp3;
+                                            selectedGiftPath = AppImagePath.heartsImage;
+                                            selectedGiftName = "Hearts";
                                             selectedCoin=980;
                                           });
                                           // Get.back();
@@ -388,6 +408,8 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                           setState(() {
                                             selectedGift = AppImagePath.kissingGift;
                                             selectedGiftMp3 = AppImagePath.kissingGiftMp3;
+                                            selectedGiftPath = AppImagePath.kissingImage;
+                                            selectedGiftName = "Kissing";
                                             selectedCoin=220;
                                           });
                                           // Get.back();
@@ -433,6 +455,8 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                           setState(() {
                                             selectedGift = AppImagePath.motorCycleEntry;
                                             selectedGiftMp3 = AppImagePath.motorcycleMp3;
+                                            selectedGiftPath = AppImagePath.motorCycleImage;
+                                            selectedGiftName = "Motorcycle";
                                             selectedCoin=130;
                                           });
                                           // Get.back();
@@ -448,14 +472,14 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.only(left: 16, right: 16),
                             child: Row(
                               children: [
                                 Row(
                                   children: [
                                     Image.asset(AppImagePath.coinsIcon, width: 15, height: 15),
                                     const SizedBox(width: 5),
-                                    Text(userViewModel.currentUser.getCoins.toString()),
+                                    Text(userViewModel.currentUser.getCoins.toString(),),
                                     const SizedBox(width: 5),
                                     Icon(Icons.arrow_forward_ios, size: 15, color: AppColors.yellowColor),
                                   ],
@@ -556,8 +580,10 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                                                 Get.find<LiveViewModel>().sendGift(
                                                     gift: selectedGift,
                                                     audio: selectedGiftMp3,
+                                                    senderUid: Get.find<LiveViewModel>().receiverUid!,
+                                                    quantity: selectedQuantity,
                                                     coins: int.parse(selectedQuantity) *
-                                                        selectedCoin);
+                                                        selectedCoin, giftName: selectedGiftName, giftPath: selectedGiftPath);
                                             }
                                             else
                                               QuickHelp.showAppNotificationAdvanced(

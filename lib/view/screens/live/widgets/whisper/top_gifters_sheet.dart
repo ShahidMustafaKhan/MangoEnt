@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:teego/parse/LiveStreamingModel.dart';
+import 'package:teego/view_model/live_controller.dart';
 
 import '../../../../../utils/constants/app_constants.dart';
 import '../../../../../utils/constants/typography.dart';
@@ -12,6 +16,7 @@ class TopGifters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LiveViewModel liveViewModel = Get.find();
     return Container(
       height: 500.h,
       child: Padding(
@@ -52,7 +57,7 @@ class TopGifters extends StatelessWidget {
               height: 20.h,
             ),
             ...List.generate(
-              5,
+              liveViewModel.hostGifters.length,
               (index) => Padding(
                 padding: const EdgeInsets.only(bottom: 18),
                 child: Row(
@@ -73,7 +78,7 @@ class TopGifters extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 24,
                         backgroundColor: AppColors.grey300,
-                        backgroundImage: AssetImage(AppImagePath.profilePic),
+                        backgroundImage: NetworkImage(liveViewModel.hostGifters[index][LiveStreamingModel.keySenderAvatar]),
                       ),
                     ),
                     SizedBox(width: 16.w),
@@ -83,13 +88,13 @@ class TopGifters extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              'Savannah Nguyen',
+                              liveViewModel.hostGifters[index][LiveStreamingModel.keySenderName],
                               style: TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 14.sp),
                             ),
                             SizedBox(width: 16.w),
                             SvgPicture.asset(
-                              AppImagePath.franceFlag,
+                              liveViewModel.hostGifters[index][LiveStreamingModel.keySenderCountry],
                               width: 24,
                               height: 17,
                             ),
@@ -99,7 +104,8 @@ class TopGifters extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              'Contribution: 840',
+                              'Contribution: ${liveViewModel.hostGifters[index][LiveStreamingModel.keyCoins]
+                            }',
                               style: sfProDisplayRegular.copyWith(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -113,107 +119,107 @@ class TopGifters extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              width: 342.w,
-              height: 72.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                color: Color(0xff302F2F),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: Row(
-                  children: [
-                    Text(
-                      "875",
-                      style: TextStyle(
-                          fontSize: 16.sp, fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    Container(
-                      height: 40.h,
-                      width: 40.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blue,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Savannah Nguyen",
-                          style: TextStyle(
-                              fontSize: 14.sp, fontWeight: FontWeight.w500),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SvgPicture.asset(AppImagePath.diamond),
-                            SizedBox(
-                              width: 5.w,
-                            ),
-                            Text(
-                              "8811M",
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.yellowBtnColor),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 20.w,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 20.h),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            AppImagePath.franceFlag,
-                            width: 24,
-                            height: 17,
-                          ),
-                          SizedBox(
-                            width: 20.w,
-                          ),
-                          Container(
-                            width: 39.w,
-                            height: 12.h,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(19.r),
-                                color: Color(0xff6617Af)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(AppImagePath.gemStone),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                Text(
-                                  "LV.9",
-                                  style: TextStyle(
-                                      fontSize: 8.sp,
-                                      fontWeight: FontWeight.w400),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Container(
+            //   width: 342.w,
+            //   height: 72.h,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(16.r),
+            //     color: Color(0xff302F2F),
+            //   ),
+            //   child: Padding(
+            //     padding: EdgeInsets.symmetric(horizontal: 10.w),
+            //     child: Row(
+            //       children: [
+            //         Text(
+            //           "875",
+            //           style: TextStyle(
+            //               fontSize: 16.sp, fontWeight: FontWeight.w600),
+            //         ),
+            //         SizedBox(
+            //           width: 10.w,
+            //         ),
+            //         Container(
+            //           height: 40.h,
+            //           width: 40.w,
+            //           decoration: BoxDecoration(
+            //             shape: BoxShape.circle,
+            //             color: Colors.blue,
+            //           ),
+            //         ),
+            //         SizedBox(
+            //           width: 10.w,
+            //         ),
+            //         Column(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             Text(
+            //               "Savannah Nguyen",
+            //               style: TextStyle(
+            //                   fontSize: 14.sp, fontWeight: FontWeight.w500),
+            //             ),
+            //             Row(
+            //               mainAxisAlignment: MainAxisAlignment.start,
+            //               children: [
+            //                 SvgPicture.asset(AppImagePath.diamond),
+            //                 SizedBox(
+            //                   width: 5.w,
+            //                 ),
+            //                 Text(
+            //                   "8811M",
+            //                   style: TextStyle(
+            //                       fontSize: 12.sp,
+            //                       fontWeight: FontWeight.w400,
+            //                       color: AppColors.yellowBtnColor),
+            //                 ),
+            //               ],
+            //             ),
+            //           ],
+            //         ),
+            //         SizedBox(
+            //           width: 20.w,
+            //         ),
+            //         Padding(
+            //           padding: EdgeInsets.only(bottom: 20.h),
+            //           child: Row(
+            //             children: [
+            //               SvgPicture.asset(
+            //                 AppImagePath.franceFlag,
+            //                 width: 24,
+            //                 height: 17,
+            //               ),
+            //               SizedBox(
+            //                 width: 20.w,
+            //               ),
+            //               Container(
+            //                 width: 39.w,
+            //                 height: 12.h,
+            //                 decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(19.r),
+            //                     color: Color(0xff6617Af)),
+            //                 child: Row(
+            //                   mainAxisAlignment: MainAxisAlignment.center,
+            //                   children: [
+            //                     Image.asset(AppImagePath.gemStone),
+            //                     SizedBox(
+            //                       width: 5.w,
+            //                     ),
+            //                     Text(
+            //                       "LV.9",
+            //                       style: TextStyle(
+            //                           fontSize: 8.sp,
+            //                           fontWeight: FontWeight.w400),
+            //                     )
+            //                   ],
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: 5.h,
             ),

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
+
+import '../../../../../../../view_model/battle_controller.dart';
 
 
 
@@ -10,14 +14,17 @@ class PlayerBGifters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BattleViewModel battleViewModel = Get.find();
     return Positioned(
-      right: 0,
+      left: battleViewModel.isCurrentUserPlayerB==true ?  0 : null,
+      right: battleViewModel.isCurrentUserPlayerB==false ?  0 : null,
       bottom: 0,
       child: Padding(
-        padding: const EdgeInsets.only(left: 10, bottom: 10),
+        padding: EdgeInsets.only(left: battleViewModel.isCurrentUserPlayerB==true ? 10 : 0,
+            right: battleViewModel.isCurrentUserPlayerB==false ? 10 : 0, bottom: 10),
         child: Row(
           children: [
-            ...List.generate(3, (index) {
+            ...List.generate(battleViewModel.playerGiftersAvatar.length, (index) {
               int reversedIndex = 2 - index;
               return Padding(
                 padding: const EdgeInsets.only(right: 8),
@@ -28,8 +35,8 @@ class PlayerBGifters extends StatelessWidget {
                       width: 26.w,
                       height: 26.w,
                       decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          image: AssetImage(AppImagePath.cardImage2),
+                        image: DecorationImage(
+                          image: NetworkImage(battleViewModel.playerGiftersAvatar[index]),
                         ),
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.yellowColor, width: 1),
@@ -39,7 +46,7 @@ class PlayerBGifters extends StatelessWidget {
                       bottom: 0,
                       right: 0,
                       child: Text(
-                        '${reversedIndex + 1}',
+                        '${index + 1}',
                         style: TextStyle(
                           inherit: true,
                           fontSize: 10.sp,

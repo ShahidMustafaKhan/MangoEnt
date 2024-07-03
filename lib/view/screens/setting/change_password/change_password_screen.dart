@@ -89,17 +89,22 @@ class _ChangePasswordState extends State<ChangePassword> {
                 SizedBox(
                   height: 15.h,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.yellow),
-                    )
-                  ],
+                GestureDetector(
+                  onTap: (){
+                    Get.toNamed(AppRoutes.forgotPassword, arguments: true);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.yellow),
+                      )
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 30.h,

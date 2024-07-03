@@ -75,7 +75,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
                     Spacer(),
                     GestureDetector(
                         onTap: () {
-                          Get.toNamed(AppRoutes.languageScreen);
+                          Get.toNamed(AppRoutes.languageScreen, arguments: true);
                         },
                         child: Icon(Icons.arrow_forward_ios))
                   ],

@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Trans;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/parse/BattleStreamingModel.dart';
 import 'package:teego/parse/LiveStreamingModel.dart';
 import 'package:teego/view_model/gift_contoller.dart';
@@ -49,6 +50,9 @@ class LiveViewModel extends GetxController {
   int singleLiveIndex=1;
   int audioLiveIndex=2;
   int gameLiveIndex=3;
+
+  int? receiverUid;
+
 
   final RxInt nineMemberIndex = 0.obs;
   final RxString selectedGuestSeat = "4P".obs;
@@ -96,6 +100,10 @@ class LiveViewModel extends GetxController {
   RxBool chatField = false.obs;
   TextEditingController chatEditingController = TextEditingController();
 
+  List<Map> hostGifters = [];
+  List<String> hostGiftersAvatar = [];
+  Map<String,dynamic> senderDetail = {};
+  RxBool showGiftBanner = false.obs;
 
   bool get isSingleLive {
     return liveStreamingModel.getStreamingType == LiveStreamingModel.keyTypeSingleLive;
@@ -199,6 +207,9 @@ class LiveViewModel extends GetxController {
         String gift= lastGift["gift"];
         String audio = lastGift["audio"];
         Get.find<GiftViewModel>().loadAnimation(gift, audio);
+        addGifterList(lastGift);
+        addGiftCoins(lastGift);
+        showGiftReceiverBanner(lastGift);
     }
       if(liveStreamingModel.getMyWishList!= null){
       myWishList = liveStreamingModel.getMyWishList!;}
@@ -400,8 +411,20 @@ class LiveViewModel extends GetxController {
     }
   }
 
-  sendGift({required String gift, required String audio, required int coins}){
-    liveStreamingModel.setGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url!, "coins": coins };
+  sendGift({required String gift, required String audio, required int senderUid, required int coins, required String quantity, required String giftName,
+    required String giftPath}){
+    liveStreamingModel.setGift={
+      LiveStreamingModel.keyGift: gift,
+      LiveStreamingModel.keyGiftName: giftName,
+      LiveStreamingModel.keyGiftPath: giftPath,
+      LiveStreamingModel.keyReceiverUid : senderUid,
+      LiveStreamingModel.keyAudio : audio,
+      LiveStreamingModel.keySenderName : Get.find<UserViewModel>().currentUser.getFullName,
+      LiveStreamingModel.keySenderAvatar : Get.find<UserViewModel>().currentUser.getAvatar!.url!,
+      LiveStreamingModel.keySenderUid : Get.find<UserViewModel>().currentUser.getUid,
+      LiveStreamingModel.keyCoins: coins ,
+      LiveStreamingModel.keyQuantity: quantity ,
+      LiveStreamingModel.keySenderCountry : QuickActions.getCountryFlag(Get.find<UserViewModel>().currentUser) };
     liveStreamingModel.setGifterCount = 1;
     liveStreamingModel.setTotalCoins = coins;
     liveStreamingModel.addDiamonds = coins;
@@ -953,8 +976,75 @@ class LiveViewModel extends GetxController {
     backgroundImage.value = value.getBackgroundImage!;
   }
 
+  addGifterList(Map value){
+    if(value[LiveStreamingModel.keyReceiverUid] == liveStreamingModel.getAuthorUid){
+      if(hostGiftersAvatar.contains(value[LiveStreamingModel.keySenderAvatar])==false)
+      hostGiftersAvatar.insert(0,value[LiveStreamingModel.keySenderAvatar]);
+      addValueToHostGifters(value);
+      update();
+      saveGifterList(value,value[LiveStreamingModel.keySenderAvatar] );
+    }
+  }
+
+  void addValueToHostGifters(Map value) {
+    bool found = false;
+
+    for (var gifter in hostGifters) {
+      if (gifter[LiveStreamingModel.keySenderUid] == value[LiveStreamingModel.keySenderUid]) {
+        gifter[LiveStreamingModel.keyCoins] += value[LiveStreamingModel.keyCoins];
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      hostGifters.add(value);
+    }
+  }
+
+  saveGifterList(Map gifter, String avatar){
+   liveStreamingModel.setGifterAvatarList = avatar;
+   liveStreamingModel.setGifterList = gifter;
+   liveStreamingModel.save();
+  }
+
+  setGifterList(){
+    if(liveStreamingModel.getGifterAvatarList!.isNotEmpty){
+      liveStreamingModel.getGifterAvatarList!.forEach((element) {
+        String value = element;
+        if(hostGiftersAvatar.contains(value)==false)
+          hostGiftersAvatar.insert(0,value);
+      }) ;
+    }
+    if(liveStreamingModel.getGifterList!.isNotEmpty){
+      liveStreamingModel.getGifterList!.forEach((element) {
+        Map value = element;
+        addValueToHostGifters(value);
+      }) ;
+    }
+  }
+
+  addGiftCoins(Map value){
+    if(value[LiveStreamingModel.keyReceiverUid] == Get.find<UserViewModel>().currentUser.getUid) {
+      Get.find<UserViewModel>().addBalance(value[LiveStreamingModel.keyCoins]).then((value) => update());
+      }
+    }
 
 
+    showGiftReceiverBanner(Map value){
+    if(Get.find<UserViewModel>().currentUser.getUid == value[LiveStreamingModel.keyReceiverUid]){
+     senderDetail = {
+       LiveStreamingModel.keySenderName : value[LiveStreamingModel.keySenderName],
+       LiveStreamingModel.keySenderAvatar : value[LiveStreamingModel.keySenderAvatar],
+       LiveStreamingModel.keyGiftPath : value[LiveStreamingModel.keyGiftPath],
+       LiveStreamingModel.keyGiftName : value[LiveStreamingModel.keyGiftName],
+       LiveStreamingModel.keyQuantity : value[LiveStreamingModel.keyQuantity],
+     } ;
+     showGiftBanner.value = true;
+     Future.delayed(Duration(seconds: 10), () {
+       showGiftBanner.value = false;
+     });
+    }}
 
   LiveViewModel(this.role, this.liveModel);
 
@@ -966,6 +1056,7 @@ class LiveViewModel extends GetxController {
       giftListLength=liveStreamingModel.getGiftsList!.length;
       if(liveStreamingModel.getMyWishList!= null)
         myWishList = liveStreamingModel.getMyWishList!;
+      setGifterList();
       updateLiveStreamingModel();
     }
     if(role==ZegoLiveRole.host){

@@ -347,7 +347,7 @@ class _MessageViewState extends State<MessageView> {
                 }
             ),
           ),
-          MessageViewBottomBar(),
+          MessageViewBottomBar(setState: setState,),
           SizedBox(height: 10.h),
         ],
       ),

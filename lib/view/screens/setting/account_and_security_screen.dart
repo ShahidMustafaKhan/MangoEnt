@@ -75,42 +75,42 @@ class AccountAndSecurity extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 25.h),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    AppImagePath.phone,
-                    height: 24.h,
-                    width: 24.w,
-                  ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  Text(
-                    "Phone",
-                    style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
-                  ),
-                  Spacer(),
-                  Text(
-                    "Unlinked",
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.red),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Icon(Icons.arrow_forward_ios)
-                ],
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Divider(color: Color(0xff494848)),
-              SizedBox(
-                height: 20.h,
-              ),
+              // Row(
+              //   children: [
+              //     Image.asset(
+              //       AppImagePath.phone,
+              //       height: 24.h,
+              //       width: 24.w,
+              //     ),
+              //     SizedBox(
+              //       width: 5.w,
+              //     ),
+              //     Text(
+              //       "Phone",
+              //       style:
+              //           TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+              //     ),
+              //     Spacer(),
+              //     Text(
+              //       "Unlinked",
+              //       style: TextStyle(
+              //           fontSize: 14.sp,
+              //           fontWeight: FontWeight.w400,
+              //           color: Colors.red),
+              //     ),
+              //     SizedBox(
+              //       width: 10.w,
+              //     ),
+              //     Icon(Icons.arrow_forward_ios)
+              //   ],
+              // ),
+              // SizedBox(
+              //   height: 10.h,
+              // ),
+              // Divider(color: Color(0xff494848)),
+              // SizedBox(
+              //   height: 20.h,
+              // ),
               Row(
                 children: [
                   Image.asset(

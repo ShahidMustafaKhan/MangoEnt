@@ -22,12 +22,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   late TextEditingController email;
   final _formKey = GlobalKey<FormState>();
   AuthViewModel authViewModel= Get.put(AuthViewModel());
+  bool settings=false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     email = TextEditingController();
+    settings = Get.arguments ?? false;
   }
 
   @override
@@ -94,6 +96,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               height: 16,
             ),
             const Spacer(),
+            if(settings==false)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

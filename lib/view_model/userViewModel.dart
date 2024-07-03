@@ -4,6 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Trans;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:teego/utils/constants/status.dart';
+import 'package:teego/utils/routes/app_routes.dart';
 
 
 import '../helpers/quick_actions.dart';
@@ -36,6 +38,10 @@ class UserViewModel extends GetxController {
   int get coins{
     return currentUser.getCoins;
   }
+
+  List blockList = [];
+
+  Status status = Status.Loading;
 
   bool checkCoins(int coins){
         return currentUser
@@ -190,14 +196,15 @@ class UserViewModel extends GetxController {
       return false;
   }
 
-  addOrRemoveFromBlockList(UserModel mUser, BuildContext context){
+  addOrRemoveFromBlockList(UserModel mUser, BuildContext context, {bool back = true}){
     if(isUserInBlockList(mUser))
       QuickActions.showAlertDialog(context, 'Are you sure you want to add user to block list?', (){
        currentUser.setBlockedUserIds= mUser.getUid!;
         currentUser.save().then((value){
          currentUser.update();
+         if(back==true){
           Get.back();
-          Get.back();
+          Get.back();}
           QuickHelp.showAppNotificationAdvanced(title: 'User Added to Block List!', context: context, isError: false);
         });
       });
@@ -206,8 +213,9 @@ class UserViewModel extends GetxController {
         currentUser.removeBlockedUserIds= mUser.getUid!;
         currentUser.save().then((value){
           currentUser.update();
-          Get.back();
-          Get.back();
+          if(back==true){
+            Get.back();
+            Get.back();}
           QuickHelp.showAppNotification(title: 'User removed from Block List!', context: context, isError: false);
         });
       });
@@ -309,6 +317,54 @@ class UserViewModel extends GetxController {
     }
   }
 
+
+  blockUserList() async {
+      QueryBuilder<UserModel> query = QueryBuilder(UserModel.forQuery());
+      query.whereContainedIn(
+          UserModel.keyUid, currentUser.getBlockedUsersIds ?? []);
+      ParseResponse response = await query.query();
+      if (response.success) {
+        if (response.results != null && response.results!.isNotEmpty) {
+          blockList = response.results!;
+          status = Status.Completed;
+          update();
+        }
+        else {
+          blockList = [];
+          status = Status.Completed;
+          update();
+        }
+      }
+      else{
+        status = Status.Completed;
+        update();
+      }
+  }
+
+
+  changeSelfBanStatus() async {
+    currentUser.setSelfBanStatus = !currentUser.getSelfBanStatus;
+    ParseResponse response = await currentUser.save();
+    if (response.success) {
+      if (response.results != null && response.results!.isNotEmpty) {
+        currentUser = response.results!.first as UserModel;
+        update();
+      }}
+}
+
+  deleteAccount(BuildContext context) async {
+    currentUser.setAccountDeleted = true;
+    ParseResponse response = await currentUser.save();
+    if(response.success){
+      QuickHelp.showAppNotification(title: "Account deleted Successfully", context: context, isError: false);
+      currentUser.logout().then((value) => Get.offAllNamed(AppRoutes.onBoarding));
+
+    }
+  }
+
+  bool ifGoogleAccountConnected(){
+  return currentUser.authData!=null && currentUser.authData!.containsKey('Google');
+  }
 
 
 

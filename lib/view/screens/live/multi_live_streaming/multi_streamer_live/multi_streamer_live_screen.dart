@@ -15,6 +15,7 @@ import '../../../../widgets/base_scaffold.dart';
 import '../../single_live_streaming/single_audience_live/widgets/gift_animation_view.dart';
 import '../../widgets/for_you_widget.dart';
 import '../multi_live_widgets.dart';
+import '../widgets/gift_received_widget.dart';
 
 
 class StreamerMultiLive extends StatelessWidget  {
@@ -40,6 +41,8 @@ class StreamerMultiLive extends StatelessWidget  {
                   Align(
                       alignment: Alignment.bottomCenter,
                       child: GiftAnimationView(giftViewModel: giftViewModel,)),
+                  GiftReceivedWidget(),
+
                 ],
               ),
             );

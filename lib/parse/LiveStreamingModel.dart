@@ -151,7 +151,14 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   static final String keyTotal='total';
   static final String keyQuantity='quantity';
   static final String keySenderName='senderName';
-  static final String keyGiftIndex='giftIndex';
+  static final String keyGift='gift';
+  static final String keyFactor='factor';
+  static final String keyGiftName='giftName';
+  static final String keyAudio='audio';
+  static final String keySenderAvatar='senderAvatar';
+  static final String keyCoins='coins';
+  static final String keySenderCountry='country';
+
 
   static final String keyMode='mode';
   static final String keyLanguage='language';
@@ -186,6 +193,12 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   static final String keyModeSubscribers='Subscribers';
 
   static final String keyBackgroundImage='backgroundImage';
+
+  static final String keyGifterList='hostGiftersList';
+  static final String keyGifterAvatarList='hostGiftersAvatarList';
+
+
+
 
 
 
@@ -783,7 +796,14 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   int? get getGifterCount=> get<int>(keyGifter);
   set setGifterCount(int count) => setIncrement(keyGifter, count);
 
-  int? get getTotalCoins=> get<int>(keyCoinsCount);
+  int? get getTotalCoins{
+    dynamic coins = get<dynamic>(keyCoinsCount);
+    if(coins is int){
+      return coins;
+    }
+    else
+      return 0;
+  }
   set setTotalCoins(int count) => setIncrement(keyCoinsCount, count);
 
   int? get getSubscriberGain=> get<int>(keySubscriberGain);
@@ -861,6 +881,28 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   }
   set setDisableChatList(int filterList) => setAdd(keyDisableChat, filterList);
   set removeDisableChatUser(int filterList) => setRemove(keyDisableChat, filterList);
+
+  List<dynamic>? get getGifterAvatarList{
+
+    List<dynamic>? filterList = get<List<dynamic>>(keyGifterAvatarList);
+    if(filterList != null && filterList.length > 0){
+      return filterList;
+    } else {
+      return [];
+    }
+  }
+  set setGifterAvatarList(String filterList) => setAdd(keyGifterAvatarList, filterList);
+
+  List<dynamic>? get getGifterList{
+
+    List<dynamic>? filterList = get<List<dynamic>>(keyGifterList);
+    if(filterList != null && filterList.length > 0){
+      return filterList;
+    } else {
+      return [];
+    }
+  }
+  set setGifterList(Map filterList) => setAdd(keyGifterList, filterList);
 
 
 }

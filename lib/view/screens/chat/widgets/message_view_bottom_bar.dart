@@ -12,7 +12,8 @@ import '../../../../utils/theme/colors_constant.dart';
 import 'message_gift_sheet.dart';
 
 class MessageViewBottomBar extends StatelessWidget {
-  MessageViewBottomBar({Key? key}) : super(key: key);
+  StateSetter setState;
+  MessageViewBottomBar({Key? key, required this.setState}) : super(key: key);
 
 
   @override
@@ -89,7 +90,13 @@ class MessageViewBottomBar extends StatelessWidget {
               onTap: (){
                 if(chatViewModel.text.value.isNotEmpty){
                 chatViewModel.saveMessage(chatViewModel.messageController.text,
-                    messageType: MessageModel.messageTypeText, onTap: (){});
+                    messageType: MessageModel.messageTypeText,
+                    onTap: (){
+                    }).then((value){
+                      if(chatViewModel.results.length<=2){
+                        setState((){});
+                      }
+                });
                 chatViewModel.messageController.text = "";
                 chatViewModel.text.value='';
                 // chatViewModel.changeButtonIcon("");

@@ -23,6 +23,7 @@ class BattleModel extends ParseObject implements ParseCloneable {
   static String keyBattleView = "battleView";
   static String keyBattleStarted = "battleStarted";
   static String keyPlayerB= "playerB";
+  static String keyPlayerBUid= "playerBUid";
   static String keyPlayerBName= "playerBName";
   static String keyPlayerBAvatar= "playerBAvatar";
   static String keyPlayerBImage= "playerBImage";
@@ -46,6 +47,8 @@ class BattleModel extends ParseObject implements ParseCloneable {
   static String keyLiveObject= "LiveObject";
   static String keyTeamAGiftsList= "teamAGiftsList";
   static String keyTeamBGiftsList= "teamBGiftsList";
+  static String keyHostGiftersAvatar= "hostGiftersAvatar";
+  static String keyPlayerGiftersAvatar= "playerGiftersAvatar";
 
   static final String keyTimerModel='timerModel';
 
@@ -63,6 +66,9 @@ class BattleModel extends ParseObject implements ParseCloneable {
 
   UserModel? get getPlayerB => get<UserModel>(keyPlayerB);
   set setPlayerB(UserModel playerB) => set<UserModel>(keyPlayerB, playerB);
+
+  int? get getPlayerUid => get<int>(keyPlayerBUid);
+  set setPlayerUid(int id) => set<int>(keyPlayerBUid, id);
 
   LiveStreamingModel? get getLiveObject => get<LiveStreamingModel>(keyLiveObject);
   set setLiveObject(LiveStreamingModel object) => set<LiveStreamingModel>(keyLiveObject, object);
@@ -211,7 +217,43 @@ class BattleModel extends ParseObject implements ParseCloneable {
   String? get getBackgroundImage => get<String>(keyBackgroundImage);
   set setBackgroundImage(String image) => set<String>(keyBackgroundImage, image);
 
+  List<dynamic>? get getHostGifterAvatarList {
 
+    List<dynamic> gifts = [];
+
+    dynamic gift = get<dynamic>(keyHostGiftersAvatar);
+    if(gift is List<dynamic>){
+      if(gift.length > 0){
+        return gift;
+      } else {
+        return gifts;
+      }
+    }
+    else{
+      return gifts;
+    }
+
+  }
+  set setHostGifterAvatarList(String gift) => setAddUnique(keyHostGiftersAvatar, gift);
+
+  List<dynamic>? get getPlayerGifterAvatarList {
+
+    List<dynamic> gifts = [];
+
+    dynamic gift = get<dynamic>(keyPlayerGiftersAvatar);
+    if(gift is List<dynamic>){
+      if(gift.length > 0){
+        return gift;
+      } else {
+        return gifts;
+      }
+    }
+    else{
+      return gifts;
+    }
+
+  }
+  set setPlayerGifterAvatarList(String gift) => setAddUnique(keyPlayerGiftersAvatar, gift);
 
 
 

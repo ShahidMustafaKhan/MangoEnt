@@ -40,7 +40,7 @@ class PlayerTag extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('${battleViewModel.isHost || Get.find<LiveViewModel>().role==ZegoLiveRole.audience  ? battleViewModel.playerBName : battleViewModel.hostName }🔥🔥', style: sfProDisplayRegular.copyWith(fontSize: 12.sp),),
+                Text('${battleViewModel.isCurrentUserPlayerB==false  ? battleViewModel.playerBName : battleViewModel.hostName }🔥🔥', style: sfProDisplayRegular.copyWith(fontSize: 12.sp),),
                 SizedBox(width: 10.w),
                 if(userViewModel.followingUser(battleViewModel.isHost==false ? battleViewModel.battleModel.getPlayerB! : battleViewModel.battleModel.getHost! ))
                 GestureDetector(

@@ -29,7 +29,8 @@ class BattleAnimations extends StatelessWidget {
               clipBehavior: Clip.none,
             children: [
               if(controller.showVersusAnimation==true)
-                oneonone(img1url: controller.battleModel.getHost!.getAvatar!.url!, img2url: controller.playerBAvatar,),
+                oneonone(img1url: controller.isCurrentUserPlayerB == true ? controller.playerBAvatar : controller.battleModel.getHost!.getAvatar!.url!,
+                  img2url:controller.isCurrentUserPlayerB == false ? controller.playerBAvatar : controller.battleModel.getHost!.getAvatar!.url!,),
               if(controller.showResult==true && controller.rightScoreCard!=controller.leftScoreCard)
                 LoserAnimation(animationViewModel, controller),
               if(controller.showResult==true && controller.rightScoreCard!=controller.leftScoreCard)

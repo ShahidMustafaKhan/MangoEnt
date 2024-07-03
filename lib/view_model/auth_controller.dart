@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart' hide Trans;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import '../data/app/setup.dart';
 import '../helpers/quick_help.dart';
 import '../parse/UserModel.dart';
@@ -19,6 +20,8 @@ class AuthViewModel extends GetxController {
   Future<User?> signUpWithGoogle(GoogleSignIn _googleSignIn, FirebaseAuth firebaseAuth, BuildContext context, SharedPreferences preferences) async {
     try {
       // await _googleSignIn.signOut();
+      QuickHelp.showLoadingDialog(context);
+
       final GoogleSignInAccount? googleSignInAccount =
       await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -87,13 +90,7 @@ class AuthViewModel extends GetxController {
         QuickHelp.showAppNotificationAdvanced(
             context: context, title: "not_connected");
       } else {
-        print(error.toString());
-        print(error.toString());
-        print(error.toString());
-        print(error.toString());
-        print(error.toString());
-        print(error.toString());
-        print(error.toString());
+
         QuickHelp.showAppNotificationAdvanced(
             context: context, title: error.toString());
       }
@@ -106,6 +103,8 @@ class AuthViewModel extends GetxController {
 
   Future<User?> signInWithGoogle(GoogleSignIn _googleSignIn, FirebaseAuth firebaseAuth, BuildContext context, SharedPreferences preferences) async {
     try {
+      QuickHelp.showLoadingDialog(context);
+
       await _googleSignIn.signOut();
       final GoogleSignInAccount? googleSignInAccount=
       await _googleSignIn.signIn();
@@ -147,7 +146,17 @@ class AuthViewModel extends GetxController {
               user.logout();
 
             } else {
-              SocialLogin.goHome(context, user, preferences);
+              if(QuickHelp.isAccountDisabled(user) == false)
+                SocialLogin.goHome(context, user, null,isUserNameIncluded: true);
+              else{
+                await _googleSignIn.signOut();
+                user.logout().then((value){
+                  Get.back();
+                  QuickHelp.showAppNotificationAdvanced(title: 'This Account is deleted.', context: context);
+
+                });
+
+              }
             }
           } else {
             QuickHelp.hideLoadingDialog(context);
@@ -287,7 +296,16 @@ class AuthViewModel extends GetxController {
           if (response.success)
             {
               UserModel user = response.result;
-              SocialLogin.goHome(context, user, preferences,isUserNameIncluded: null );
+              if(QuickHelp.isAccountDisabled(user) == false)
+                SocialLogin.goHome(context, user, null,isUserNameIncluded: true);
+              else{
+                user.logout().then((value){
+                  Get.back();
+                  QuickHelp.showAppNotificationAdvanced(title: 'This Account is deleted.', context: context);
+
+                });
+
+              }
             }
           else{
             QuickHelp.hideLoadingDialog(context);
@@ -318,7 +336,16 @@ class AuthViewModel extends GetxController {
           if (response.success)
             {
               UserModel user = response.result;
+              if(QuickHelp.isAccountDisabled(user) == false)
               SocialLogin.goHome(context, user, null,isUserNameIncluded: true);
+              else{
+                user.logout().then((value){
+                  Get.back();
+                  QuickHelp.showAppNotificationAdvanced(title: 'This Account is deleted.', context: context);
+
+                });
+
+              }
             }
           else{
             QuickHelp.hideLoadingDialog(context);
@@ -418,8 +445,12 @@ class AuthViewModel extends GetxController {
 
     QuickHelp.hideLoadingDialog(context);
 
-    QuickHelp.showAppNotificationAdvanced(context: context, title: "auth.forgot_sent".tr(), message: "auth.email_explain".tr(), isError: false);
-  }
+    QuickHelp.showAppNotificationAdvanced(
+        context: context,
+        title: "Email Sent",
+        message: "Check your inbox for the password reset link.",
+        isError: false
+    );  }
 
   void showError(int error, BuildContext context) {
     QuickHelp.hideLoadingDialog(context);

@@ -38,6 +38,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   bool lapse=false;
   int teamAGiftListLength = 0;
   int teamBGiftListLength = 0;
+  List<String> hostGiftersAvatar = [];
+  List<String> playerGiftersAvatar = [];
+
 
   // Getters
   bool get isBattleView => _isBattleView;
@@ -284,6 +287,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setDraw= value.getDraw ;
     getPlayerB(value.getPlayerB);
     changeBackgroundImage(value);
+    setHostGifterList(value);
+    setPlayerGifterList(value);
+
 
     update();
   }
@@ -567,6 +573,8 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     if(endBattle==true){
       _timerModel= TimerModel();
       _battleModel= BattleModel();
+      hostGiftersAvatar=[];
+      playerGiftersAvatar=[];
     }
     if(isHost && endBattle==false){
       updateGameResultCount(endBattle: endBattle);
@@ -623,6 +631,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
 
   Future<void> setPlayerBModel(UserModel playerB) async {     // to setPlayerB userModel to battleObject
     _battleModel.setPlayerB = playerB;
+    _battleModel.setPlayerUid = playerB.getUid!;
     await _saveAndUpdate();
   }
 
@@ -677,6 +686,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     teamAGiftListLength= _battleModel.getTeamAGiftsList!.length;
     teamBGiftListLength= _battleModel.getTeamBGiftsList!.length;
     audienceLogicIfBattleStarted();
+    setGifterList();
     setTimerModel(_battleModel);
     subscribeBattleModel(Get.find<LiveViewModel>().liveStreamingModel.getAuthorUid!);
     update();
@@ -697,6 +707,8 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     else
       return fetchBattleModelForAudience(Get.find<LiveViewModel>().liveStreamingModel.getAuthor!.getUid!);
   }
+
+
 
   void audienceLogicIfBattleStarted(){
     if(_battleModel.getBattleStarted==true){
@@ -922,8 +934,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
 
 
   sendGiftToTeamA({required String gift, required String audio, required int coins}){
-    _battleModel.setTeamAGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url! };
+    _battleModel.setTeamAGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, LiveStreamingModel.keyCoins: coins,  LiveStreamingModel.keySenderAvatar : Get.find<UserViewModel>().currentUser.getAvatar!.url!, LiveStreamingModel.keyReceiverUid : battleModel.getHost!.getUid! };
     _battleModel.setTeamScoreA= coins + _battleModel.getTeamScoreA;
+    _battleModel.setHostGifterAvatarList= Get.find<UserViewModel>().currentUser.getAvatar!.url!;
     _battleModel.save();
     Get.find<RankingViewModel>().addRecord(coins);
     Get.find<UserViewModel>().deductBalance(coins);
@@ -932,8 +945,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   sendGiftToTeamB({required String gift, required String audio, required int coins}){
-    _battleModel.setTeamBGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url! };
+    _battleModel.setTeamBGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, LiveStreamingModel.keyCoins: coins, LiveStreamingModel.keySenderAvatar : Get.find<UserViewModel>().currentUser.getAvatar!.url!, LiveStreamingModel.keySenderAvatar : Get.find<UserViewModel>().currentUser.getAvatar!.url!, LiveStreamingModel.keyReceiverUid : battleModel.getPlayerB!.getUid! };
     _battleModel.setTeamScoreB= coins + _battleModel.getTeamScoreB;
+    _battleModel.setPlayerGifterAvatarList= Get.find<UserViewModel>().currentUser.getAvatar!.url!;
     _battleModel.save();
     Get.find<RankingViewModel>().addRecord(coins);
     Get.find<UserViewModel>().deductBalance(coins);
@@ -943,10 +957,12 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   sendGiftToAllTeams({required String gift, required String audio, required int coins}){
-    _battleModel.setTeamAGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url! };
-    _battleModel.setTeamBGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, "avatar" : Get.find<UserViewModel>().currentUser.getAvatar!.url! };
+    _battleModel.setTeamAGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, LiveStreamingModel.keyCoins: coins, LiveStreamingModel.keySenderAvatar : Get.find<UserViewModel>().currentUser.getAvatar!.url!, LiveStreamingModel.keySenderAvatar : Get.find<UserViewModel>().currentUser.getAvatar!.url!, LiveStreamingModel.keyReceiverUid : battleModel.getHost!.getUid! };
+    _battleModel.setTeamBGift={"gift": gift, "audio" : audio, "name" : Get.find<UserViewModel>().currentUser.getFullName, LiveStreamingModel.keyCoins: coins, LiveStreamingModel.keySenderAvatar : Get.find<UserViewModel>().currentUser.getAvatar!.url!, LiveStreamingModel.keySenderAvatar : Get.find<UserViewModel>().currentUser.getAvatar!.url!, LiveStreamingModel.keyReceiverUid : battleModel.getPlayerB!.getUid!};
     _battleModel.setTeamScoreA= coins + _battleModel.getTeamScoreA;
     _battleModel.setTeamScoreB= coins + _battleModel.getTeamScoreB;
+    _battleModel.setHostGifterAvatarList= Get.find<UserViewModel>().currentUser.getAvatar!.url!;
+    _battleModel.setPlayerGifterAvatarList= Get.find<UserViewModel>().currentUser.getAvatar!.url!;
     _battleModel.save();
     Get.find<RankingViewModel>().addRecord(coins);
     Get.find<UserViewModel>().deductBalance(coins);
@@ -955,13 +971,15 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   runGiftAnimationForTeamA(BattleModel value){
-    if(isHost || Get.find<LiveViewModel>().role==ZegoLiveRole.audience){
+    if(isCurrentUserPlayerB==false){
       if(value.getTeamAGiftsList!.length > teamAGiftListLength){
         teamAGiftListLength=value.getTeamAGiftsList!.length;
         Map lastGift=value.getTeamAGiftsList!.last;
         String gift= lastGift["gift"];
         String audio = lastGift["audio"];
         Get.find<GiftViewModel>().loadAnimation(gift, audio);
+        addGiftCoins(lastGift);
+
       }
     }
   }
@@ -974,6 +992,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
         String gift = lastGift["gift"];
         String audio = lastGift["audio"];
         Get.find<GiftViewModel>().loadAnimation(gift, audio);
+        addGiftCoins(lastGift);
       }
     }
   }
@@ -982,6 +1001,69 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     if(value.getBackgroundImage != null)
       Get.find<LiveViewModel>().
       backgroundImage.value = value.getBackgroundImage!;
+  }
+
+  saveHostGifterList(String avatar){
+    battleModel.setHostGifterAvatarList = avatar;
+    battleModel.save();
+  }
+
+
+  savePlayerGifterList(String avatar){
+    battleModel.setPlayerGifterAvatarList = avatar;
+    battleModel.save();
+  }
+
+
+  setHostGifterList(BattleModel value){
+    if(value.getHostGifterAvatarList!.isNotEmpty && value.getHostGifterAvatarList!.length != hostGiftersAvatar.length ){
+      hostGiftersAvatar = [];
+      value.getHostGifterAvatarList!.forEach((element) {
+        String value = element;
+        if(hostGiftersAvatar.contains(value)==false)
+          hostGiftersAvatar.insert(0,value);
+      }) ;
+      update();
+    }
+
+  }
+
+  setPlayerGifterList(BattleModel value){
+    if(value.getPlayerGifterAvatarList!.isNotEmpty && value.getPlayerGifterAvatarList!.length != playerGiftersAvatar.length ){
+      playerGiftersAvatar = [];
+      value.getPlayerGifterAvatarList!.forEach((element) {
+        String value = element;
+        if(playerGiftersAvatar.contains(value)==false)
+          playerGiftersAvatar.insert(0,value);
+      }) ;
+      update();
+    }
+
+  }
+
+  addGiftCoins(Map value){
+    if(value[LiveStreamingModel.keyReceiverUid] == Get.find<UserViewModel>().currentUser.getUid) {
+      Get.find<UserViewModel>().addBalance(value[LiveStreamingModel.keyCoins]).then((value) => update());
+    }
+  }
+
+  setGifterList(){
+    if(battleModel.getHostGifterAvatarList!.isNotEmpty){
+      battleModel.getHostGifterAvatarList!.forEach((element) {
+        String value = element;
+        if(hostGiftersAvatar.contains(value)==false)
+          hostGiftersAvatar.insert(0,value);
+      }) ;
+    }
+
+    if(battleModel.getPlayerGifterAvatarList!.isNotEmpty){
+      battleModel.getPlayerGifterAvatarList!.forEach((element) {
+        String value = element;
+        if(playerGiftersAvatar.contains(value)==false)
+          playerGiftersAvatar.insert(0,value);
+      }) ;
+    }
+
   }
 
 

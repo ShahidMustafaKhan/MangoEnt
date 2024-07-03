@@ -9,6 +9,7 @@ import '../../../../../../view_model/battle_controller.dart';
 import '../../../../../../view_model/live_messages_controller.dart';
 import '../../../../../../view_model/music_controller.dart';
 import '../../../../../widgets/base_scaffold.dart';
+import '../../../multi_live_streaming/widgets/gift_received_widget.dart';
 import '../../../widgets/background_image.dart';
 import '../../../widgets/chat_text_field.dart';
 import '../../../widgets/for_you_widget.dart';
@@ -61,11 +62,9 @@ class _SingleLiveScreenState extends State<SingleLiveScreen> with WidgetsBinding
                       if(streamerViewModel.isBattleView==false)
                         ZegoCloudPreview(role:ZegoLiveRole.host),
                         SingleStreamerLiveItemWidget(),
-                      Align(
-                          alignment: Alignment.bottomCenter,
-                          child: GiftAnimationView(giftViewModel: giftViewModel,)
-                      ),
-                      if(battleViewModel.isBattleView == false)
+
+                      GiftReceivedWidget(),
+                      if(battleViewModel.isBattleView == true)
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Obx(() {
@@ -75,6 +74,10 @@ class _SingleLiveScreenState extends State<SingleLiveScreen> with WidgetsBinding
                               return SizedBox();
                           }),
                         ),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: GiftAnimationView(giftViewModel: giftViewModel,)
+                      ),
                     ],
                   ),
                 );

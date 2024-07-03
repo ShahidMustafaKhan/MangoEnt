@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
@@ -16,6 +17,7 @@ import '../../../../utils/routes/app_routes.dart';
 import '../../../../utils/theme/colors_constant.dart';
 import '../../../../view_model/live_controller.dart';
 import '../../../../view_model/userViewModel.dart';
+import 'gifters_avatar.dart';
 import 'subscrption/subscriber_detail_sheet.dart';
 import 'wishList_streamer_sheet.dart';
 import '../single_live_streaming/single_audience_live/widgets/audience_detail_sheet.dart';
@@ -110,7 +112,7 @@ class _AudienceTopBarState extends State<AudienceTopBar> {
                                               Image.asset(AppImagePath.diamondIcon, width: 14, height: 14),
                                               const SizedBox(width: 4),
                                               Text(
-                                                widget.liveViewModel.liveStreamingModel.getAuthor!.getCoins.toString() ,
+                                                widget.liveViewModel.liveStreamingModel.getTotalCoins.toString() ,
                                                 style: sfProDisplayMedium.copyWith(
                                                   fontSize: 12,
                                                   color: AppColors.yellowColor,
@@ -159,27 +161,10 @@ class _AudienceTopBarState extends State<AudienceTopBar> {
                         ],
                       ),
                       const Spacer(),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.only(left: 28),
-                                child: Image.asset(AppImagePath.topPerson3, width: 36, height: 36),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Image.asset(AppImagePath.topPerson2, width: 36, height: 36),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 3),
-                                child: Image.asset(AppImagePath.topPerson1, width: 36, height: 36),
-                              ),
-                            ],
-                          ),
-                        ],
+                      GiftAvatar(
+                        avatar1: liveViewModel.hostGiftersAvatar.length >= 1 ? liveViewModel.hostGiftersAvatar[0] : null,
+                        avatar2: liveViewModel.hostGiftersAvatar.length >= 2 ? liveViewModel.hostGiftersAvatar[1] : null,
+                        avatar3: liveViewModel.hostGiftersAvatar.length >= 3 ? liveViewModel.hostGiftersAvatar[2] : null,
                       ),
                       const SizedBox(width: 8),
                       CircleAvatar(

@@ -74,6 +74,12 @@ class _MultiCoHostGiftAvatarState extends State<MultiCoHostGiftAvatar> {
                       return GestureDetector(
                         onTap: ()=> setState(() {
                           selectedIndex=index;
+                          if(index == 0){
+                            liveViewModel.receiverUid = liveViewModel.liveStreamingModel.getAuthorUid;
+                          }
+                          else {
+                            liveViewModel.receiverUid = int.parse(filteredCoHostList[index-1].userID);
+                          }
                         }),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10),

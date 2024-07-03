@@ -14,6 +14,7 @@ import '../../widgets/background_image.dart';
 import '../../widgets/for_you_widget.dart';
 import '../../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
 import '../multi_live_widgets.dart';
+import '../widgets/gift_received_widget.dart';
 
 
 class AudienceMultiLive extends StatelessWidget {
@@ -50,6 +51,8 @@ class AudienceMultiLive extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: GiftAnimationView(giftViewModel: giftViewModel,)),
+              GiftReceivedWidget(),
+
             ],
           ),
         );

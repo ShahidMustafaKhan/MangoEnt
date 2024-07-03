@@ -77,6 +77,8 @@ class _AudioCoHostGiftAvatarState extends State<AudioCoHostGiftAvatar> {
                       return GestureDetector(
                       onTap: ()=> setState(() {
                         selectedIndex=index;
+                        liveViewModel.receiverUid = int.parse(user.userID);
+
                       }),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10),

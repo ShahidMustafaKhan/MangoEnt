@@ -348,6 +348,8 @@ class UserModel extends ParseUser implements ParseCloneable {
 
   static String keySubscriptionAnnouncement= "subscriptionAnnouncement";
 
+  static String keySelfBan= "selfBan";
+
 
   String? get getSessionToken => get<String>(keySessionToken);
 
@@ -1557,6 +1559,16 @@ class UserModel extends ParseUser implements ParseCloneable {
 
   String? get getDevice => get<String>(keyDevice);
   set setDevice(String device) => set<String>(keyDevice, device);
+
+  bool get getSelfBanStatus {
+    bool? ban = get<bool>(keySelfBan);
+    if(ban!=null)
+      return ban;
+    else
+      return false;
+  }
+
+  set setSelfBanStatus(bool ban) => set<bool>(keySelfBan, ban);
 
 
   String? get getSubscribeAnnouncement => get<String>(keySubscriptionAnnouncement);

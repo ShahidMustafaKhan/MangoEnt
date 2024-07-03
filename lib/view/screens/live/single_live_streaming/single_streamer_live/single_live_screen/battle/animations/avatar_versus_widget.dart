@@ -28,11 +28,13 @@ class Avatar extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-            right: 82.w,
+            right: battleViewModel.isCurrentUserPlayerB == true ?  null : 82.w,
+            left: battleViewModel.isCurrentUserPlayerB == true ?  82.w: null,
             top: 133.h,
             child: Align(child: CircleAvatar(radius: 33.r, backgroundImage: NetworkImage(battleViewModel.playerBAvatar),))),
         Positioned(
-            left: 82.w,
+            right: battleViewModel.isCurrentUserPlayerB == true ?  null : 82.w,
+            left: battleViewModel.isCurrentUserPlayerB == false ?  82.w: null,
             top: 133.h,
             child: Align(child: CircleAvatar(radius: 33.r, backgroundImage: NetworkImage(battleViewModel.battleModel.getHost!.getAvatar!.url!),)))
       ],

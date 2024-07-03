@@ -123,8 +123,8 @@ class ChatViewModel extends GetxController {
 
     ParseResponse apiResponse = await queryBuilder.query();
     if (apiResponse.success) {
-      print("Messages count: ${apiResponse.results!.length}");
       if (apiResponse.results != null) {
+        print("Messages count: ${apiResponse.results!.length}");
         List result = apiResponse.results!;
         return result;
       } else {
@@ -167,6 +167,7 @@ class ChatViewModel extends GetxController {
 
       results.insert(0, message as dynamic);
       update();
+
 
 
       await message.save();

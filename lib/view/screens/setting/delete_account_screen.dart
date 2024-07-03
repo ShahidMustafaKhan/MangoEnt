@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
 
+import '../../../helpers/quick_actions.dart';
 import '../../../utils/theme/colors_constant.dart';
+import '../../../view_model/userViewModel.dart';
 import '../../widgets/custom_buttons.dart';
 
 class DeleteAccount extends StatefulWidget {
@@ -15,6 +18,7 @@ class DeleteAccount extends StatefulWidget {
 
 class _DeleteAccountState extends State<DeleteAccount> {
   bool _isChecked = false;
+  UserViewModel userViewModel = Get.find();
 
   void _toggleCheck() {
     setState(() {
@@ -62,7 +66,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
                 Row(
                   children: [
                     Text(
-                      "LLOUSIE DNLO",
+                      userViewModel.currentUser.getFullName!,
                       style: TextStyle(
                           fontSize: 16.sp, fontWeight: FontWeight.w700),
                     )
@@ -137,7 +141,21 @@ class _DeleteAccountState extends State<DeleteAccount> {
                     title: "Delete account",
                     textColor: Color(0xff1E2121),
                     bgColor: AppColors.yellowBtnColor,
-                    onTap: () {}),
+                    onTap: () {
+                      if(_isChecked == true){
+                        QuickActions.showAlertDialog(context,
+                            "Are you sure you want to delete this account?",
+                                () {
+                              Get.back();
+                              userViewModel.deleteAccount(context);
+                            });
+                      }
+                      else{
+                        QuickHelp.showAppNotificationAdvanced(title: "Please click the toggle button to confirm that you have read and agreed.", context: context);
+                      }
+
+
+                    }),
               ],
             ),
           ),

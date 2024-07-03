@@ -11,12 +11,15 @@ import 'package:teego/view/widgets/base_scaffold.dart';
 import 'package:teego/view/widgets/broadcasters.dart';
 
 import '../../../parse/UserModel.dart';
+import '../../../view_model/search_controller.dart';
+import '../../../view_model/userViewModel.dart';
 
 class TrendingBroadcastersScreen extends StatelessWidget {
   const TrendingBroadcastersScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    SearchController searchController = Get.put(SearchController());
     return BaseScaffold(
         body: Stack(
           children: [
@@ -31,7 +34,9 @@ class TrendingBroadcastersScreen extends StatelessWidget {
                     style: sfProDisplayMedium.copyWith(fontSize: 16),
                   ),
                   const Expanded(child: SizedBox()),
-                  Text('Skip', style: sfProDisplayMedium.copyWith(fontSize: 12)),
+                  GestureDetector(
+                      onTap: ()=> Get.toNamed(AppRoutes.dashboardScreen),
+                      child: Text('Skip', style: sfProDisplayMedium.copyWith(fontSize: 12))),
                   SizedBox(width: 8.w),
                   Icon(
                     Icons.double_arrow,
@@ -41,21 +46,27 @@ class TrendingBroadcastersScreen extends StatelessWidget {
                   SizedBox(width: 15.5.w),
                 ],),
                 SizedBox(height: ScreenUtil().setHeight(24)),
-                SizedBox(
-                  height: ScreenUtil().setHeight(650),
-                  child: GridView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return BroadCasters(
-                        index: index,
-                      );
-                    },
-                  ),
+                GetBuilder<SearchController>(
+                    init: searchController,
+                    builder: (controller) {
+                      return SizedBox(
+                      height: ScreenUtil().setHeight(650),
+                      child: GridView.builder(
+                        itemCount: searchController.recentPopular.length,
+                        padding: EdgeInsets.symmetric(horizontal: 8.w),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return BroadCasters(
+                            index: index,
+                          );
+                        },
+                      ),
+                    );
+                  }
                 ),
 
               ],

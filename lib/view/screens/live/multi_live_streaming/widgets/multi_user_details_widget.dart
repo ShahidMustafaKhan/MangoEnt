@@ -142,48 +142,48 @@ class MultiUserDetails extends StatelessWidget {
                     ),
                   ],
                 )),
-            Positioned(
-              bottom: 8,
-              right:  10,
-              child: Visibility(
-                visible: !seats9 && !seats12 && !seats4 && !isExpanded,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment:
-                  MainAxisAlignment.center,
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(
-                              left: 28),
-                          child: Image.asset(
-                              AppImagePath.topPerson3,
-                              width: 17.w,
-                              height: 17.w),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                              left: 15),
-                          child: Image.asset(
-                              AppImagePath.topPerson2,
-                              width: 17.w,
-                              height: 17.w),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                              left: 3),
-                          child: Image.asset(
-                              AppImagePath.topPerson1,
-                              width: 17.w,
-                              height: 17.w),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Positioned(
+            //   bottom: 8,
+            //   right:  10,
+            //   child: Visibility(
+            //     visible: !seats9 && !seats12 && !seats4 && !isExpanded,
+            //     child: Row(
+            //       mainAxisSize: MainAxisSize.max,
+            //       mainAxisAlignment:
+            //       MainAxisAlignment.center,
+            //       children: [
+            //         Stack(
+            //           children: [
+            //             Container(
+            //               padding: const EdgeInsets.only(
+            //                   left: 28),
+            //               child: Image.asset(
+            //                   AppImagePath.topPerson3,
+            //                   width: 17.w,
+            //                   height: 17.w),
+            //             ),
+            //             Container(
+            //               padding: const EdgeInsets.only(
+            //                   left: 15),
+            //               child: Image.asset(
+            //                   AppImagePath.topPerson2,
+            //                   width: 17.w,
+            //                   height: 17.w),
+            //             ),
+            //             Container(
+            //               padding: const EdgeInsets.only(
+            //                   left: 3),
+            //               child: Image.asset(
+            //                   AppImagePath.topPerson1,
+            //                   width: 17.w,
+            //                   height: 17.w),
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         );
       else

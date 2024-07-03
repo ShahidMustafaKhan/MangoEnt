@@ -51,7 +51,7 @@ class HostVideoLive extends StatelessWidget {
                         return ZegoAudioVideoView(userInfo: user );
                       }).toList();
 
-                      if(coHostList.isNotEmpty)
+                      if(videoList.isNotEmpty)
                       return  Column(
                         children: [
                           Expanded(child: ZegoAudioVideoView(userInfo: zegoController.liveStreamingManager.hostNoti.value!)),

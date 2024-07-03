@@ -16,6 +16,7 @@ import '../../../../../../utils/theme/colors_constant.dart';
 import '../../../../../../view_model/battle_controller.dart';
 import '../../../../../../view_model/whisper_list_controller.dart';
 import '../../../../../widgets/custom_buttons.dart';
+import '../../../multi_live_streaming/widgets/gift_received_widget.dart';
 import '../../../widgets/background_image.dart';
 import '../../../widgets/chat_text_field.dart';
 import '../../../zegocloud/zim_zego_sdk/internal/business/business_define.dart';
@@ -121,7 +122,7 @@ class SingleStreamerLiveItemWidget extends StatelessWidget {
                               liveViewModel.role== ZegoLiveRole.host ? BottomBar() : AudienceBottomBar(),
                               if(liveViewModel.chatField.value==true)
                                 ChatTextField(),
-                              if(liveViewModel.chatField.value==false)
+                              // if(liveViewModel.chatField.value==false)
                               SizedBox(height: 20),
                             ],
                           );

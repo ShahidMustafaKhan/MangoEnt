@@ -139,7 +139,7 @@ class AudioHostView extends StatelessWidget {
               ),
             ),
             Text(
-              liveViewModel.liveStreamingModel.getAuthor!.getCoins!.toString(),
+              liveViewModel.liveStreamingModel.getTotalCoins.toString() ,
               style: TextStyle(color: AppColors.yellowBtnColor),
             )
           ],

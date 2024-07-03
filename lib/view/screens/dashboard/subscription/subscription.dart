@@ -39,6 +39,13 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   @override
+  void dispose() {
+    subscriptionViewModel.getSubscribee();
+    subscriptionViewModel.getExpiredSubscription();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     subscriptionViewModel.getSubscribee();
     subscriptionViewModel.getExpiredSubscription();
@@ -161,7 +168,7 @@ class _SubscriptionState extends State<Subscription> {
                           subscriptionViewModel.subscribeeList[index].setSubscriptionEnd = DateTime.now().subtract(Duration(hours: 1));
                           subscriptionViewModel.subscribeeList[index].save();
                           subscriptionViewModel.update();
-                          subscriptionViewModel.getSubscribee();
+
                         });
                       }
                     },

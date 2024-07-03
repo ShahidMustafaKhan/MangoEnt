@@ -7,6 +7,7 @@ import '../../generated/assets.dart';
 import '../../utils/constants/typography.dart';
 import '../../utils/theme/colors_constant.dart';
 import '../../view_model/broadcaster_controller.dart';
+import '../../view_model/search_controller.dart';
 
 class BroadCasters extends StatelessWidget {
   final int index;
@@ -17,6 +18,7 @@ class BroadCasters extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(BroadCastersController());
     final controller = Get.find<BroadCastersController>();
+    final searchController = Get.find<SearchController>();
 
     return InkWell(
       onTap: () {
@@ -25,15 +27,16 @@ class BroadCasters extends StatelessWidget {
       child: Obx(() {
         return Column(
           children: [
+            if(searchController.recentPopular[index].getAvatar!=null)
             CircleAvatar(
               radius: ScreenUtil().setWidth(30),
-              backgroundImage: const AssetImage(Assets.pngProfile),
+              backgroundImage: NetworkImage(searchController.recentPopular[index].getAvatar!.url!),
             ),
             SizedBox(
               height: ScreenUtil().setHeight(5),
             ),
             Text(
-              'Gina Rodriquez',
+              '${searchController.recentPopular[index].getFullName}',
               style: sfProDisplayMedium.copyWith(fontSize: 14),
             ),
             SizedBox(
@@ -56,7 +59,7 @@ class BroadCasters extends StatelessWidget {
                   size: ScreenUtil().setHeight(20),
                 ),
                 Text(
-                  '00458547',
+                  '${searchController.recentPopular[index].getFollowers!.length}',
                   style: sfProDisplayRegular.copyWith(color: AppColors.dHintColor, fontSize: 12),
                 )
               ],

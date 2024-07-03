@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:teego/helpers/quick_actions.dart';
+import 'package:teego/helpers/quick_help.dart';
+import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/utils/constants/typography.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/screens/authentication/broadcaster.dart';
@@ -14,22 +18,22 @@ import '../../widgets/base_scaffold.dart';
 
 List<String> countryNames = [
   "English",
-  "Japanese",
-  "Hindi",
-  "Bangle",
-  "Indonesia",
-  "Russian",
-  "Chinese",
+  // "Japanese",
+  // "Hindi",
+  // "Bangle",
+  // "Indonesia",
+  // "Russian",
+  // "Chinese",
 ];
 
 List<String> countryImages = [
-  Assets.flagsEnglish,
-  Assets.flagsJapanese,
-  Assets.flagsHindi,
-  Assets.flagsBangla,
-  Assets.flagsIndonesia,
-  Assets.flagsRussian,
-  Assets.flagsChina,
+  AppImagePath.englandFlag,
+  // Assets.flagsJapanese,
+  // Assets.flagsHindi,
+  // Assets.flagsBangla,
+  // Assets.flagsIndonesia,
+  // Assets.flagsRussian,
+  // Assets.flagsChina,
 ];
 
 class LanguageScreen extends StatefulWidget {
@@ -46,6 +50,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool settings = false;
+    settings = Get.arguments ?? false;
     return BaseScaffold(
       body: Column(
         children: [
@@ -84,11 +90,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
               itemCount: countryNames.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  leading: Image.asset(
-                    countryImages[index],
-                    width: 20,
-                    height: 20,
-                  ),
+                  contentPadding: EdgeInsets.only(left: 20.w, right: 5.w),
+                  horizontalTitleGap: 10,
+                  leading: SvgPicture.asset(countryImages[index], height: 20.h, width: 32.w,),
                   title: Text(countryNames[index]),
                   trailing: Radio(
                       activeColor: AppColors.yellow,
@@ -104,13 +108,24 @@ class _LanguageScreenState extends State<LanguageScreen> {
               },
             ),
           ),
-          SizedBox(height: ScreenUtil().setHeight(24)),
+          Spacer(),
           Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
             child: AppButton(context, "Next",
-                () => Get.toNamed(AppRoutes.trendingBroadcastersScreen)),
-          )
+                (){
+              if(_selectedLanguage != null){
+                      if(settings == false)
+                        Get.toNamed(AppRoutes.trendingBroadcastersScreen);
+                      else
+                        Get.back();}
+              else{
+                QuickHelp.showAppNotificationAdvanced(title: 'Please select a language!', context: context);
+              }
+                }),
+          ),
+          SizedBox(height: ScreenUtil().setHeight(24)),
+
         ],
       ),
     );

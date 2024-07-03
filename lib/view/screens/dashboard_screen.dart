@@ -87,112 +87,115 @@ class _DashboardViewState extends State<DashboardView> {
     final Size size = MediaQuery.of(context).size;
     userViewModel.getDeviceName(context);
     communityController.getListVideo();
-    return BaseScaffold(
-      resizeToAvoidBottomInset: false,
-      topSafeArea:  _selectedIndex == 1 ? true : null ,
-      // topSafeArea:  _selectedIndex == 1 ? true : null ,
-      body: Stack(
-        children: [
-          _screens[_selectedIndex],
-          Positioned(
-              bottom: 0,
-              left: 0,
-              child: SizedBox(
-                width: size.width,
-                height: 72,
-                child: Stack(
-                  children: [
-                    CustomPaint(
-                      size: Size(size.width, 80),
-                      painter: BNBCustomPainter(),
-                    ),
-                    Center(
-                      heightFactor: 0.7,
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          goToLiveScreen();
-                        },
-                        backgroundColor: Color(0xffF9c034),
-                        elevation: 0.1,
-                        shape: const CircleBorder(),
-                        child: Image.asset(
-                          AppImagePath.cameraIcon,
-                          width: 24,
-                          height: 24,
+    return WillPopScope(
+      onWillPop: () async => await false,
+      child: BaseScaffold(
+        resizeToAvoidBottomInset: false,
+        topSafeArea:  _selectedIndex == 1 ? true : null ,
+        // topSafeArea:  _selectedIndex == 1 ? true : null ,
+        body: Stack(
+          children: [
+            _screens[_selectedIndex],
+            Positioned(
+                bottom: 0,
+                left: 0,
+                child: SizedBox(
+                  width: size.width,
+                  height: 72,
+                  child: Stack(
+                    children: [
+                      CustomPaint(
+                        size: Size(size.width, 80),
+                        painter: BNBCustomPainter(),
+                      ),
+                      Center(
+                        heightFactor: 0.7,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            goToLiveScreen();
+                          },
+                          backgroundColor: Color(0xffF9c034),
+                          elevation: 0.1,
+                          shape: const CircleBorder(),
+                          child: Image.asset(
+                            AppImagePath.cameraIcon,
+                            width: 24,
+                            height: 24,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width,
-                      height: 80,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(
-                            onPressed: () => _onItemTapped(0),
-                            icon: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: Image.asset(
-                                AppImagePath.homeIcon,
-                                color: _getIconColor(0),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => _onItemTapped(1),
-                            icon: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: Image.asset(
-                                AppImagePath.fireIcon,
-                                color: _getIconColor(1),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: size.width * 0.20,
-                          ),
-                          IconButton(
-                            onPressed: () => _onItemTapped(2),
-                            icon: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: Image.asset(
-                                AppImagePath.chatIcon,
-                                color: _getIconColor(2),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => _onItemTapped(3),
-                            icon: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                // borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: _getIconColor(3),
-                                  width: 2,
+                      SizedBox(
+                        width: size.width,
+                        height: 80,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                              onPressed: () => _onItemTapped(0),
+                              icon: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: Image.asset(
+                                  AppImagePath.homeIcon,
+                                  color: _getIconColor(0),
                                 ),
                               ),
-                              child: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    Get.find<UserViewModel>()
-                                        .currentUser
-                                        .getAvatar!
-                                        .url!,
-                                  )),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ))
-        ],
+                            IconButton(
+                              onPressed: () => _onItemTapped(1),
+                              icon: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: Image.asset(
+                                  AppImagePath.fireIcon,
+                                  color: _getIconColor(1),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: size.width * 0.20,
+                            ),
+                            IconButton(
+                              onPressed: () => _onItemTapped(2),
+                              icon: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: Image.asset(
+                                  AppImagePath.chatIcon,
+                                  color: _getIconColor(2),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () => _onItemTapped(3),
+                              icon: Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  // borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: _getIconColor(3),
+                                    width: 2,
+                                  ),
+                                ),
+                                child: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                      Get.find<UserViewModel>()
+                                          .currentUser
+                                          .getAvatar!
+                                          .url!,
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ))
+          ],
+        ),
       ),
     );
   }
