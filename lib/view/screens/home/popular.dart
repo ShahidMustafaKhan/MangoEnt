@@ -15,9 +15,8 @@ class Popular extends StatefulWidget {
   State<Popular> createState() => _PopularState();
 }
 
-
 class _PopularState extends State<Popular> {
-  final PopularViewModel popularViewModel= Get.put(PopularViewModel());
+  final PopularViewModel popularViewModel = Get.put(PopularViewModel());
 
   @override
   void initState() {
@@ -35,12 +34,20 @@ class _PopularState extends State<Popular> {
     return isSelected ? Colors.yellow.shade600 : null;
   }
 
-  Color? textColorSelected(bool isSelected) {
+  Color? textColorSelected(bool isSelected, BuildContext context) {
+    // return isSelected ? Colors.black : Colors.white;
+    if (Theme.of(context).brightness == Brightness.light) {
+      return Colors.black;
+    }
     return isSelected ? Colors.black : Colors.white;
   }
 
-  Color? borderColorSelected(bool isSelected) {
-    return isSelected ? null : Colors.white70;
+  Color? borderColorSelected(bool isSelected, BuildContext context) {
+    // return isSelected ? null : Colors.white70;
+    if (Theme.of(context).brightness == Brightness.light) {
+      return Colors.black;
+    }
+    return isSelected ? Colors.black : Colors.white;
   }
 
   @override
@@ -49,77 +56,94 @@ class _PopularState extends State<Popular> {
         init: popularViewModel,
         builder: (controller) {
           return Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 16.h,
-              ),
-              toggleButton(),
-              SizedBox(height: 6.h,),
-              controller.isAllTapSelected.value ? Expanded(child: PopularAllWidget()) : Expanded(child: PopularTrendingWidget()),
-            ],
-          ),
-        );
-      }
-    );
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 16.h,
+                ),
+                toggleButton(),
+                SizedBox(
+                  height: 6.h,
+                ),
+                controller.isAllTapSelected.value
+                    ? Expanded(child: PopularAllWidget())
+                    : Expanded(child: PopularTrendingWidget()),
+              ],
+            ),
+          );
+        });
   }
 
   Widget toggleButton() {
     return Obx(() {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 17),
-          child: Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  if (popularViewModel.isAllTapSelected.value == false) {
-                    popularViewModel.switchToggle(toggle: "All");
-                  }
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: ScreenUtil().setHeight(30),
-                  width: ScreenUtil().setWidth(40),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: colorSelected(popularViewModel.isAllTapSelected.value == true),
-                      border: Border.all(color: Colors.white70)),
-                  child: Text(
-                    'All',
-                    style: TextStyle(
-                        color: textColorSelected(popularViewModel.isAllTapSelected.value == true),
-                        fontSize: 14.sp),
-                  ),
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 17),
+        child: Row(
+          children: [
+            InkWell(
+              onTap: () {
+                if (popularViewModel.isAllTapSelected.value == false) {
+                  popularViewModel.switchToggle(toggle: "All");
+                }
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: ScreenUtil().setHeight(30),
+                width: ScreenUtil().setWidth(40),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: colorSelected(
+                        popularViewModel.isAllTapSelected.value == true),
+                    border: Border.all(
+                      // color: Colors.white70
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white70,
+                    )),
+                child: Text(
+                  'All',
+                  style: TextStyle(
+                      color: textColorSelected(
+                          popularViewModel.isAllTapSelected.value == true,
+                          context),
+                      fontSize: 14.sp),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20)),
-              InkWell(
-                onTap: () {
-                  if (popularViewModel.isAllTapSelected.value == true) {
-                    popularViewModel.switchToggle(toggle: "Trending");
-                  }
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: ScreenUtil().setHeight(30),
-                  width: ScreenUtil().setWidth(80),
-                  decoration: BoxDecoration(
-                      color: colorSelected(popularViewModel.isAllTapSelected.value == false),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white70)
-                  ),
-                  child: Text(
-                    "Trending",
-                    style: TextStyle(
-                        color: textColorSelected(popularViewModel.isAllTapSelected.value == false),
-                        fontSize: 14.sp),
-                  ),
+            ),
+            SizedBox(width: ScreenUtil().setWidth(20)),
+            InkWell(
+              onTap: () {
+                if (popularViewModel.isAllTapSelected.value == true) {
+                  popularViewModel.switchToggle(toggle: "Trending");
+                }
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: ScreenUtil().setHeight(30),
+                width: ScreenUtil().setWidth(80),
+                decoration: BoxDecoration(
+                    color: colorSelected(
+                        popularViewModel.isAllTapSelected.value == false),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      // color: Colors.white70
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white70,
+                    )),
+                child: Text(
+                  "Trending",
+                  style: TextStyle(
+                      color: textColorSelected(
+                          popularViewModel.isAllTapSelected.value == false,
+                          context),
+                      fontSize: 14.sp),
                 ),
               ),
-            ],
-          ),
-        );
-      }
-    );
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

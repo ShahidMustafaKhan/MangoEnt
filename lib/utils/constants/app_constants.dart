@@ -194,6 +194,7 @@ class AppImagePath {
   static const pcIcon = "assets/png/game/pcIcon.png";
   static const verticalDisplay = "assets/png/game/verticalDisplay.png";
   static const horizontalDisplay = "assets/png/game/horizontalDisplay.png";
+  static const sunIcon = "assets/png/userProfile/sunIcon.png";
 
   // popular screen png/dashboard
 

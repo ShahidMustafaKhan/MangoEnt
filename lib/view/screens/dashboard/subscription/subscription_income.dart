@@ -7,6 +7,7 @@ import 'package:teego/view_model/subscription_model.dart';
 
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/typography.dart';
+import '../../../../utils/theme/colors_constant.dart';
 import '../wallet/wallet.dart';
 
 
@@ -16,7 +17,20 @@ class SubscriptionIncome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: AppBar(centerTitle: true, title: Text('Subscription income', style: sfProDisplayMedium.copyWith(fontSize: 16.sp),), backgroundColor: Colors.transparent,),
+      appBar: AppBar(centerTitle: true, title: Text('Subscription income',
+        style: sfProDisplayMedium.copyWith(fontSize: 16.sp,
+            color: Get.isDarkMode ? AppColors.white : AppColors.black
+        ),),
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+                Icons.arrow_back_ios,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
+            )),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
         child: Column(
@@ -25,7 +39,6 @@ class SubscriptionIncome extends StatelessWidget {
             Text(
               "Your Balance",
               style: TextStyle(
-                color: Colors.white,
                 fontSize: 16.sp,
               ),
             ),
@@ -46,7 +59,7 @@ class SubscriptionIncome extends StatelessWidget {
                   icon: Icon(
                     Icons.arrow_forward_ios,
                     size: 17,
-                    color: Colors.white70,
+                    color: Get.isDarkMode ? Colors.white70 : AppColors.black,
                   ),
                 ),
               ],
@@ -59,15 +72,15 @@ class SubscriptionIncome extends StatelessWidget {
                 width: 342.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(35.r),
-                  color: const Color(0xff494848),
+                  color: Get.isDarkMode ? Color(0xff494848) :  AppColors.white,
                 ),
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.wallet,
-                      color: Colors.white70,
+                      color: Get.isDarkMode ? Colors.white70 : AppColors.black,
                     ),
                     SizedBox(
                       width: 16.w,
@@ -75,7 +88,7 @@ class SubscriptionIncome extends StatelessWidget {
                     Text(
                       "Go to wallet",
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: Get.isDarkMode ? Colors.white70 : AppColors.black,
                         fontSize: 14.sp,
                       ),
                     )

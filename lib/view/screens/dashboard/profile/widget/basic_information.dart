@@ -10,14 +10,12 @@ import 'package:teego/view_model/userViewModel.dart';
 
 import '../../../../../utils/theme/colors_constant.dart';
 import 'gender_sheet.dart';
+
 class BasicInformationSection extends StatelessWidget {
   final GenderController genderController = Get.find();
-  final RelationshipStatusController relationStatusController =
-      Get.find();
+  final RelationshipStatusController relationStatusController = Get.find();
 
   final EditController editController = Get.find();
-
- 
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -39,7 +37,7 @@ class BasicInformationSection extends StatelessWidget {
     String suffixIconPath,
     Color iconColor,
     VoidCallback? onTap,
-  TextEditingController textEditingController, {
+    TextEditingController textEditingController, {
     bool readOnly = false,
   }) {
     return TextFormField(
@@ -49,7 +47,7 @@ class BasicInformationSection extends StatelessWidget {
         filled: false,
         labelText: labelText,
         labelStyle: TextStyle(
-          color: Colors.white,
+          color: Colors.grey,
           fontSize: 14.sp,
           fontWeight: FontWeight.w500,
         ),
@@ -105,6 +103,10 @@ class BasicInformationSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : Colors.white;
+    final backgroundColor = isLightTheme ? Colors.white : AppColors.grey500;
+
     UserViewModel userViewModel = Get.find();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,18 +116,19 @@ class BasicInformationSection extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            // color: Colors.white,
+            color: textColor,
           ),
         ),
         SizedBox(height: 20.h),
         _buildInputField(
-          "Name*",
-          userViewModel.currentUser.getFullName ?? '',
-          AppImagePath.editTextIcon,
-          Colors.white,
-          () {},
-            editController.nameEditingController
-        ),
+            "Name*",
+            userViewModel.currentUser.getFullName ?? '',
+            AppImagePath.editTextIcon,
+            // Colors.white,
+            textColor,
+            () {},
+            editController.nameEditingController),
         SizedBox(height: 20.h),
         Obx(() => _buildInputField(
               "Gender*",
@@ -133,7 +136,9 @@ class BasicInformationSection extends StatelessWidget {
                   ? genderController.selectedGender.value
                   : "Select",
               AppImagePath.dropDownIcon,
-              Colors.white,
+              // Colors.white,
+              textColor,
+
               () {
                 showModalBottomSheet(
                   context: context,
@@ -144,15 +149,16 @@ class BasicInformationSection extends StatelessWidget {
                     ),
                   ),
                   isScrollControlled: true,
-                  backgroundColor: AppColors.grey500,
+                  backgroundColor: backgroundColor,
                   builder: (context) => GenderSheet(),
                 ).then((value) {
-                  editController.genderEditingController.text= genderController.selectedGender.value.isNotEmpty
-                      ? genderController.selectedGender.value
-                      : "Select";
+                  editController.genderEditingController.text =
+                      genderController.selectedGender.value.isNotEmpty
+                          ? genderController.selectedGender.value
+                          : "Select";
                 });
               },
-          editController.genderEditingController,
+              editController.genderEditingController,
               readOnly: true,
             )),
         SizedBox(height: 20.h),
@@ -160,16 +166,21 @@ class BasicInformationSection extends StatelessWidget {
               "Birthday*",
               editController.selectedDate.value.isNotEmpty
                   ? editController.selectedDate.value
-                  :  '${Get.find<UserViewModel>().currentUser.getBirthday!.year}-${doubleDigit(Get.find<UserViewModel>().currentUser.getBirthday!.month.toString())}-${doubleDigit(Get.find<UserViewModel>().currentUser.getBirthday!.day.toString())}',
+                  : '${Get.find<UserViewModel>().currentUser.getBirthday!.year}-${doubleDigit(Get.find<UserViewModel>().currentUser.getBirthday!.month.toString())}-${doubleDigit(Get.find<UserViewModel>().currentUser.getBirthday!.day.toString())}',
               AppImagePath.dropDownIcon,
-              Colors.white,
+              // Colors.white,
+              textColor,
+
               () {
-                _selectDate(context).then((value) => editController.selectedDate.value.isNotEmpty
-                    ? editController.birthdayEditingController.text = editController.selectedDate.value
-                    :  editController.birthdayEditingController.text = '${Get.find<UserViewModel>().currentUser.getBirthday!.year}-${doubleDigit(Get.find<UserViewModel>().currentUser.getBirthday!.month.toString())}-${doubleDigit(Get.find<UserViewModel>().currentUser.getBirthday!.day.toString())}');
+                _selectDate(context).then((value) => editController
+                        .selectedDate.value.isNotEmpty
+                    ? editController.birthdayEditingController.text =
+                        editController.selectedDate.value
+                    : editController.birthdayEditingController.text =
+                        '${Get.find<UserViewModel>().currentUser.getBirthday!.year}-${doubleDigit(Get.find<UserViewModel>().currentUser.getBirthday!.month.toString())}-${doubleDigit(Get.find<UserViewModel>().currentUser.getBirthday!.day.toString())}');
                 print("Birthday icon tapped");
               },
-          editController.birthdayEditingController,
+              editController.birthdayEditingController,
               readOnly: true,
             )),
         SizedBox(height: 20.h),
@@ -179,7 +190,9 @@ class BasicInformationSection extends StatelessWidget {
                   ? relationStatusController.selectedStatus.value
                   : userViewModel.currentUser.getRelationshipStatus ?? "Select",
               AppImagePath.dropDownIcon,
-              Colors.white,
+              // Colors.white,
+              textColor,
+
               () {
                 showModalBottomSheet(
                   context: context,
@@ -190,33 +203,36 @@ class BasicInformationSection extends StatelessWidget {
                     ),
                   ),
                   isScrollControlled: true,
-                  backgroundColor: AppColors.grey500,
+                  // backgroundColor: AppColors.grey500,
+                  backgroundColor: backgroundColor,
                   builder: (context) => RelationshipStatusSheet(),
-                ).then((value) => relationStatusController.selectedStatus.value.isNotEmpty
-                    ? editController.statusEditingController.text = relationStatusController.selectedStatus.value
-                    : editController.statusEditingController.text = userViewModel.currentUser.getRelationshipStatus ?? "Select");
+                ).then((value) =>
+                    relationStatusController.selectedStatus.value.isNotEmpty
+                        ? editController.statusEditingController.text =
+                            relationStatusController.selectedStatus.value
+                        : editController.statusEditingController.text =
+                            userViewModel.currentUser.getRelationshipStatus ??
+                                "Select");
               },
-          editController.statusEditingController,
+              editController.statusEditingController,
               readOnly: true,
             )),
         SizedBox(height: 20.h),
         _buildInputField(
-          "Bio",
-          userViewModel.currentUser.getBio ?? 'Hi! i am using Mango Ent.',
-          AppImagePath.editTextIcon,
-          Colors.white,
-          () {
-            print("Bio icon tapped");
-          }, 
-         editController.bioEditingController
-        ),
+            "Bio",
+            userViewModel.currentUser.getBio ?? 'Hi! i am using Mango Ent.',
+            AppImagePath.editTextIcon,
+            // Colors.white,
+            textColor, () {
+          print("Bio icon tapped");
+        }, editController.bioEditingController),
         SizedBox(height: 20.h),
       ],
     );
   }
 
-  String doubleDigit(String value){
-    if(int.parse(value)<=9)
+  String doubleDigit(String value) {
+    if (int.parse(value) <= 9)
       return "0$value";
     else
       return value;

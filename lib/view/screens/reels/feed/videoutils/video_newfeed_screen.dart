@@ -21,7 +21,7 @@ import '../../../../../view_model/communityController.dart';
 import '../../../../../view_model/userViewModel.dart';
 import 'api.dart';
 
-class VideoNewFeedScreen<V extends VideoInfo> extends StatefulWidget {
+class VideoNewFeedScreen extends StatefulWidget {
   /// Is case you want to keep the screen
   ///
   final bool keepPage;
@@ -35,7 +35,7 @@ class VideoNewFeedScreen<V extends VideoInfo> extends StatefulWidget {
   /// Video Item config
   final VideoItemConfig config;
 
-  final VideoNewFeedApi<V> api;
+  final VideoNewFeedApi<VideoInfo> api;
 
   /// Video ended callback
   ///
@@ -46,7 +46,7 @@ class VideoNewFeedScreen<V extends VideoInfo> extends StatefulWidget {
 
   /// Video Info Customizable
   ///
-  final Widget Function(BuildContext context, V v)? customVideoInfoWidget;
+  final Widget Function(BuildContext context, VideoInfo v)? customVideoInfoWidget;
 
   const VideoNewFeedScreen({
     this.keepPage = false,
@@ -72,7 +72,7 @@ class VideoNewFeedScreen<V extends VideoInfo> extends StatefulWidget {
 }
 
 class _VideoNewFeedScreenState <V extends VideoInfo>
-    extends State<VideoNewFeedScreen<VideoInfo>> {
+    extends State<VideoNewFeedScreen> {
   /// PageController
   ///
   //late PageController _pageController;
@@ -93,9 +93,9 @@ class _VideoNewFeedScreenState <V extends VideoInfo>
 
   /// Temp to update list video data
   ///
-  List<V> temps = [];
+  List<VideoInfo> temps = [];
 
-  void setList(List<V> items) {
+  void setList(List<VideoInfo> items) {
     if (!_listVideoStream.isClosed) {
       _listVideoStream.sink.add(items);
     }
@@ -133,15 +133,15 @@ class _VideoNewFeedScreenState <V extends VideoInfo>
   }
 
   void _getListVideo() {
-    // if(communityController.videosList.isNotEmpty){
-    //   temps.addAll(communityController.videosList);
-    //   _notifyDataChanged();
-    // }
-    // else{
+    if(communityController.videosList.isNotEmpty){
+      temps.addAll(communityController.videosList);
+      _notifyDataChanged();
+    }
+    else{
       widget.api.getListVideo().then((value) {
         _notifyDataChanged();
       });
-    // }
+    }
 
   }
 

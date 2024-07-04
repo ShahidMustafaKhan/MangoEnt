@@ -30,7 +30,7 @@ class AudioLiveTopBar extends StatefulWidget {
 
 class _AudioLiveTopBarState extends State<AudioLiveTopBar> {
   final LiveViewModel liveViewModel = Get.find();
-
+  int? coin=0 ;
   @override
   void initState() {
     liveViewModel.subscribeLiveStreamingModel();
@@ -50,6 +50,8 @@ class _AudioLiveTopBarState extends State<AudioLiveTopBar> {
         init: userViewModel,
         builder: (userViewModel) {
           return GetBuilder<LiveViewModel>(builder: (controller) {
+            if(liveViewModel.liveStreamingModel.getTotalCoins!=0 && liveViewModel.liveStreamingModel.getTotalCoins!=null)
+              coin = liveViewModel.liveStreamingModel.getTotalCoins!;
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: liveViewModel.isMultiGuest ? 10.w : 0),
             child: Column(
@@ -61,7 +63,8 @@ class _AudioLiveTopBarState extends State<AudioLiveTopBar> {
                         Container(
                           padding: EdgeInsets.only(left: 0, right: liveViewModel.role==ZegoLiveRole.audience ? 0 : 6, top: 3, bottom: 3),
                           constraints: BoxConstraints(
-                              minWidth: 120.w
+                              minWidth: 120.w,
+
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
@@ -106,7 +109,7 @@ class _AudioLiveTopBarState extends State<AudioLiveTopBar> {
                                             Image.asset(AppImagePath.diamondIcon, width: 14, height: 14),
                                             const SizedBox(width: 4),
                                             Text(
-                                              liveViewModel.liveStreamingModel.getTotalCoins.toString() ,
+                                              coin.toString() ,
                                               style: sfProDisplayMedium.copyWith(
                                                 fontSize: 12,
                                                 color: AppColors.yellowColor,

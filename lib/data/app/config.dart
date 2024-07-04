@@ -29,7 +29,7 @@ class Config {
   static final String supportId = "";
 
   // Play Store and App Store public keys
-  static final String publicGoogleSdkKey = "goog_dZLJLYOpiggjCsZSDbGJclMmbtX";
+  static final String publicGoogleSdkKey = "goog_ktrhyGbCrWyfYXUlrStILIkzoIN";
   static final String publicIosSdkKey = "_";
 
   // Languages

@@ -9,6 +9,10 @@ class TopStreamWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final backgroundColor =
+        isLightTheme ? Color(0xffF3F5F7) : Color(0xff494848);
+    final nameColor = isLightTheme ? AppColors.black : Colors.white;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -90,7 +94,9 @@ class TopStreamWidget extends StatelessWidget {
                                 Text(
                                   'Whoopee Streamer',
                                   style: TextStyle(
-                                    color: AppColors.white,
+                                    // color: AppColors.white,
+                                    color: nameColor,
+
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -98,7 +104,9 @@ class TopStreamWidget extends StatelessWidget {
                                 Text(
                                   'Red Dead Redemption',
                                   style: TextStyle(
-                                    color: AppColors.grey,
+                                    // color: AppColors.grey,
+                                    color: nameColor,
+
                                     fontSize: 12.sp,
                                   ),
                                 ),
@@ -109,7 +117,9 @@ class TopStreamWidget extends StatelessWidget {
                                       width: 48.w,
                                       height: 19.h,
                                       decoration: BoxDecoration(
-                                        color: Color(0xff494848),
+                                        // color: Color(0xff494848),
+                                        color: backgroundColor,
+
                                         borderRadius: BorderRadius.circular(30),
                                       ),
                                       child: Center(
@@ -124,7 +134,9 @@ class TopStreamWidget extends StatelessWidget {
                                       width: 48.w,
                                       height: 19.h,
                                       decoration: BoxDecoration(
-                                        color: Color(0xff494848),
+                                        // color: Color(0xff494848),
+                                        color: backgroundColor,
+
                                         borderRadius: BorderRadius.circular(30),
                                       ),
                                       child: Center(

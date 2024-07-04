@@ -23,7 +23,7 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
   late final EuropeRegionViewModel europeRegionViewModel;
   late final MiddleEastRegionViewModel middleEastRegionViewModel;
   TrendingViewModel trendingViewModel = Get.find();
-  String selectedRegion = "America"; 
+  String selectedRegion = "America";
 
   @override
   void initState() {
@@ -36,6 +36,9 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : Colors.white;
+    final textColorFaded = isLightTheme ? Colors.black54 : Colors.grey;
     return BaseScaffold(
       body: Column(
         children: [
@@ -50,21 +53,25 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: ()=> Get.back(),
+                      onTap: () => Get.back(),
                       child: Icon(
                         Icons.arrow_back_ios_new_sharp,
-                        color: AppColors.textWhite,
+                        // color: AppColors.textWhite,
+                        color: textColor,
                       ),
                     ),
                     Spacer(),
                     Text(
                       "Countries & Regions",
                       style: sfProDisplayRegular.copyWith(
-                          color: AppColors.textWhite, fontSize: 17.sp),
+                        // color: AppColors.textWhite,
+                          color: textColor,
+                          fontSize: 17.sp),
                     ),
                     Spacer(),
                     SvgPicture.asset(
                       AppImagePath.searchIcon,
+                      color: textColor,
                     ),
                   ],
                 ),
@@ -74,20 +81,22 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildRegionOption("America"),
+                    buildRegionOption("America", textColor, textColorFaded),
                     Spacer(),
-                    buildRegionOption("Asia"),
+                    buildRegionOption("Asia", textColor, textColorFaded),
                     Spacer(),
-                    buildRegionOption("Middle East"),
+                    buildRegionOption("Middle East", textColor, textColorFaded),
                     Spacer(),
-                    buildRegionOption("Europe"),
+                    buildRegionOption("Europe", textColor, textColorFaded),
                   ],
                 ),
                 SizedBox(
                   height: 10.h,
                 ),
                 Divider(
-                  color: AppColors.textWhite,
+                  // color: AppColors.textWhite,
+                  color: textColor,
+
                   height: 1.5,
                 ),
                 SizedBox(
@@ -99,26 +108,28 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
           if (selectedRegion == "America")
             GetBuilder<AmericaRegionViewModel>(
               builder: (americaController) {
-                return buildRegionGrid(americaController.americaModelList);
+                return buildRegionGrid(
+                    americaController.americaModelList, context);
               },
             ),
           if (selectedRegion == "Asia")
             GetBuilder<AsiaRegionViewModel>(
               builder: (asiaController) {
-                return buildRegionGrid(asiaController.asiaModelList);
+                return buildRegionGrid(asiaController.asiaModelList, context);
               },
             ),
           if (selectedRegion == "Middle East")
             GetBuilder<MiddleEastRegionViewModel>(
               builder: (middleEastController) {
                 return buildRegionGrid(
-                    middleEastController.middleEastModelList);
+                    middleEastController.middleEastModelList, context);
               },
             ),
           if (selectedRegion == "Europe")
             GetBuilder<EuropeRegionViewModel>(
               builder: (europeController) {
-                return buildRegionGrid(europeController.europeModelList);
+                return buildRegionGrid(
+                    europeController.europeModelList, context);
               },
             ),
         ],
@@ -126,7 +137,8 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
     );
   }
 
-  Widget buildRegionOption(String regionName) {
+  Widget buildRegionOption(
+      String regionName, Color textColor, Color textColorFaded) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -139,8 +151,10 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
             regionName,
             style: sfProDisplayRegular.copyWith(
                 color: selectedRegion == regionName
-                    ? Colors.white
-                    : AppColors.textWhite.withOpacity(0.6),
+                // ? Colors.white
+                // : AppColors.textWhite.withOpacity(0.6),
+                    ? textColor
+                    : textColorFaded,
                 fontSize: 16.sp),
           ),
           SizedBox(height: 8.h),
@@ -149,7 +163,9 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
               width: 6.w,
               height: 6.h,
               decoration: BoxDecoration(
-                color: Colors.white,
+                // color: Colors.white,
+                color: textColor,
+
                 shape: BoxShape.circle,
               ),
             ),
@@ -158,14 +174,14 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
     );
   }
 
-  Widget buildRegionGrid(List<CountryModel> modelList) {
+  Widget buildRegionGrid(List<CountryModel> modelList, BuildContext context) {
     return GridView.count(
       crossAxisCount: 4,
       shrinkWrap: true,
       padding: EdgeInsets.symmetric(vertical: 17.h),
       children: List.generate(modelList.length, (index) {
         return GestureDetector(
-          onTap: (){
+          onTap: () {
             trendingViewModel.chosenCountryFlag.value = modelList[index].flag;
             trendingViewModel.chosenCountry.value = modelList[index].name;
             trendingViewModel.updateListForChosenCountry(modelList[index].name);
@@ -174,13 +190,19 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
           child: buildCountries(
             cFlag: modelList[index].flag,
             cName: modelList[index].name,
+            context: context,
           ),
         );
       }),
     );
   }
 
-  Widget buildCountries({required String cFlag, required String cName}) {
+  Widget buildCountries(
+      {required String cFlag,
+        required String cName,
+        required BuildContext context}) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -192,7 +214,9 @@ class _MoreRegionWidgetState extends State<MoreRegionWidget> {
         ),
         Text(cName,
             style: sfProDisplayRegular.copyWith(
-                color: Colors.white, fontSize: 12.sp))
+              // color: Colors.white,
+                color: isLightTheme ? Colors.black : Colors.white,
+                fontSize: 12.sp))
       ],
     );
   }

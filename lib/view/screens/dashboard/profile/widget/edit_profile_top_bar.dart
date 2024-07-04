@@ -21,12 +21,14 @@ class EditProfileTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : Colors.white;
+
     UserViewModel userViewModel = Get.find();
     final EditController editController = Get.find();
     final StreamerProfileController profileController = Get.find();
     final GenderController genderController = Get.find();
-    final RelationshipStatusController relationStatusController =
-    Get.find();
+    final RelationshipStatusController relationStatusController = Get.find();
 
     return Column(
       children: [
@@ -38,7 +40,7 @@ class EditProfileTopBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: ()=> Get.back(),
+                    onTap: () => Get.back(),
                     child: Icon(
                       Icons.arrow_back_ios,
                       size: 18,
@@ -46,45 +48,63 @@ class EditProfileTopBar extends StatelessWidget {
                   ),
                   Text(
                     "Edit",
-                    style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: textColor),
                   ),
                   GestureDetector(
                     onTap: () async {
                       QuickHelp.showLoadingDialog(context);
-                      if(editController.bioEditingController.text.isNotEmpty)
-                        userViewModel.currentUser.setBio = editController.bioEditingController.text;
-                      if(editController.nameEditingController.text.isNotEmpty)
-                        userViewModel.currentUser.setFullName = editController.nameEditingController.text;
-                        userViewModel.currentUser.setFirstName = editController.nameEditingController.text.split(' ')[0];
-                        if(editController.nameEditingController.text.split(' ').length>1){
-                        userViewModel.currentUser.setLastName = editController.nameEditingController.text.split(' ')[1];}
-                      if(editController.selectedDate.value.isNotEmpty)
-                        userViewModel.currentUser.setBirthday = DateTime.parse(editController.selectedDate.value);
-                      if(genderController.selectedGender.value.isNotEmpty)
-                        userViewModel.currentUser.setGender = genderController.selectedGender.value;
-                      if(relationStatusController.selectedStatus.value.isNotEmpty)
-                        userViewModel.currentUser.setRelationshipStatus = relationStatusController.selectedStatus.value;
+                      if (editController.bioEditingController.text.isNotEmpty)
+                        userViewModel.currentUser.setBio =
+                            editController.bioEditingController.text;
+                      if (editController.nameEditingController.text.isNotEmpty)
+                        userViewModel.currentUser.setFullName =
+                            editController.nameEditingController.text;
+                      userViewModel.currentUser.setFirstName = editController
+                          .nameEditingController.text
+                          .split(' ')[0];
+                      if (editController.nameEditingController.text
+                              .split(' ')
+                              .length >
+                          1) {
+                        userViewModel.currentUser.setLastName = editController
+                            .nameEditingController.text
+                            .split(' ')[1];
+                      }
+                      if (editController.selectedDate.value.isNotEmpty)
+                        userViewModel.currentUser.setBirthday =
+                            DateTime.parse(editController.selectedDate.value);
+                      if (genderController.selectedGender.value.isNotEmpty)
+                        userViewModel.currentUser.setGender =
+                            genderController.selectedGender.value;
+                      if (relationStatusController
+                          .selectedStatus.value.isNotEmpty)
+                        userViewModel.currentUser.setRelationshipStatus =
+                            relationStatusController.selectedStatus.value;
 
-                      ParseResponse parseResponse = await userViewModel.currentUser.save();
-                      if(parseResponse.success){
-                        if(parseResponse.results!=null){
-                          userViewModel.currentUser = parseResponse.results!.first as UserModel ;
-                          userViewModel.update() ;
+                      ParseResponse parseResponse =
+                          await userViewModel.currentUser.save();
+                      if (parseResponse.success) {
+                        if (parseResponse.results != null) {
+                          userViewModel.currentUser =
+                              parseResponse.results!.first as UserModel;
+                          userViewModel.update();
                           profileController.profile = userViewModel.currentUser;
                           profileController.update();
 
                           QuickHelp.hideLoadingDialog(context);
                         }
-                      }
-                      else
+                      } else
                         QuickHelp.hideLoadingDialog(context);
-
                     },
                     child: Text(
                       "SAVE",
-                      style:
-                          TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w800),
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w800,
+                          color: textColor),
                     ),
                   ),
                 ],
@@ -95,16 +115,18 @@ class EditProfileTopBar extends StatelessWidget {
                   Text(
                     "Image",
                     style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.white,
-                    ),
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        // color: AppColors.white,
+                        color: textColor),
                   ),
                   SizedBox(width: 10.w),
                   Text(
                     "Tap to edit up to 9 images",
-                    style:
-                        TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: textColor),
                   ),
                 ],
               ),
@@ -112,7 +134,7 @@ class EditProfileTopBar extends StatelessWidget {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       PermissionHandler.checkPermission(true, context);
                     },
                     child: Container(
@@ -120,8 +142,8 @@ class EditProfileTopBar extends StatelessWidget {
                       height: 88.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border:
-                            Border.all(color: AppColors.yellowBtnColor, width: 3),
+                        border: Border.all(
+                            color: AppColors.yellowBtnColor, width: 3),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(44.r),
@@ -140,81 +162,87 @@ class EditProfileTopBar extends StatelessWidget {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(
-                            4,
-                            (index) {
-                              ParseFileBase? avatar;
-                              if(index==0)
-                                avatar = userViewModel.currentUser.getAvatar1;
-                              else if(index==1)
-                                avatar = userViewModel.currentUser.getAvatar2;
-                              else if(index==2)
-                                avatar = userViewModel.currentUser.getAvatar3;
-                             else
-                                avatar = userViewModel.currentUser.getAvatar4;
-                              return GestureDetector(
-                              onTap: ()=> PermissionHandler.checkPermission(true, context, avatarNumber: index+1),
+                          children: List.generate(4, (index) {
+                            ParseFileBase? avatar;
+                            if (index == 0)
+                              avatar = userViewModel.currentUser.getAvatar1;
+                            else if (index == 1)
+                              avatar = userViewModel.currentUser.getAvatar2;
+                            else if (index == 2)
+                              avatar = userViewModel.currentUser.getAvatar3;
+                            else
+                              avatar = userViewModel.currentUser.getAvatar4;
+                            return GestureDetector(
+                              onTap: () => PermissionHandler.checkPermission(
+                                  true, context,
+                                  avatarNumber: index + 1),
                               child: Container(
                                 width: 36.w,
                                 height: 36.h,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.white),
+                                  border: Border.all(
+                                      // color: AppColors.white
+                                      color: textColor),
                                 ),
-                                child:
-                                avatar==null ?
-                                Center(child: Icon(Icons.add)) : ClipRRect(
-                                  borderRadius: BorderRadius.circular(44.r),
-                                  child: Image.network(
-                                    avatar.url!,
-                                    height: double.infinity,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                child: avatar == null
+                                    ? Center(child: Icon(Icons.add))
+                                    : ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(44.r),
+                                        child: Image.network(
+                                          avatar.url!,
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                               ),
                             );
-                            }
-                          ),
+                          }),
                         ),
                         SizedBox(
                           height: 15.h,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(
-                            4,
-                            (index) {
-                              ParseFileBase? avatar;
-                              if(index==0)
-                                avatar = userViewModel.currentUser.getAvatar5;
-                              else if(index==1)
-                                avatar = userViewModel.currentUser.getAvatar6;
-                              else if(index==2)
-                                avatar = userViewModel.currentUser.getAvatar7;
-                              else
-                                avatar = userViewModel.currentUser.getAvatar8;
-                              return GestureDetector(
-                                onTap: ()=> PermissionHandler.checkPermission(true, context, avatarNumber: index+5),
-                                child: Container(
-                                width: 36.w,
-                                height: 36.h,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.white),
-                                ),
-                                child: avatar==null ?
-                                Center(child: Icon(Icons.add)) : ClipRRect(
-                                borderRadius: BorderRadius.circular(44.r),
-                                child: Image.network(
-                                avatar.url!,
-                                height: double.infinity,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                ),
-                            )),
-                              );}
-                          ),
+                          children: List.generate(4, (index) {
+                            ParseFileBase? avatar;
+                            if (index == 0)
+                              avatar = userViewModel.currentUser.getAvatar5;
+                            else if (index == 1)
+                              avatar = userViewModel.currentUser.getAvatar6;
+                            else if (index == 2)
+                              avatar = userViewModel.currentUser.getAvatar7;
+                            else
+                              avatar = userViewModel.currentUser.getAvatar8;
+                            return GestureDetector(
+                              onTap: () => PermissionHandler.checkPermission(
+                                  true, context,
+                                  avatarNumber: index + 5),
+                              child: Container(
+                                  width: 36.w,
+                                  height: 36.h,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        // color: AppColors.white
+                                        color: textColor),
+                                  ),
+                                  child: avatar == null
+                                      ? Center(child: Icon(Icons.add))
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(44.r),
+                                          child: Image.network(
+                                            avatar.url!,
+                                            height: double.infinity,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )),
+                            );
+                          }),
                         ),
                       ],
                     ),
@@ -229,16 +257,18 @@ class EditProfileTopBar extends StatelessWidget {
                   Text(
                     "Video",
                     style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.white,
-                    ),
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        // color: AppColors.white,
+                        color: textColor),
                   ),
                   SizedBox(width: 10.w),
                   Text(
                     "Unlock at Lv 6",
-                    style:
-                        TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: textColor),
                   ),
                 ],
               ),
@@ -262,7 +292,7 @@ class EditProfileTopBar extends StatelessWidget {
                     height: 88.h,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.white, width: 2)),
+                        border: Border.all(color: textColor, width: 2)),
                     child: Center(child: Icon(Icons.play_arrow)),
                   ),
                   Container(
@@ -270,7 +300,7 @@ class EditProfileTopBar extends StatelessWidget {
                     height: 88.h,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.white, width: 2)),
+                        border: Border.all(color: textColor, width: 2)),
                     child: Center(child: Icon(Icons.play_arrow)),
                   ),
                 ],

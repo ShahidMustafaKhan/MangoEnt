@@ -106,12 +106,26 @@ class CommunityController<V extends VideoInfo>  extends GetxController with GetS
 
         for (PostsModel postsModel in apiResponse.results!) {
 
-              VideoInfo videoInfo = VideoInfo(
-                  postModel: postsModel,
-                  currentUser: currentUser,
-                  url: postsModel.getVideo!.url,
-              );
-              videos.add(videoInfo);
+          final fileInfo= await checkedCacheFor(postsModel.getVideo!.url!);
+          if(fileInfo==null){
+             cachedForUrl(postsModel.getVideo!.url!);
+            VideoInfo videoInfo = VideoInfo(
+                postModel: postsModel,
+                currentUser: currentUser,
+                url: postsModel.getVideo!.url,
+                // file: file
+            );
+            videos.add(videoInfo);
+          }
+          else{
+            VideoInfo videoInfo = VideoInfo(
+                postModel: postsModel,
+                currentUser: currentUser,
+                url: postsModel.getVideo!.url,
+                file: fileInfo!.file
+            );
+            videos.add(videoInfo);
+          }
 
 
         }

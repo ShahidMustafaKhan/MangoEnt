@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:purchases_flutter/models/package_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/utils/Utils.dart';
 import 'package:teego/utils/constants/typography.dart';
@@ -8,7 +11,9 @@ import 'package:teego/utils/routes/app_routes.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
 import 'package:teego/view/screens/dashboard/wallet/receipt.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
+import 'package:teego/view/widgets/nothing_widget.dart';
 import 'package:teego/view_model/transaction_controller.dart';
+import '../../../../purchase/purchase.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../view_model/userViewModel.dart';
 import 'checkout.dart';
@@ -24,6 +29,9 @@ class _WalletState extends State<Wallet> {
   bool withdraw = false;
   bool customAmount = false;
   String amount = '';
+  List<Package> packages = [];
+  bool isLoading = true;
+  int? userCoins;
 
   TransactionController transactionController = Get.put(TransactionController());
   UserViewModel userViewModel = Get.find();
@@ -52,15 +60,53 @@ class _WalletState extends State<Wallet> {
         "1000",
       ];
 
+  Future<void> fetchOffers() async {
+    try {
+      final offering = await PurchaseApi.fetchOfferByIds(Coin.productId);
+      if (offering.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No Plan found')),
+        );
+      } else {
+
+        packages = offering
+            .map((e) => e.availablePackages)
+            .expand((element) => element)
+            .toList();
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching offers: $e')),
+      );
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    userCoins = Get.find<UserViewModel>().coins;
+    super.initState();
+    fetchOffers();
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    userCoins = Get.find<UserViewModel>().coins;
     return BaseScaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         title: Text(
           'Wallet',
-          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp),
+          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp, color: Get.isDarkMode ? AppColors.white : AppColors.black),
 
         ),
         centerTitle: true,
@@ -70,7 +116,7 @@ class _WalletState extends State<Wallet> {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
             )),
       ),
       body: GetBuilder<TransactionController>(
@@ -87,10 +133,10 @@ class _WalletState extends State<Wallet> {
                     height: 64.h,
                     width: 277.w,
                     decoration: BoxDecoration(
-                      color: const Color(0xff323232),
+                      color: Get.isDarkMode ? Color(0xff323232) :  AppColors.white,
                       borderRadius: BorderRadius.circular(50.r),
                       border: Border.all(
-                        color: const Color(0xff494848),
+                        color: Get.isDarkMode ? Color(0xff494848) :  AppColors.white,
                       ),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
@@ -109,7 +155,7 @@ class _WalletState extends State<Wallet> {
                             decoration: BoxDecoration(
                               color: withdraw
                                   ? Colors.transparent
-                                  : const Color(0xff484848),
+                                  : Get.isDarkMode ? Color(0xff484848): Color(0xffF3F5F7),
                               borderRadius: BorderRadius.circular(30.r),
                             ),
                             alignment: Alignment.center,
@@ -124,7 +170,7 @@ class _WalletState extends State<Wallet> {
                                 Text(
                                   "Purchase Coins",
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Get.isDarkMode ? Colors.white : Colors.black,
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -146,7 +192,7 @@ class _WalletState extends State<Wallet> {
                               decoration: BoxDecoration(
                                 color: !withdraw
                                     ? Colors.transparent
-                                    : const Color(0xff484848),
+                                    : Get.isDarkMode ? Color(0xff484848): Color(0xffF3F5F7),
                                 borderRadius: BorderRadius.circular(30.r),
                               ),
                               alignment: Alignment.center,
@@ -161,7 +207,7 @@ class _WalletState extends State<Wallet> {
                                   Text(
                                     "Withdraw",
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Get.isDarkMode ? Colors.white : Colors.black,
                                       fontSize: 14.sp,
                                     ),
                                   ),
@@ -202,26 +248,25 @@ class _WalletState extends State<Wallet> {
                                         "Your Balance",
                                         style: TextStyle(
                                           fontSize: 14.sp,
-                                          color: Colors.white,
                                         ),
                                       )
                                       : Text(
                                           "Your Coins",
                                           style: TextStyle(
                                             fontSize: 14.sp,
-                                            color: Colors.white,
+
                                           ),
                                         ),
                                   TextButton.icon(
                                       onPressed: ()=> Get.toNamed(AppRoutes.transactionHistory),
-                                      icon: const ImageIcon(
+                                      icon: ImageIcon(
                                         AssetImage(transactionIcon),
-                                        color: Color(0xffC0C0C0),
+                                        color: Get.isDarkMode  ? Color(0xffC0C0C0) : AppColors.black.withOpacity(0.7),
                                       ),
                                       label: Text(
                                         "Transaction History",
                                         style: TextStyle(
-                                          color: const Color(0xffC0C0C0),
+                                          color: Get.isDarkMode  ? Color(0xffC0C0C0) : AppColors.black.withOpacity(0.7),
                                           fontSize: 12.h,
                                         ),
                                       ))
@@ -240,7 +285,7 @@ class _WalletState extends State<Wallet> {
                                   ),
                                   SizedBox(width: 8.w),
                                   Text(
-                                    userViewModel.currentUser.getCoins.toString(),
+                                    userCoins.toString(),
                                     style: sfProDisplayBold.copyWith(
                                       fontSize: 24.sp,
                                     ),
@@ -265,7 +310,6 @@ class _WalletState extends State<Wallet> {
                                         Text(
                                           "Withdraw",
                                           style: TextStyle(
-                                            color: Colors.white,
                                             fontSize: 14.sp,
                                           ),
                                         ),
@@ -273,7 +317,7 @@ class _WalletState extends State<Wallet> {
                                         Text(
                                           "Minimum amount of withdraw is \$100",
                                           style: TextStyle(
-                                            color: Colors.white70,
+                                            color: Get.isDarkMode ? Colors.white70 : AppColors.black.withOpacity(0.7),
                                             fontSize: 10.sp,
                                           ),
                                         ),
@@ -282,7 +326,6 @@ class _WalletState extends State<Wallet> {
                                   : Text(
                                       "Buy Coins",
                                       style: TextStyle(
-                                        color: Colors.white,
                                         fontSize: 14.sp,
                                       ),
                                     ),
@@ -343,14 +386,12 @@ class _WalletState extends State<Wallet> {
           Text(
             "${userViewModel.currentUser.getFirstName} 💫 ",
             style: TextStyle(
-              color: Colors.white,
               fontSize: 14.sp,
             ),
           ),
           Text(
             "\$ $amount",
             style: TextStyle(
-              color: Colors.white,
               fontSize: 32.sp,
             ),
           ),
@@ -427,7 +468,7 @@ class _WalletState extends State<Wallet> {
                             height: 65.h,
                             width: 102.w,
                             decoration: BoxDecoration(
-                              color: const Color(0xff363339),
+                              color: Get.isDarkMode ? Color(0xff363339) : AppColors.white,
                               borderRadius: BorderRadius.circular(20.r),
                             ),
                             alignment: Alignment.center,
@@ -437,14 +478,12 @@ class _WalletState extends State<Wallet> {
                                   keypad[index].digit,
                                   style: TextStyle(
                                     fontSize: 32.sp,
-                                    color: Colors.white,
                                   ),
                                 ),
                                 Text(
                                   keypad[index].char,
                                   style: TextStyle(
                                     fontSize: 10.sp,
-                                    color: Colors.white,
                                   ),
                                 ),
                               ],
@@ -554,14 +593,14 @@ class _WalletState extends State<Wallet> {
               width: 100.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.r),
-                color: const Color(0xff494848),
+                color: Get.isDarkMode ? Color(0xff494848) : AppColors.white,
               ),
               alignment: Alignment.center,
               child: Text(
                 "\$ ${wallet[index]}",
                 style: TextStyle(
                   fontSize: 18.sp,
-                  color: transactionController.withdrawItemIndex==index ? AppColors.yellowColor : Colors.white,
+                  color: transactionController.withdrawItemIndex==index ? AppColors.yellowColor : Get.isDarkMode ? Colors.white: AppColors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -569,111 +608,127 @@ class _WalletState extends State<Wallet> {
           ),
         ),
       );
-  Widget get coinsGrid => GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 9.w,
-          mainAxisSpacing: 9.h,
-          childAspectRatio: 1.4,
-        ),
-        physics: const NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.zero,
-        children: List.generate(
-          transactionController.coins.length,
-          (index) => GestureDetector(
-            onTap: (){
-              transactionController.purchaseItemIndex = index;
-              transactionController.update();
-            },
-            child: Container(
-              width: 108.w,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.r),
-                color: transactionController.purchaseItemIndex==index ? AppColors.yellowColor.withOpacity(0.2) : null,
-                border: Border.all(
-                  color: const Color(0xff484848),
+  Widget get coinsGrid {
+
+      if(isLoading==true)
+        return QuickHelp.appLoading();
+      if(isLoading==false && packages.isEmpty)
+        return NothingIsHere();
+
+      return GridView(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 9.w,
+        mainAxisSpacing: 9.h,
+        childAspectRatio: 1.4,
+      ),
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      children: List.generate(
+          packages.length,
+              (index) {
+            final package = packages[index];
+
+            return GestureDetector(
+              onTap: () async {
+                Purchases.purchaseStoreProduct(package.storeProduct).then((value){
+                    transactionController.successfulPayment(transactionController.getCoinsFromAmount(package.storeProduct.price), package.storeProduct.price,
+                        onReturn: ()=> setState((){customAmount = false;}));
+
+                });
+
+              },
+              child: Container(
+                width: 108.w,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.r),
+                  color: Get.isDarkMode ?  null : AppColors.white ,
+                  border: Border.all(
+                    color: Get.isDarkMode ? Color(0xff484848) : Colors.transparent,
+                  ),
+
                 ),
-              ),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        coin,
-                        height: 18.h,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          coin,
+                          height: 18.h,
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          "${package.storeProduct.title.split(' ').first}",
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            color: Get.isDarkMode ? amberColor : AppColors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                    Container(
+                      height: 15.h,
+                      width: 73.w,
+                      decoration: BoxDecoration(
+                        color: const Color(0xffF9C034).withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(4.r),
                       ),
-                      SizedBox(width: 6.w),
-                      Text(
-                        transactionController.coins[index].coins.toString(),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "${package.storeProduct.currencyCode} ${package.storeProduct.price}",
                         style: TextStyle(
-                          fontSize: 18.sp,
-                          color: amberColor,
+                          fontSize: 10.sp,
+                          color: Get.isDarkMode ? amberColor : AppColors.black,
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 8.h),
-                  Container(
-                    height: 15.h,
-                    width: 73.w,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffF9C034).withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "USD ${transactionController.coins[index].amount.toStringAsFixed(2)}",
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: amberColor,
-                      ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ),
-        ),
-      );
+            );}
+      ),
+    );}
 
-  Widget button(String text, String? icon, Color bgColor, Color fgColor,
-          double size, FontWeight weight) =>
-      Container(
-        height: 51.93.h,
-        width: 342.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(35.r),
-          color: bgColor,
-        ),
-        alignment: Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            icon != null
-                ? Image.asset(
-                    icon,
-                    height: 16.h,
-                  )
-                : const SizedBox.shrink(),
-            SizedBox(
-              width: 16.w,
-            ),
-            Text(
-              text,
-              style: TextStyle(
-                color: fgColor,
-                fontSize: size,
-                fontWeight: weight,
+    Widget button(String text, String? icon, Color bgColor, Color fgColor,
+        double size, FontWeight weight) =>
+        Container(
+          height: 51.93.h,
+          width: 342.w,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(35.r),
+            color: bgColor,
+          ),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              icon != null
+                  ? Image.asset(
+                icon,
+                height: 16.h,
+              )
+                  : const SizedBox.shrink(),
+              SizedBox(
+                width: 16.w,
               ),
-            )
-          ],
-        ),
-      );
-}
+              Text(
+                text,
+                style: TextStyle(
+                  color: fgColor,
+                  fontSize: size,
+                  fontWeight: weight,
+                ),
+              )
+            ],
+          ),
+        );
+  }
+
 
 class KeypadModel {
   final String digit;

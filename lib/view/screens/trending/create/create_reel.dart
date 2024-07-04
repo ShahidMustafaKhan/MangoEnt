@@ -100,9 +100,10 @@ class _CameraScreenState extends State<CameraScreen> {
 
         final File? file = await result.first.file;
         if (file != null) {
-          Navigator.pop(context, {
-            'videoFile': file,
-          });
+          prepareVideo(file);
+          // Navigator.pop(context, {
+          //   'videoFile': file,
+          // });
         }
     }
   }
@@ -176,9 +177,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
     File file = File(video.path);
 
-    Navigator.pop(context, {
-      'videoFile': file,
-    });
+    prepareVideo(file);
 
   }
 

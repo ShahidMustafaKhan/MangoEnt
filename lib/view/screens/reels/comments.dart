@@ -159,7 +159,7 @@ class _CommentsState extends State<Comments> {
                                               'DM Sans',
                                               fontSize: 12*ffem,
                                               height: 1.1666666667*ffem/fem,
-                                              color: AppColors.white,
+                                              color: Get.isDarkMode ? Colors.white : AppColors.black
                                             ),
                                             children: [
                                               TextSpan(
@@ -169,7 +169,6 @@ class _CommentsState extends State<Comments> {
                                                   fontSize: 12*ffem,
                                                   fontWeight: FontWeight.w700,
                                                   height: 1.1666666667*ffem/fem,
-                                                  color: AppColors.white,
                                                 ),
                                               ),
                                               TextSpan(
@@ -183,7 +182,6 @@ class _CommentsState extends State<Comments> {
                                                   fontSize: 12*ffem,
                                                   fontWeight: FontWeight.w400,
                                                   height: 1.23*ffem/fem,
-                                                  color: AppColors.white,
                                                 ),
                                                 // Add additional text here without any special formatting
                                               ),
@@ -212,7 +210,6 @@ class _CommentsState extends State<Comments> {
                                             fontSize: 11*ffem,
                                             fontWeight: FontWeight.w400,
                                             height: 1.2727272727*ffem/fem,
-                                            color: AppColors.white,
                                           ),
                                         ),
                                       ),
@@ -225,7 +222,6 @@ class _CommentsState extends State<Comments> {
                                             fontSize: 11*ffem,
                                             fontWeight: FontWeight.w400,
                                             height: 1.2727272727*ffem/fem,
-                                            color: AppColors.white,
                                           ),
                                         ),
                                       ),
@@ -267,7 +263,6 @@ class _CommentsState extends State<Comments> {
                                             fontSize: 11*ffem,
                                             fontWeight: FontWeight.w400,
                                             height: 1.2727272727*ffem/fem,
-                                            color: AppColors.white,
                                           ),
                                         ),
                                       ),
@@ -307,7 +302,6 @@ class _CommentsState extends State<Comments> {
                                       fontSize: 12*ffem,
                                       fontWeight: FontWeight.w400,
                                       height: 1.3333333333*ffem/fem,
-                                      color: AppColors.white,
                                     ),
                                   ),
                                 ],
@@ -893,7 +887,7 @@ class _CommentsState extends State<Comments> {
       likeBuilder: (bool isLiked) {
         return Icon(
           isLiked ? Icons.favorite : Icons.favorite_outline_outlined,
-          color: isLiked ? kPrimaryColor : Colors.white.withOpacity(0.8),
+          color: isLiked ? kPrimaryColor :  Get.isDarkMode ? Colors.white.withOpacity(0.8) : AppColors.black.withOpacity(0.8),
           size: 18,
         );
       },

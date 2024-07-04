@@ -9,6 +9,7 @@ import 'package:teego/view_model/userViewModel.dart';
 
 import '../utils/constants/app_constants.dart';
 import '../utils/constants/status.dart';
+import '../utils/theme/colors_constant.dart';
 import '../view/screens/dashboard/wallet/transaction_history.dart';
 
 
@@ -88,7 +89,6 @@ class TransactionHistoryViewModel extends GetxController {
               .now()
               .day ? 'Today' : currentDate!.toLocal().toShortDateString()}",
           style: TextStyle(
-            color: Colors.white,
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
           ),
@@ -111,7 +111,6 @@ class TransactionHistoryViewModel extends GetxController {
             Text(
               title,
               style: TextStyle(
-                color: Colors.white,
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -119,7 +118,7 @@ class TransactionHistoryViewModel extends GetxController {
             Text(
               status.isEmpty ? '' : "  ($status)",
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : AppColors.black.withOpacity(0.9),
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -137,7 +136,6 @@ class TransactionHistoryViewModel extends GetxController {
         trailing: Text(
           price,
           style: TextStyle(
-            color: Colors.white,
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),

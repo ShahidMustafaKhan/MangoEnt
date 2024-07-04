@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:like_button/like_button.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:teego/main.dart';
 
 import 'package:teego/ui/text_with_tap.dart';
 import 'package:teego/utils/colors_hype.dart';
@@ -56,6 +57,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   TextEditingController textEditingController = TextEditingController();
 
   bool following = false;
+  late int count;
   // Subscription? subscription;
   // LiveQuery liveQuery = LiveQuery();
   List<StreamSubscription> subscriptions = [];
@@ -66,7 +68,14 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   UserViewModel userViewModel = Get.find();
 
 
-
+  Future<void> updateModel() async {
+    QueryBuilder<PostsModel> queryBuilder = QueryBuilder<PostsModel>(PostsModel());
+    queryBuilder.whereEqualTo(PostsModel.keyObjectId, widget.postModel!.objectId!);
+    ParseResponse response = await queryBuilder.query();
+    if(response.success && response.results!=null){
+      widget.postModel = response.results!.first! as PostsModel;
+    }
+  }
 
   @override
   void dispose() {
@@ -82,6 +91,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
   @override
   void initState() {
     // setupCounterLiveUser();
+    count = widget.postModel!.getLikes!.length;
     if (userViewModel.currentUser!.getFollowing!.contains(widget.postModel!.getAuthor!.objectId)) {
       followingUser.value = true;
     } else {
@@ -177,7 +187,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                     widget.postModel = value.results!.first as PostsModel;
                   });
 
-                  _likePost(widget.postModel!);
+                  // _likePost(widget.postModel!);
 
                   return Future.value(true);
                 }
@@ -201,7 +211,8 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
               isLiked: widget.postModel!.getLikes!.contains(userViewModel.currentUser!.objectId),
               likeCountAnimationType: LikeCountAnimationType.all,
               likeBuilder: (bool isLiked) {
-                return Image.asset(AppImagePath.reel_comment);
+                return Image.asset(AppImagePath.reel_comment
+                );
               },
               likeCountPadding: EdgeInsets.only(left: 3, top: 9),
               likeCount: widget.postModel!.getComments!.length,
@@ -210,20 +221,26 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 Widget result;
 
                 result = Text(
-                  QuickHelp.convertNumberToK(count!),
+                  QuickHelp.convertNumberToK(widget.postModel!.getComments!.length),
                   style: SafeGoogleFont (
                     'DM Sans',
                     fontSize: 12*ffem,
                     fontWeight: FontWeight.w500,
                     height: 1.3333333333*ffem/fem,
                     color: Color(0xffffffff),
+
                   ),
                 );
                 return result;
               },
               onTap: (isLiked) {
                 print("Liked: $isLiked");
-                showComments(context, fem, ffem);
+                showComments(context, fem, ffem, (){  widget.postModel!.save().then((value) {
+                  widget.postModel = value.results!.first as PostsModel;
+                  setState(() {
+
+                  });
+                });});
                 return Future.value(false);
               },
             ),
@@ -261,13 +278,14 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 Widget result;
 
                 result = Text(
-                  QuickHelp.convertNumberToK(count!),
+                  QuickHelp.convertNumberToK(widget.postModel!.getShares!.length),
                   style: SafeGoogleFont (
                     'DM Sans',
                     fontSize: 12*ffem,
                     fontWeight: FontWeight.w500,
                     height: 1.3333333333*ffem/fem,
                     color: Color(0xffffffff),
+
                   ),
                 );
                 return result;
@@ -281,6 +299,9 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
 
                     widget.postModel!.save().then((value) {
                       widget.postModel = value.results!.first as PostsModel;
+                      setState(() {
+
+                      });
                     });
 
                   });
@@ -323,7 +344,8 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
               height: 10.h,
             ),
             if(widget.singleReel==false)
-              Text("Tip"),
+              Text("Tip",style: TextStyle(color: Color(0xffffffff),
+              ),),
             if(widget.singleReel==false)
               SizedBox(
               height: 25.h,
@@ -347,7 +369,8 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
             SizedBox(
               height: 10.h,
             ),
-            Text("Tools"),
+            Text("Tools",style: TextStyle(color: Color(0xffffffff),
+            ),),
             SizedBox(
               height:  25.h
             ),
@@ -377,7 +400,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                   Text(
                     "${widget.postModel!.getAuthor!.getFullName} ❤️❤️ ",
                     style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 12.sp),
+                        fontWeight: FontWeight.w600, fontSize: 12.sp, color: AppColors.white),
                   ),
                   SizedBox(
                     width: 10.w,
@@ -411,7 +434,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 height: 10.h,
               ),
               if(widget.postModel!.getCaption != null)
-              Text("${widget.postModel!.getCaption ?? ''}"),
+              Text("${widget.postModel!.getCaption ?? ''}", style: TextStyle(color: AppColors.white),),
               if(widget.postModel!.getCaption != null)
                 SizedBox(
                 height: 30.h,
@@ -438,7 +461,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                         Text(
                           "${widget.postModel!.getAuthor!.getFollowers!.length}  users",
                           style: TextStyle(
-                              fontSize: 12.sp, fontWeight: FontWeight.w400),
+                              fontSize: 12.sp, fontWeight: FontWeight.w400, color: AppColors.white),
                         ),
                         SizedBox(
                           width: 5.w,
@@ -652,7 +675,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                     widget.postModel = value.results!.first as PostsModel;
                   });
 
-                  _likePost(widget.postModel!);
+                  // _likePost(widget.postModel!);
 
                   return Future.value(true);
                 }
@@ -709,7 +732,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                 print("Liked: $isLiked");
 
                 //openComments(context, currentUser!, postModel!);
-                showComments(context,fem,ffem);
+                showComments(context,fem,ffem,(){setState(() {});});
 
                 return Future.value(false);
 
@@ -1506,11 +1529,11 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
     }
   }
 
-  _likePost(PostsModel post) {
-    QuickActions.createOrDeleteNotification(userViewModel.currentUser!, post.getAuthor!,
-        NotificationsModel.notificationTypeLikedReels,
-        post: post);
-  }
+  // _likePost(PostsModel post) {
+  //   QuickActions.createOrDeleteNotification(userViewModel.currentUser!, post.getAuthor!,
+  //       NotificationsModel.notificationTypeLikedReels,
+  //       post: post);
+  // }
 
   void openSheet(
       BuildContext context, UserModel author, PostsModel? post) async {
@@ -2020,7 +2043,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
     }
   }
 
-  void showComments(BuildContext context,double fem, double ffem) {
+  void showComments(BuildContext context,double fem, double ffem, Function()? then) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -2053,8 +2076,8 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
             Text("Comments",
             style: SafeGoogleFont('DM Sans',
               fontSize: 16*ffem,
+              color: Get.isDarkMode ? Colors.white : AppColors.black,
               fontWeight: FontWeight.w500,
-              color: AppColors.white,
             ),),
             SizedBox(height:14*fem),
             Padding(
@@ -2068,7 +2091,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
           ],
         ),
       ),
-    );
+    ).then((value) => then);
   }
 
   Widget liveComments(BuildContext context,double fem,double ffem) {
@@ -2243,7 +2266,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                                 widget.postModel = value.results!.first as PostsModel;
                               });
 
-                              _likePost(widget.postModel!);
+                              // _likePost(widget.postModel!);
 
                               return Future.value(true);
                             }

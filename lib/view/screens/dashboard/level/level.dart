@@ -7,6 +7,7 @@ import 'package:teego/view_model/userViewModel.dart';
 import '../../../../utils/Utils.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/routes/app_routes.dart';
+import '../../../../utils/theme/colors_constant.dart';
 import '../store/store.dart';
 
 
@@ -25,7 +26,9 @@ class Level extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           'Gifter Level',
-          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp),
+          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp,
+              color: Get.isDarkMode ? AppColors.white : AppColors.black
+          ),
 
         ),
         centerTitle: true,
@@ -35,7 +38,7 @@ class Level extends StatelessWidget {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
             )),
 
       ),

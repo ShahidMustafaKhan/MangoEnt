@@ -6,6 +6,7 @@ import 'package:teego/view/screens/dashboard/subscription/subscription_income.da
 
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/typography.dart';
+import '../../../../utils/theme/colors_constant.dart';
 import '../../../../view_model/live_controller.dart';
 import '../../../../view_model/subscription_model.dart';
 import '../../../../view_model/userViewModel.dart';
@@ -52,8 +53,18 @@ class _SubscribersState extends State<Subscribers> {
     return BaseScaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(centerTitle: true, title: Text('My Subscribers',
-        style: sfProDisplayMedium.copyWith(fontSize: 16.sp),),
+        style: sfProDisplayMedium.copyWith(fontSize: 16.sp,
+            color: Get.isDarkMode ? AppColors.white : AppColors.black
+        ),),
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+                Icons.arrow_back_ios,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
+            )),
      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -99,7 +110,7 @@ class _SubscribersState extends State<Subscribers> {
                             Text(
                               "🦊 ${userViewModel.currentUser.getFullName!.capitalize} 🦊",
                               style: TextStyle(
-                                color: Colors.white,
+                                
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -134,7 +145,7 @@ class _SubscribersState extends State<Subscribers> {
                           announcement.value,
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: Colors.white,
+                            
                           ),
                         );
                       }
@@ -215,7 +226,7 @@ class _SubscribersState extends State<Subscribers> {
               Text(
                 "Gif's and Emojis",
                 style: TextStyle(
-                  color: Colors.white,
+                  
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),
@@ -248,7 +259,7 @@ class _SubscribersState extends State<Subscribers> {
               Text(
                 "Badges",
                 style: TextStyle(
-                  color: Colors.white,
+                  
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),
@@ -364,7 +375,7 @@ class _SubscribersState extends State<Subscribers> {
           Text(
             leadingText,
             style: TextStyle(
-              color: Colors.white,
+              
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
             ),
@@ -402,13 +413,13 @@ class _SubscribersState extends State<Subscribers> {
                 width: 36.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white70),
+                  border: Border.all(color: Get.isDarkMode ? Colors.white70 : Colors.black.withOpacity(0.4)),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(
+                child: Icon(
                   Icons.add,
                   size: 15,
-                  color: Colors.white70,
+                  color: Get.isDarkMode ? Colors.white70 : Colors.black.withOpacity(0.4),
                 ),
               ),
             ),
@@ -429,14 +440,14 @@ class _SubscribersState extends State<Subscribers> {
         style: TextStyle(
           fontSize: 18.sp,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          
         ),
       ),
       Text(
         subtitle,
         style: TextStyle(
           fontSize: 12.sp,
-          color: Colors.white,
+          
         ),
       ),
     ],
@@ -466,7 +477,7 @@ class _SubscribersState extends State<Subscribers> {
                 Text(
                   title,
                   style: TextStyle(
-                    color: Colors.white,
+                    
                     fontWeight: FontWeight.bold,
                     fontSize: 18.sp,
                   ),
@@ -474,7 +485,7 @@ class _SubscribersState extends State<Subscribers> {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: Colors.white,
+                    
                     fontSize: 10.sp,
                   ),
                 ),

@@ -34,6 +34,8 @@ class AudienceTopBar extends StatefulWidget {
 
 class _AudienceTopBarState extends State<AudienceTopBar> {
 
+  int? coin=0 ;
+
   @override
   void initState() {
     Get.find<LiveViewModel>().subscribeLiveStreamingModel();
@@ -55,6 +57,8 @@ class _AudienceTopBarState extends State<AudienceTopBar> {
           return  GetBuilder<LiveViewModel>(
             init: widget.liveViewModel,
             builder: (liveViewModel) {
+              if(liveViewModel.liveStreamingModel.getTotalCoins!=0 && liveViewModel.liveStreamingModel.getTotalCoins!=null)
+              coin = liveViewModel.liveStreamingModel.getTotalCoins!;
               return Column(
               children: [
                 Padding(
@@ -112,7 +116,7 @@ class _AudienceTopBarState extends State<AudienceTopBar> {
                                               Image.asset(AppImagePath.diamondIcon, width: 14, height: 14),
                                               const SizedBox(width: 4),
                                               Text(
-                                                widget.liveViewModel.liveStreamingModel.getTotalCoins.toString() ,
+                                                coin.toString() ,
                                                 style: sfProDisplayMedium.copyWith(
                                                   fontSize: 12,
                                                   color: AppColors.yellowColor,

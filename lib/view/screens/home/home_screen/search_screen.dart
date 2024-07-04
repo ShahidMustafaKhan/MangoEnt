@@ -13,6 +13,9 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : Colors.white;
+
     SearchController searchController = Get.put(SearchController());
     return BaseScaffold(
       body: SingleChildScrollView(
@@ -37,11 +40,10 @@ class SearchScreen extends StatelessWidget {
                   height: 36.h,
                   width: 306.w,
                   child: TextField(
-                    onChanged: (value){
-                      if(value.isEmpty){
+                    onChanged: (value) {
+                      if (value.isEmpty) {
                         searchController.getRecentPopularUserModel();
-                      }
-                      else{
+                      } else {
                         searchController.searchRecentPopularUserModel(value);
                       }
                     },
@@ -71,8 +73,10 @@ class SearchScreen extends StatelessWidget {
                 children: [
                   Text(
                     "Recently Popular",
-                    style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: textColor),
                   ),
                   SizedBox(
                     height: 20.h,
@@ -91,8 +95,10 @@ class SearchScreen extends StatelessWidget {
                 children: [
                   Text(
                     "You May Like",
-                    style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: textColor),
                   ),
                   SizedBox(
                     height: 20.h,

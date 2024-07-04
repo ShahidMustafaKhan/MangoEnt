@@ -13,6 +13,10 @@ import '../../../../../view_model/streamer_profile_controller.dart';
 class AboutWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : Colors.white;
+    final backgroundColor =
+        isLightTheme ? Color(0xffF3F5F7) : Color(0xff212121);
     final StreamerProfileController controller = Get.find();
     return Expanded(
       child: Padding(
@@ -27,7 +31,10 @@ class AboutWidget extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Bio",
-                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                      color: textColor),
                 ),
               ),
               SizedBox(
@@ -37,7 +44,10 @@ class AboutWidget extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Text(
                   controller.profile!.getBio ?? 'Hi! i am using Mango Ent.',
-                  style: TextStyle(fontSize: 12.5.sp, fontWeight: FontWeight.w400),
+                  style: TextStyle(
+                      fontSize: 12.5.sp,
+                      fontWeight: FontWeight.w400,
+                      color: textColor),
                 ),
               ),
               SizedBox(
@@ -47,7 +57,10 @@ class AboutWidget extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Basic Information",
-                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                      color: textColor),
                 ),
               ),
               SizedBox(
@@ -55,59 +68,70 @@ class AboutWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  if(controller.profile!.getHideMyLocation == false)
-                  Container(
-                    width: 109.w,
-                    height: 32.h,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.r),
-                        color: Color(0xff212121),
-                        border: Border.all(
-                          color: AppColors.grey300,
-                        )),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          controller.profile!.getCountry!,
-                          style: TextStyle(
-                              fontSize: 14.sp, fontWeight: FontWeight.w400),
-                        ),
-                        SvgPicture.asset(
-                          QuickActions.getCountryFlag(controller.profile!),
-                          width: 22.w,
-                          height: 16.h,
-                        )
-                      ],
+                  if (controller.profile!.getHideMyLocation == false)
+                    Container(
+                      width: 109.w,
+                      height: 32.h,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.r),
+                          // color: Color(0xff212121),
+                          color: backgroundColor,
+                          border: Border.all(
+                            color: AppColors.grey300,
+                          )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            controller.profile!.getCountry!,
+                            style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: textColor),
+                          ),
+                          SvgPicture.asset(
+                            QuickActions.getCountryFlag(controller.profile!),
+                            width: 22.w,
+                            height: 16.h,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  if(controller.profile!.getHideMyLocation == false)
+                  if (controller.profile!.getHideMyLocation == false)
                     SizedBox(
-                    width: 10.w,
-                  ),
-                  if(controller.profile!.getDevice != null)
-                  Container(
-                    height: 32.h,
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.r),
-                        color: Color(0xff212121),
-                        border: Border.all(
-                          color: AppColors.grey300,
-                        )),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                         Text(
-                              controller.profile!.getDevice ?? '',
-                              style: TextStyle(
-                                  fontSize: 14.sp, fontWeight: FontWeight.w400),
-                        ),
-                        SizedBox(width: 6.w,),
-                        Image.asset(AppImagePath.mobileButton),
-                      ],
+                      width: 10.w,
                     ),
-                  ),
+                  if (controller.profile!.getDevice != null)
+                    Container(
+                      height: 32.h,
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.r),
+                          // color: Color(0xff212121),
+                          color: backgroundColor,
+                          border: Border.all(
+                            color: AppColors.grey300,
+                          )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            controller.profile!.getDevice ?? '',
+                            style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: textColor),
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          Image.asset(
+                            AppImagePath.mobileButton,
+                            color: textColor,
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
               SizedBox(
@@ -117,7 +141,10 @@ class AboutWidget extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Tags",
-                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                      color: textColor),
                 ),
               ),
               SizedBox(
@@ -136,8 +163,10 @@ class AboutWidget extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Sweet",
-                        style:
-                            TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            color: textColor),
                       ),
                     ),
                   ),
@@ -155,8 +184,10 @@ class AboutWidget extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Singer",
-                        style:
-                            TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            color: textColor),
                       ),
                     ),
                   ),
@@ -174,8 +205,10 @@ class AboutWidget extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Gamer",
-                        style:
-                            TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            color: textColor),
                       ),
                     ),
                   ),
@@ -188,7 +221,10 @@ class AboutWidget extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Social",
-                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                      color: textColor),
                 ),
               ),
               SizedBox(

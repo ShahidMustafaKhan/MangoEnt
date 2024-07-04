@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/helpers/quick_help.dart';
 import 'package:teego/view/screens/live/single_live_streaming/single_audience_live/widgets/audience_gift_card.dart';
 import 'package:teego/view_model/battle_controller.dart';
@@ -254,7 +255,60 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                             child: Divider(color: AppColors.grey300, thickness: 2),
                           ),
                           const SizedBox(height: 16),
-                          Padding(
+                          if(selectedTab == tabs[1])
+                              Container(
+                                height: 350.h,
+                                width: Get.width,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: Image.asset(
+                                        bag,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    SizedBox(height: 9.h,),
+                                    Text(
+                                      "Empty Bag",
+                                      style: TextStyle(
+                                        color:  Get.isDarkMode ?  Colors.white70 : Colors.black.withOpacity(0.4),
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                          if(selectedTab == tabs[2])
+                              Container(
+                                height: 350.h,
+                                width: Get.width,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: Image.asset(
+                                        bag,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    SizedBox(height: 9.h,),
+                                    Text(
+                                      "No new item added",
+                                      style: TextStyle(
+                                        color:  Get.isDarkMode ?  Colors.white70 : Colors.black.withOpacity(0.4),
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                          if(selectedTab == tabs[0])
+                            Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 14),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -472,14 +526,14 @@ class _AudienceGiftSheetState extends State<AudienceGiftSheet> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 16, right: 16),
+                            padding: EdgeInsets.only(left: 16, right: 5.9),
                             child: Row(
                               children: [
                                 Row(
                                   children: [
                                     Image.asset(AppImagePath.coinsIcon, width: 15, height: 15),
                                     const SizedBox(width: 5),
-                                    Text(userViewModel.currentUser.getCoins.toString(),),
+                                    Text(QuickActions.formatValue(userViewModel.currentUser.getCoins),),
                                     const SizedBox(width: 5),
                                     Icon(Icons.arrow_forward_ios, size: 15, color: AppColors.yellowColor),
                                   ],

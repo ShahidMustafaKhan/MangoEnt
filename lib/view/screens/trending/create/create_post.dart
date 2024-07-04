@@ -39,7 +39,7 @@ class _PostScreenState extends State<PostScreen> {
   String _location = 'Tags';
   final ImagePicker _picker = ImagePicker();
   File? _pickedFile;
-  ParseBase ? parseFileThumbnail;
+  ParseFile ? parseFileThumbnail;
   String ? thumbnailImage;
   final List<File> imageList = [];
   RxBool isBold = false.obs;
@@ -58,6 +58,8 @@ class _PostScreenState extends State<PostScreen> {
     if (result != null) {
       setState(() {
         _pickedFile = result["videoFile"];
+        parseFileThumbnail = result["parseFileThumbnail"];
+        thumbnailImage = result["uploadPhoto"];
         _selectedMedia = 'video';
       });
     }
@@ -281,7 +283,7 @@ class _PostScreenState extends State<PostScreen> {
                   )),
             ),
             SizedBox(height: 10),
-            _pickedFile != null ? _buildMediaPreview(_pickedFile!.path) : Container(),
+            thumbnailImage != null ? _buildMediaPreview(thumbnailImage!) : Container(),
             Spacer(),
             ElevatedButton(
               onPressed: savePost,
@@ -317,6 +319,8 @@ class _PostScreenState extends State<PostScreen> {
       PostsModel postsModel = PostsModel();
       postsModel.setAuthor = user!;
       postsModel.setAuthorId = user.objectId!;
+      if(parseFileThumbnail!=null)
+      postsModel.setVideoThumbnail = parseFileThumbnail!;
       if (_textController.text.isNotEmpty)
         postsModel.setCaption = _textController.text;
       if (_pickedFile != null) {

@@ -88,7 +88,7 @@ class YouMayLike extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 65.h,),
-              NothingIsHere(height: 180, width: 180,),
+              NothingIsHere(height: 195.h, width: 180.w,),
             ],
           );
       }

@@ -21,6 +21,7 @@ class EditProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final UserViewModel userViewModel = Get.find();
     genderController.selectedGender.value = userViewModel.currentUser.getGender!;
     return BaseScaffold(

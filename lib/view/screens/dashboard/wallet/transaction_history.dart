@@ -8,6 +8,7 @@ import 'package:teego/view/widgets/base_scaffold.dart';
 import '../../../../utils/Utils.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/typography.dart';
+import '../../../../utils/theme/colors_constant.dart';
 import '../../../../view_model/transaction_history_controller.dart';
 
 
@@ -25,7 +26,9 @@ class TransactionHistory extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           'Transaction History',
-          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp),
+          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp,
+              color: Get.isDarkMode ? AppColors.white : AppColors.black
+          ),
 
         ),
         centerTitle: true,
@@ -35,7 +38,7 @@ class TransactionHistory extends StatelessWidget {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
             )),
 
       ),
@@ -53,7 +56,8 @@ class TransactionHistory extends StatelessWidget {
                   children: [
                     Text("*  ", style: sfProDisplayBlack.copyWith(color: Colors.red),),
                     Text("No Transaction record found", style: sfProDisplayMedium.copyWith(
-                      fontSize: 14.sp,
+                      fontSize: 14.sp, color: Get.isDarkMode ? AppColors.white : AppColors.black
+
 
                     ),),
                   ],

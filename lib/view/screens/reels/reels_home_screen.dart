@@ -129,7 +129,7 @@ class _ReelsHomeScreenState extends State<ReelsHomeScreen>
   Widget reelsVideoWidget(UserModel? currentUser, {bool? exclusive}) {
     return Container(
       color: kContentColorLightTheme,
-      child: VideoNewFeedScreen<VideoInfo>(
+      child: VideoNewFeedScreen(
         api: this,
         keepPage: true,
         screenConfig: ScreenConfig(

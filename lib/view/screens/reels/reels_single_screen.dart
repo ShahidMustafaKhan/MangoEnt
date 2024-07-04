@@ -97,7 +97,7 @@ class _ReelsSingleScreenState extends State<ReelsSingleScreen>
   Widget reelsVideoWidget({bool? exclusive}) {
     return Container(
       color: kContentColorLightTheme,
-      child: VideoNewFeedScreen<VideoInfo>(
+      child: VideoNewFeedScreen(
         api: this,
         singleReel: true,
         keepPage: true,

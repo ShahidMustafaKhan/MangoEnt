@@ -805,7 +805,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   pauseLiveStreamingForPkPlayer(bool value){
-    if(isHost==false){
+    if(isCurrentUserPlayerB==true){
       if(value==false) {
         // Get.find<LiveViewModel>().startLive();
         Get.find<LiveViewModel>().backToLiveSession();
@@ -814,7 +814,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   resetBackgroundForPkPlayer(){
-    if(isHost==false && Get.find<LiveViewModel>().role!=ZegoLiveRole.audience)
+    if(isCurrentUserPlayerB==true)
         Get.find<LiveViewModel>().backgroundImage.value= Get.find<LiveViewModel>().liveStreamingModel.getBackgroundImage ?? '';
   }
 

@@ -40,35 +40,40 @@ class _ToggleButtonListState extends State<ToggleButtonList> {
       height: 60,
       child: Row(
         children: [
-          SizedBox(width: 5.w,),
+          SizedBox(
+            width: 5.w,
+          ),
           Expanded(
             child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  items(0),
-                  items(1),
-                  items(2),
-                  items(3),
-                ],
-              )
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    items(0),
+                    items(1),
+                    items(2),
+                    items(3),
+                  ],
+                )),
           ),
           SizedBox(width: 12.w),
           GestureDetector(
-            onTap: ()=>  Get.toNamed(AppRoutes.searchScreen),
+            onTap: () => Get.toNamed(AppRoutes.searchScreen),
             child: Padding(
               padding: const EdgeInsets.only(top: 8),
-              child:
-              SvgPicture.asset(AppImagePath.searchIcon, ),
+              child: SvgPicture.asset(
+                AppImagePath.searchIcon,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.black // Selected color for light theme
+                    : Colors.white,
+              ),
             ),
           ),
           GestureDetector(
-            onTap: ()=> Get.toNamed(AppRoutes.topFan),
+            onTap: () => Get.toNamed(AppRoutes.topFan),
             child: Padding(
               padding: const EdgeInsets.only(top: 8),
               child:
-                  Image.asset(AppImagePath.trophyIcon, width: 40, height: 40),
+              Image.asset(AppImagePath.trophyIcon, width: 40, height: 40),
             ),
           ),
           SizedBox(width: 9.w),
@@ -77,7 +82,7 @@ class _ToggleButtonListState extends State<ToggleButtonList> {
     );
   }
 
-  Widget items(int index){
+  Widget items(int index) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -104,9 +109,14 @@ class _ToggleButtonListState extends State<ToggleButtonList> {
                 style: sfProDisplayBold.copyWith(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
+                  // color: _selectedIndex == index
+                  //     ? Colors.white
+                  //     : Colors.grey,
                   color: _selectedIndex == index
-                      ? Colors.white
-                      : Colors.grey,
+                      ? (Theme.of(context).brightness == Brightness.light
+                      ? Colors.black // Selected color for light theme
+                      : Colors.white) // Selected color for dark theme
+                      : Colors.grey, // Unselected color for both themes
                 ),
               ),
               const SizedBox(height: 4),

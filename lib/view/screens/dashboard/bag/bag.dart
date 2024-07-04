@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:teego/view/widgets/base_scaffold.dart';
 import '../../../../utils/Utils.dart';
 import '../../../../utils/constants/app_constants.dart';
+import '../../../../utils/theme/colors_constant.dart';
 import '../../../../view_model/storeController.dart';
 import 'bagmodel.dart';
 import 'sticker_dialoge.dart';
@@ -75,7 +76,9 @@ class _BagState extends State<Bag> {
         automaticallyImplyLeading: false,
         title: Text(
           'Your Bag',
-          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp),
+          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp,
+              color: Get.isDarkMode ? AppColors.white : AppColors.black
+          ),
 
         ),
         centerTitle: true,
@@ -85,7 +88,7 @@ class _BagState extends State<Bag> {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
             )),
 
       ),
@@ -96,7 +99,7 @@ class _BagState extends State<Bag> {
             height: 80.0 * cat.length,
             width: 108.w,
             decoration: BoxDecoration(
-              color: const Color(0xff252526),
+              color: Get.isDarkMode ? Color(0xff252526) : AppColors.white,
               border: Border.all(
                 color: Colors.white70,
                 width: 0.2,
@@ -118,7 +121,7 @@ class _BagState extends State<Bag> {
                       cat[index].name,
                       style: TextStyle(
                         color:
-                            selectedIndex == index ? amberColor : Colors.white,
+                            selectedIndex == index ? amberColor : Get.isDarkMode ? Colors.white : AppColors.black,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                       ),
@@ -126,8 +129,8 @@ class _BagState extends State<Bag> {
                   ),
                 ),
               ),
-              separatorBuilder: (_, index) => const Divider(
-                color: Colors.white70,
+              separatorBuilder: (_, index) => Divider(
+                color:  Get.isDarkMode ?  Colors.white70 : Colors.black.withOpacity(0.4),
                 thickness: 0.2,
               ),
             ),
@@ -149,7 +152,7 @@ class _BagState extends State<Bag> {
                       Text(
                         "Empty Bag",
                         style: TextStyle(
-                          color: Colors.white70,
+                          color:  Get.isDarkMode ?  Colors.white70 : Colors.black.withOpacity(0.4),
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
@@ -176,7 +179,7 @@ class _BagState extends State<Bag> {
                           horizontal: 16.w,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xff252526),
+                          color: Get.isDarkMode ? Color(0xff252526) : AppColors.white,
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         child: Row(
@@ -203,7 +206,6 @@ class _BagState extends State<Bag> {
                                 item[index].name,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: Colors.white,
                                   fontSize: selectedIndex==0 ? 22.sp : 14.sp,
                                   fontWeight: FontWeight.w500,
                                 ),

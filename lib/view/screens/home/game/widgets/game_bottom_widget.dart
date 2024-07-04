@@ -9,6 +9,8 @@ class GameBottomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : AppColors.white;
     return Container(
       child: GridView.builder(
         shrinkWrap: true,
@@ -103,7 +105,9 @@ class GameBottomWidget extends StatelessWidget {
                         Text(
                           'Whoopee Streamer',
                           style: TextStyle(
-                            color: AppColors.white,
+                            // color: AppColors.white,
+                            color: textColor,
+
                             fontSize: 12.sp,
                             fontWeight: FontWeight.bold,
                           ),
@@ -114,7 +118,9 @@ class GameBottomWidget extends StatelessWidget {
                         Text(
                           'Red Dead Redemption',
                           style: TextStyle(
-                            color: AppColors.grey,
+                            // color: AppColors.grey,
+                            color: textColor,
+
                             fontSize: 10.sp,
                           ),
                         ),

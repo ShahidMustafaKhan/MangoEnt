@@ -25,7 +25,6 @@ class OnBoardingScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const Spacer(),
-          guestLogin(context),
           Image.asset(
             AppImagePath.onBoarding,
           ),

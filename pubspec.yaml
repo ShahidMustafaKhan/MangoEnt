@@ -3,8 +3,7 @@ description: Live Streaming app
 
 publish_to: 'none'
 
-version: 8.0.0+8
-
+version: 9.0.0+9
 environment:
   sdk: ">=2.13.0 <3.0.3"
 

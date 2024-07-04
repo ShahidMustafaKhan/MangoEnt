@@ -27,8 +27,16 @@ class SubscribersList extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+                Icons.arrow_back_ios,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
+            )),
         title: Text('Subscribers List', textAlign: TextAlign.center,
-        style: sfProDisplayMedium.copyWith(fontSize: 17.sp),),
+          style: sfProDisplayMedium.copyWith(fontSize: 17.sp, color:Get.isDarkMode ? AppColors.white : AppColors.black),),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 16.h),

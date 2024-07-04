@@ -33,7 +33,9 @@ class _StoreState extends State<Store> {
         automaticallyImplyLeading: false,
         title: Text(
           'Store',
-          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp),
+          style: SafeGoogleFont('sfProDisplayMedium', fontSize: 16.sp,
+              color: Get.isDarkMode ? AppColors.white : AppColors.black
+          ),
 
         ),
         centerTitle: true,
@@ -43,7 +45,7 @@ class _StoreState extends State<Store> {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
             )),
       ),
       body: GetBuilder<UserViewModel>(
@@ -63,9 +65,7 @@ class _StoreState extends State<Store> {
                         bottomRight: Radius.circular(24.r),
                       ),
                       border:  Border.all(
-
-                          color: Color(0xff36383D),
-
+                        color: Get.isDarkMode ? Color(0xff36383D) : Color(0xff36383D).withOpacity(0.05) ,
                       ),
                     ),
                     child: Column(
@@ -87,7 +87,6 @@ class _StoreState extends State<Store> {
                                   Text(
                                     store.buttons[index].title,
                                     style: TextStyle(
-                                      color: Colors.white,
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -100,7 +99,7 @@ class _StoreState extends State<Store> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 24.h),
+                  Container(height: 24.h, color: !Get.isDarkMode ? AppColors.white : null,),
                   Container(
                     width: 375.w,
                     decoration: BoxDecoration(
@@ -109,9 +108,7 @@ class _StoreState extends State<Store> {
                         topRight: Radius.circular(24.r),
                       ),
                       border:  Border.all(
-
-                          color: Color(0xff36383D),
-
+                          color: Get.isDarkMode ? Color(0xff36383D) : Color(0xff36383D).withOpacity(0.05) ,
                       ),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -128,7 +125,6 @@ class _StoreState extends State<Store> {
                                   Text(
                                     store.title[index],
                                     style: TextStyle(
-                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.sp,
                                     ),
@@ -141,7 +137,6 @@ class _StoreState extends State<Store> {
                                     child: Text(
                                       "More >",
                                       style: TextStyle(
-                                        color: Colors.white,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14.sp,
                                       ),
@@ -218,7 +213,7 @@ class _StoreState extends State<Store> {
                                             padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 14.h),
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(8.r),
-                                              color: const Color(0xff494848),
+                                              color: Get.isDarkMode ? Color(0xff494848) : AppColors.white,
                                             ),
                                             child: index ==0 ? SvgPicture.asset(store.avatarFrames[gridIndex]["image"]) : Image.asset(store.roomDecor[gridIndex]["image"]),
                                           ),
@@ -227,7 +222,7 @@ class _StoreState extends State<Store> {
                                             index ==0 ? store.avatarFrames[gridIndex]["name"]
                                                 : store.roomDecor[gridIndex]["name"],
                                             style: TextStyle(
-                                              color: Colors.white70,
+                                              color: Get.isDarkMode ? Colors.white70 : AppColors.black.withOpacity(0.7),
                                               fontSize: 12.sp,
                                               fontWeight: FontWeight.w500,
                                             ),

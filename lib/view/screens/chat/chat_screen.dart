@@ -206,7 +206,7 @@ class _MessageViewState extends State<MessageView> {
                                       decoration: BoxDecoration(
                                         color: !isMe
                                             ? Color(0xff494848)
-                                            : Color(0xffffffff).withOpacity(0.05),
+                                            : Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.6) : Color(0xffffffff).withOpacity(0.05),
                                         borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(
                                               !isMe ? 4.r : 18.r),
@@ -239,7 +239,7 @@ class _MessageViewState extends State<MessageView> {
                                       decoration: BoxDecoration(
                                         color: !isMe
                                             ? Color(0xff494848)
-                                            : Color(0xffffffff).withOpacity(0.05),
+                                            : Theme.of(context).brightness == Brightness.light ? Colors.black.withOpacity(0.6) : Color(0xffffffff).withOpacity(0.05),
                                         borderRadius: BorderRadius.all(Radius.circular(64.r)),
                                       ),
                                       child: Row(
@@ -319,6 +319,8 @@ class _MessageViewState extends State<MessageView> {
                                           chatMessage.isRead!
                                               ? "assets/svg/seen.svg"
                                               : chatMessage.createdAt != null ? "assets/svg/send.svg" :  "assets/svg/waiting.svg",
+                                          color: Theme.of(context).brightness == Brightness.light ? Colors.black : null,
+
 
 
                                         ),

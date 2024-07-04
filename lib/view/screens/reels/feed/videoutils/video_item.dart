@@ -67,7 +67,7 @@ class _VideoItemWidgetState<V extends VideoInfo>
   bool isEnded = false;
 
   bool isPauseClicked = false;
-  bool isBuffering = true;
+  bool isBuffering = false;
   bool isVideoPlaying = false;
 
   ///
@@ -75,6 +75,9 @@ class _VideoItemWidgetState<V extends VideoInfo>
   @override
   void initState() {
     super.initState();
+    if(widget.currentPageIndex == 0 && widget.pageIndex == 0)
+      isBuffering=true;
+
     _initVideoController();
   }
 
@@ -105,6 +108,7 @@ class _VideoItemWidgetState<V extends VideoInfo>
                 Center(
                   child: QuickActions.getVideoPlaceHolder(
                     widget.videoInfo.postModel!.getVideoThumbnail!.url!,
+                    adaptive: true,
                     showLoading: false,
                   ),
                 ),
@@ -192,20 +196,70 @@ class _VideoItemWidgetState<V extends VideoInfo>
 
   /// Video initialization
   ///
-  void _initVideoController() {
+  Future<void> _initVideoController() async {
     if (widget.videoInfo.url == null) return;
-    // Init video from network url
-    _videoPlayerController = CachedVideoPlayerController.network(
-      widget.videoInfo.url!,
-    );
-    _videoPlayerController!.addListener(_videoListener);
-    _videoPlayerController!.initialize().then((_) {
-      if (!mounted) return;
 
-      setState(() {
-        _videoPlayerController!.setLooping(true);
-        initialized = true;
+
+    if(widget.videoInfo.file!=null){
+      _videoPlayerController = CachedVideoPlayerController.file(
+        widget.videoInfo.file,
+      );
+      _videoPlayerController!.addListener(_videoListener);
+      _videoPlayerController!.initialize().then((_) {
+        if (!mounted) return;
+        print('video player initialized ${widget.currentPageIndex} fileInfo in cache');
+
+
+        setState(() {
+          _videoPlayerController!.setLooping(widget.config.loop);
+          initialized = true;
+        });
       });
+    }
+    else{
+
+      final fileInfo= await checkedCacheFor(widget.videoInfo.url!);
+      if(fileInfo==null){
+        _videoPlayerController = CachedVideoPlayerController.network(
+          widget.videoInfo.url!,
+        );
+        _videoPlayerController!.addListener(_videoListener);
+        _videoPlayerController!.initialize().then((_) {
+          if (!mounted) return;
+          cachedForUrl(widget.videoInfo.url!);
+
+          setState(() {
+            _videoPlayerController!.setLooping(widget.config.loop);
+            initialized = true;
+          });
+        });
+      }
+      else {
+        final file= fileInfo.file;
+        _videoPlayerController = CachedVideoPlayerController.file(
+          file,
+        );
+        _videoPlayerController!.addListener(_videoListener);
+        _videoPlayerController!.initialize().then((_) {
+          if (!mounted) return;
+          print('video player initialized ${widget.currentPageIndex} fileInfo in cache');
+
+          setState(() {
+            _videoPlayerController!.setLooping(widget.config.loop);
+            initialized = true;
+          });
+        });
+      }}
+  }
+
+  Future<FileInfo?> checkedCacheFor(String url) async {
+    final FileInfo? value= await DefaultCacheManager().getFileFromCache(url);
+    return value;
+  }
+
+  Future<void> cachedForUrl(String url) async {
+    await DefaultCacheManager().getSingleFile(url).then((value){
+      print('successfully downloaded done for ${widget.currentPageIndex}');
     });
   }
 
@@ -216,14 +270,14 @@ class _VideoItemWidgetState<V extends VideoInfo>
 
     if (widget.pageIndex == widget.currentPageIndex &&
         _videoPlayerController!.value.isBuffering) {
-      if (!isBuffering) {
+      // if (!isBuffering) {
         setState(() {
           isBuffering = true;
           isVideoPlaying = false;
         });
 
         print("This video is isBuffering: ${widget.videoInfo.url!}");
-      }
+      // }
     } else if (widget.pageIndex == widget.currentPageIndex &&
         _videoPlayerController!.value.isPlaying) {
       if (!isVideoPlaying) {
@@ -341,7 +395,7 @@ class _VideoItemWidgetState<V extends VideoInfo>
 
       if(visiblePercentage == 0.0){
         print("CHECK VIDEO STATE VISIBLE $visiblePercentage");
-        _videoPlayerController?.pause().then((value) {});
+        // _videoPlayerController?.pause().then((value) {});
       } else {
         _videoPlayerController?.play().then((value) {
           setState(() {});
@@ -349,7 +403,8 @@ class _VideoItemWidgetState<V extends VideoInfo>
         });
       }
 
-    } else if(_videoPlayerController != null && !actualDisposed && !widget.isPaused) {
+    }
+    else if(_videoPlayerController != null && !actualDisposed && !widget.isPaused) {
       _videoPlayerController?.pause().then((value) {});
     }
   }

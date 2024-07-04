@@ -53,8 +53,16 @@ class _SubscriptionState extends State<Subscription> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+                Icons.arrow_back_ios,
+                color: Get.isDarkMode ? AppColors.white : AppColors.black
+            )),
         title: Text('My Subscription', textAlign: TextAlign.center,
-          style: sfProDisplayMedium.copyWith(fontSize: 17.sp),),
+          style: sfProDisplayMedium.copyWith(fontSize: 17.sp, color:Get.isDarkMode ? AppColors.white : AppColors.black),),
       ),
       body: GetBuilder<SubscriptionViewModel>(
           init: subscriptionViewModel,
@@ -136,7 +144,6 @@ class _SubscriptionState extends State<Subscription> {
                       Text(
                         "${subscriptionViewModel.subscribeeList[index].getSubscribee!.getFullName}",
                         style: TextStyle(
-                          color: Colors.white,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
@@ -155,7 +162,7 @@ class _SubscriptionState extends State<Subscription> {
                         ? "Since: $startDate"
                         : "Expired at: 2023-08-07",
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: Get.isDarkMode ? Colors.white70 : AppColors.black.withOpacity(0.4),
                       fontSize: 12.sp,
                     ),
                   ),
@@ -238,7 +245,6 @@ class _SubscriptionState extends State<Subscription> {
                             Text(
                               "${subscriptionViewModel.expiredSubscriptionList[index].getSubscribee!.getFullName}",
                               style: TextStyle(
-                                color: Colors.white,
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -254,7 +260,7 @@ class _SubscriptionState extends State<Subscription> {
                         subtitle: Text(
                          "Expired at: $endDate",
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Get.isDarkMode ? Colors.white70 : AppColors.black.withOpacity(0.4),
                             fontSize: 12.sp,
                           ),
                         ),
@@ -338,16 +344,16 @@ class _SubscriptionState extends State<Subscription> {
               Text(
                 title,
                 style: TextStyle(
-                  color: tabEnum == selectedTab ? Colors.white : Colors.white70,
+                  color: tabEnum == selectedTab ? Get.isDarkMode ? Colors.white : AppColors.black : Get.isDarkMode ? Colors.white70 : AppColors.black.withOpacity(0.4),
                   fontSize: tabEnum == selectedTab ? 20.sp : 14.sp,
                 ),
               ),
               Visibility(
                 visible: tabEnum == selectedTab,
-                child: const Icon(
+                child: Icon(
                   Icons.brightness_1,
                   size: 5,
-                  color: Colors.white,
+                  color: Get.isDarkMode ? Colors.white : AppColors.black
                 ),
               ),
             ],

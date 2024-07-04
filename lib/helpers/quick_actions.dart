@@ -5325,6 +5325,7 @@ class QuickActions {
             });
       },
     );
+
   }
 
 
@@ -5436,6 +5437,20 @@ class QuickActions {
     );
   }
 
+static String formatValue(int value) {
+   if (value >= 1000000) {
+     double formattedValue = value / 1000000;
+     return '${formattedValue.toStringAsFixed(2)}M';
+   } else if (value >= 100000) {
+     double formattedValue = value / 1000000;
+     return '${formattedValue.toStringAsFixed(2)}M';
+   } else if (value >= 1000) {
+     double formattedValue = value / 1000;
+     return '${formattedValue.toStringAsFixed(2)}K';
+   } else {
+     return value.toString();
+   }
+ }
 
 }
 

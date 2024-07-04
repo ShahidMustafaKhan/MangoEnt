@@ -8,6 +8,8 @@ class GameCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : AppColors.white;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -71,7 +73,9 @@ class GameCategories extends StatelessWidget {
                           Text(
                             categoryText,
                             style: TextStyle(
-                              color: AppColors.white,
+                              // color: AppColors.white,
+                              color: textColor,
+
                               fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
@@ -90,7 +94,9 @@ class GameCategories extends StatelessWidget {
                               Text(
                                 '180,8k',
                                 style: TextStyle(
-                                  color: AppColors.grey,
+                                  // color: AppColors.grey,
+                                  color: textColor,
+
                                   fontSize: 12.sp,
                                 ),
                               ),

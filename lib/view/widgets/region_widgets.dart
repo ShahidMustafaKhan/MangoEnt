@@ -10,7 +10,6 @@ import '../../view_model/region_controller.dart';
 import '../../view_model/trending_controller.dart';
 import 'more_regions.dart';
 
-
 class RegionWidget extends StatelessWidget {
   RegionWidget({Key? key}) : super(key: key);
 
@@ -21,6 +20,8 @@ class RegionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<RegionViewModel>(
       builder: (controller) {
+        final isLightTheme = Theme.of(context).brightness == Brightness.light;
+
         return Column(
           children: [
             Row(
@@ -29,7 +30,10 @@ class RegionWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     "Countries & Regions",
-                    style: sfProDisplayMedium.copyWith(color: Colors.white, fontSize: 16.sp),
+                    style: sfProDisplayMedium.copyWith(
+                        color: isLightTheme ? Colors.black : Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
                 GestureDetector(
@@ -38,7 +42,9 @@ class RegionWidget extends StatelessWidget {
                   },
                   child: Text(
                     "More",
-                    style: sfProDisplayRegular.copyWith(color: Colors.grey, fontSize: 16.sp),
+                    style: sfProDisplayRegular.copyWith(
+                        fontSize: 16.sp,
+                        color: isLightTheme ? Colors.black : Colors.grey),
                   ),
                 ),
                 SizedBox(
@@ -46,7 +52,9 @@ class RegionWidget extends StatelessWidget {
                 ),
                 Icon(
                   Icons.arrow_forward_ios_outlined,
-                  color: Colors.white,
+                  // color: Colors.white,
+                  color: isLightTheme ? Colors.black54 : Colors.grey,
+
                   size: 17.w,
                 )
               ],
@@ -55,16 +63,21 @@ class RegionWidget extends StatelessWidget {
               crossAxisCount: 4,
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(vertical: 17.h),
-              children: List.generate(controller.countryModelList.length, (index) {
+              children:
+              List.generate(controller.countryModelList.length, (index) {
                 return GestureDetector(
-                  onTap :(){
-                    trendingViewModel.chosenCountryFlag.value= controller.countryModelList[index].flag;
-                    trendingViewModel.chosenCountry.value= controller.countryModelList[index].name;
-                    trendingViewModel.updateListForChosenCountry(controller.countryModelList[index].name);
+                  onTap: () {
+                    trendingViewModel.chosenCountryFlag.value =
+                        controller.countryModelList[index].flag;
+                    trendingViewModel.chosenCountry.value =
+                        controller.countryModelList[index].name;
+                    trendingViewModel.updateListForChosenCountry(
+                        controller.countryModelList[index].name);
                   },
                   child: buildCountries(
                     cFlag: controller.countryModelList[index].flag,
                     cName: controller.countryModelList[index].name,
+                    context: context,
                   ),
                 );
               }),
@@ -75,18 +88,25 @@ class RegionWidget extends StatelessWidget {
     );
   }
 
-  Widget buildCountries({required String cFlag, required String cName}) {
+  Widget buildCountries(
+      {required String cFlag,
+        required String cName,
+        required BuildContext context}) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        SvgPicture.asset(cFlag, height: 32.h, width: 44.w,),
-        Text(
-          cName,
-          style: sfProDisplayRegular.copyWith(color: Colors.white, fontSize: 12.sp)
-        )
+        SvgPicture.asset(
+          cFlag,
+          height: 32.h,
+          width: 44.w,
+        ),
+        Text(cName,
+            style: sfProDisplayRegular.copyWith(
+                color: isLightTheme ? Colors.black : Colors.white,
+                fontSize: 12.sp))
       ],
     );
   }
 }
-

@@ -19,13 +19,19 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final primaryTextColor = isLightTheme ? Colors.black : Colors.white;
+    final secondaryTextColor = isLightTheme ? Colors.black87 : Colors.white70;
     return Scaffold(
       body: SafeArea(
-          child: showAllContent ? buildAllContent() : GameAllCategories()),
+          child: showAllContent
+              ? buildAllContent(context, primaryTextColor, secondaryTextColor)
+              : GameAllCategories()),
     );
   }
 
-  Widget buildAllContent() {
+  Widget buildAllContent(
+      BuildContext context, Color primaryTextColor, Color secondaryTextColor) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: SingleChildScrollView(
@@ -38,7 +44,8 @@ class _GameState extends State<Game> {
             Text(
               "Top Streams",
               style: TextStyle(
-                  color: AppColors.white,
+                  // color: AppColors.white,
+                  color: primaryTextColor,
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold),
             ),
@@ -53,8 +60,11 @@ class _GameState extends State<Game> {
               children: [
                 Text(
                   "Categories",
-                  style:
-                  TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    color: primaryTextColor,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 Spacer(),
                 GestureDetector(
@@ -65,8 +75,10 @@ class _GameState extends State<Game> {
                   },
                   child: Text(
                     "All",
-                    style:
-                    TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                        color: secondaryTextColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400),
                   ),
                 ),
               ],
@@ -91,7 +103,9 @@ class _GameState extends State<Game> {
                       Text(
                         "All",
                         style: TextStyle(
-                            fontSize: 18.sp, fontWeight: FontWeight.w700),
+                            color: primaryTextColor,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w700),
                       ),
                       SizedBox(
                         height: 5.h,
@@ -121,7 +135,9 @@ class _GameState extends State<Game> {
                           Text(
                             "Trends",
                             style: TextStyle(
-                                fontSize: 14.sp, fontWeight: FontWeight.w400),
+                                color: secondaryTextColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400),
                           ),
                           SizedBox(
                             height: 5.h,

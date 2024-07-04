@@ -35,6 +35,7 @@ class AppColors {
   static Color orangeContainer = const Color(0xFFEF8D32);
   static Color purpleColor = const Color(0xFFBD8DF4);
   static Color darkPink = const Color(0xFFFF4242);
+  static Color greyT = const Color(0xFF494A4A);
 
   static final List<Color> darkBGGradientColor = [
     darkBGColor,
@@ -48,7 +49,6 @@ class AppColors {
   static final List<Color> orangeGradientColor = [
     orange,
     yellowish,
-
   ];
 
   static Color yellow = const Color(0xFFF9C034).withOpacity(0.7);
@@ -59,7 +59,6 @@ class AppColors {
   static Color lightPurple = const Color(0xFFA036FF);
   static Color darkPurple = const Color(0xFF3B0073);
   static Color grey = const Color(0xFFBABABA);
-
 
   static const brand = Color(0xffF9C034);
   static const white = Color(0xffFFFFFF);
@@ -81,5 +80,3 @@ class AppColors {
   static const textWhite = Color(0xffFFFFFF);
   static final textWhite70 = const Color(0xffFFFFFF).withOpacity(0.7);
 }
-
-

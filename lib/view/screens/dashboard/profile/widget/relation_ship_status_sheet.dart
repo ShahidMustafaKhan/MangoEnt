@@ -13,6 +13,10 @@ class RelationshipStatusSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : Colors.white;
+    final backgroundColor =
+        isLightTheme ? Color(0xffF3F5F7) : Color(0xFF363339);
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -31,9 +35,12 @@ class RelationshipStatusSheet extends StatelessWidget {
                 title: 'Single',
                 textStyle: sfProDisplayMedium.copyWith(
                   fontSize: 16.sp,
-                  color: AppColors.white,
+                  // color: AppColors.white,
+                  color: textColor,
                 ),
-                bgColor: const Color(0xFF363339),
+                // bgColor: const Color(0xFF363339),
+                bgColor: backgroundColor,
+
                 onTap: () {
                   relationStatusController.updateStatus('Single');
                   Navigator.pop(context);
@@ -50,9 +57,12 @@ class RelationshipStatusSheet extends StatelessWidget {
                 title: 'Married',
                 textStyle: sfProDisplayMedium.copyWith(
                   fontSize: 16.sp,
-                  color: AppColors.white,
+                  // color: AppColors.white,
+                  color: textColor,
                 ),
-                bgColor: const Color(0xFF363339),
+                // bgColor: const Color(0xFF363339),
+                bgColor: backgroundColor,
+
                 onTap: () {
                   relationStatusController.updateStatus('Married');
                   Navigator.pop(context);
@@ -69,9 +79,12 @@ class RelationshipStatusSheet extends StatelessWidget {
                 title: 'In a Relationship',
                 textStyle: sfProDisplayMedium.copyWith(
                   fontSize: 16.sp,
-                  color: AppColors.white,
+                  // color: AppColors.white,
+                  color: textColor,
                 ),
-                bgColor: const Color(0xFF363339),
+                // bgColor: const Color(0xFF363339),
+                bgColor: backgroundColor,
+
                 onTap: () {
                   relationStatusController.updateStatus('In a Relationship');
                   Navigator.pop(context);
@@ -88,9 +101,12 @@ class RelationshipStatusSheet extends StatelessWidget {
                 title: 'Actively Seeking',
                 textStyle: sfProDisplayMedium.copyWith(
                   fontSize: 16.sp,
-                  color: AppColors.white,
+                  // color: AppColors.white,
+                  color: textColor,
                 ),
-                bgColor: const Color(0xFF363339),
+                // bgColor: const Color(0xFF363339),
+                bgColor: backgroundColor,
+
                 onTap: () {
                   relationStatusController.updateStatus('Actively Seeking');
                   Navigator.pop(context);
@@ -107,9 +123,11 @@ class RelationshipStatusSheet extends StatelessWidget {
                 title: 'Secret',
                 textStyle: sfProDisplayMedium.copyWith(
                   fontSize: 16.sp,
-                  color: AppColors.white,
+                  // color: AppColors.white,
+                  color: textColor,
                 ),
-                bgColor: const Color(0xFF363339),
+                // bgColor: const Color(0xFF363339),
+                bgColor: backgroundColor,
                 onTap: () {
                   relationStatusController.updateStatus('Secret');
                   Navigator.pop(context);
@@ -123,7 +141,8 @@ class RelationshipStatusSheet extends StatelessWidget {
                 borderRadius: 12,
                 textStyle: sfProDisplayMedium.copyWith(
                   fontSize: 16.sp,
-                  color: AppColors.white,
+                  // color: AppColors.white,
+                  color: textColor,
                 ),
                 bgColor: AppColors.yellowBtnColor,
                 onTap: () {

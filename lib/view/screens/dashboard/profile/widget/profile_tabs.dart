@@ -7,7 +7,8 @@ import '../../../../../view_model/streamer_profile_controller.dart';
 class ProfileTabs extends StatelessWidget {
   ProfileTabs({Key? key}) : super(key: key);
 
-  final StreamerProfileController controller = Get.find<StreamerProfileController>();
+  final StreamerProfileController controller =
+      Get.find<StreamerProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +16,17 @@ class ProfileTabs extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: Row(
             children: [
-              buildTabItem(0, "Video"),
+              buildTabItem(0, "Video", context),
               SizedBox(width: 20.w),
-              buildTabItem(1, "About"),
+              buildTabItem(1, "About", context),
             ],
           ),
         ));
   }
 
-  Widget buildTabItem(int index, String text) {
+  Widget buildTabItem(int index, String text, BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final textColor = isLightTheme ? Colors.black : Colors.white;
     return GestureDetector(
       onTap: () => controller.updateIndex(index),
       child: Column(
@@ -34,7 +37,7 @@ class ProfileTabs extends StatelessWidget {
               fontSize: 18.sp,
               fontWeight: FontWeight.w500,
               color: controller.selectedIndex.value == index
-                  ? Colors.white
+                  ? textColor
                   : Colors.grey,
             ),
           ),

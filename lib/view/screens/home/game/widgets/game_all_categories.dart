@@ -5,12 +5,15 @@ import '../../../../../utils/constants/app_constants.dart';
 import '../../../../../utils/constants/typography.dart';
 import '../../../../../utils/theme/colors_constant.dart';
 
-
 class GameAllCategories extends StatelessWidget {
   const GameAllCategories({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final backgroundColor =
+        isLightTheme ? Color(0xffF3F5F7) : Color(0xff494848);
+    final nameColor = isLightTheme ? Colors.black : Colors.white;
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -27,7 +30,10 @@ class GameAllCategories extends StatelessWidget {
                 ),
                 Text(
                   'Categories',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: nameColor),
                 ),
               ],
             ),
@@ -41,11 +47,15 @@ class GameAllCategories extends StatelessWidget {
                   return _buildCategoryRow(
                     AppImagePath.category2,
                     ['Action', 'Horror', 'FPS'],
+                    backgroundColor,
+                    nameColor,
                   );
                 } else {
                   return _buildCategoryRow(
                     AppImagePath.category1,
                     ['Action', 'Horror'],
+                    backgroundColor,
+                    nameColor,
                   );
                 }
               },
@@ -57,7 +67,12 @@ class GameAllCategories extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryRow(String imagePath, List<String> categories) {
+  Widget _buildCategoryRow(
+    String imagePath,
+    List<String> categories,
+    Color backgroundColor,
+    Color nameColor,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 18),
       child: Row(
@@ -78,7 +93,11 @@ class GameAllCategories extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Text('Alisha'),
+                  Text(
+                    'Alisha',
+                    style: TextStyle(
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 5.h),
@@ -87,7 +106,9 @@ class GameAllCategories extends StatelessWidget {
                   Text(
                     '72,13k Views ',
                     style: sfProDisplayRegular.copyWith(
-                        fontSize: 12, color: AppColors.white.withOpacity(0.7)),
+                      color: nameColor,
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
@@ -101,7 +122,8 @@ class GameAllCategories extends StatelessWidget {
                     width: 48.w,
                     height: 19.h,
                     decoration: BoxDecoration(
-                      color: Color(0xff494848),
+                      // color: Color(0xff494848),
+                      color: backgroundColor,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Center(

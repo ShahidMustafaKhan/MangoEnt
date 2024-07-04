@@ -20,45 +20,55 @@ class Explore extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Obx(() {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 17),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  height: trendingViewModel.chosenCountry.value.isEmpty ? 16.h : 20.h,
-                ),
-                if(trendingViewModel.chosenCountry.value.isEmpty)
-                RegionWidget(),
-
-                GestureDetector(
-                  onTap: (){
-                    trendingViewModel.chosenCountry.value = '';
-                    trendingViewModel.chosenCountryFlag.value = '';
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        trendingViewModel.chosenCountry.value.isEmpty ? "Trending" : trendingViewModel.chosenCountry.value,
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16.sp),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 17),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height:
+                    trendingViewModel.chosenCountry.value.isEmpty ? 16.h : 20.h,
+              ),
+              if (trendingViewModel.chosenCountry.value.isEmpty) RegionWidget(),
+              GestureDetector(
+                onTap: () {
+                  trendingViewModel.chosenCountry.value = '';
+                  trendingViewModel.chosenCountryFlag.value = '';
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      trendingViewModel.chosenCountry.value.isEmpty
+                          ? "Trending"
+                          : trendingViewModel.chosenCountry.value,
+                      style: TextStyle(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Colors.black
+                                  : Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp),
+                    ),
+                    SizedBox(width: 12.w),
+                    if (trendingViewModel.chosenCountryFlag.value.isNotEmpty)
+                      SvgPicture.asset(
+                        trendingViewModel.chosenCountryFlag.value,
+                        height: 19.h,
+                        width: 26.13.w,
                       ),
-
-                      SizedBox(width: 12.w),
-                      if(trendingViewModel.chosenCountryFlag.value.isNotEmpty)
-                      SvgPicture.asset(trendingViewModel.chosenCountryFlag.value, height: 19.h, width: 26.13.w,),
-                    ],
-                  ),
+                  ],
                 ),
-
-                SizedBox(height:  trendingViewModel.chosenCountry.value.isNotEmpty ? 20.h : 0,),
-
-                TrendingWidget(),
-              ],
-            ),
-          );
-        }
-      ),
+              ),
+              SizedBox(
+                height:
+                    trendingViewModel.chosenCountry.value.isNotEmpty ? 20.h : 0,
+              ),
+              TrendingWidget(),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

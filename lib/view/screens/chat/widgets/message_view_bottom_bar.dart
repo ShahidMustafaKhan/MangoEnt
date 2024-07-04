@@ -62,6 +62,7 @@ class MessageViewBottomBar extends StatelessWidget {
                 child: Center(
                   child: Image.asset(
                     AppImagePath.chatPhoto,
+                    color: Theme.of(context).brightness == Brightness.light ? Colors.black : null,
                     height: 22.h,
                     width: 22.w,
                   ),
@@ -80,6 +81,7 @@ class MessageViewBottomBar extends StatelessWidget {
                 child: Center(
                   child: Image.asset(
                     AppImagePath.chatCamera,
+                    color: Theme.of(context).brightness == Brightness.light ? Colors.black : null,
                     height: 22.h,
                     width: 25.w,
                   ),

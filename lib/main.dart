@@ -33,6 +33,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:teego/parse/UserModel.dart';
 import 'package:teego/data/app/navigation_service.dart';
+import 'package:teego/purchase/purchase.dart';
 import 'package:teego/utils/routes/app_routes.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await PurchaseApi.init();
   try {
     await Firebase.initializeApp();
   } catch (e) {

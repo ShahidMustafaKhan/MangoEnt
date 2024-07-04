@@ -20,6 +20,7 @@ class AppConfigurations {
         statusBarColor: Colors.transparent,
         statusBarBrightness: Get.isDarkMode ? Brightness.light : Brightness.dark,
         statusBarIconBrightness: Get.isDarkMode ? Brightness.light : Brightness.dark,
-        systemNavigationBarColor: (Get.isDarkMode || isBottomNav) ? AppColors.navBarColor : AppColors.lightBGColor));
+        systemNavigationBarDividerColor: AppColors.white100.withOpacity(0.1), // Set the divider color if needed
+        systemNavigationBarColor: (Get.isDarkMode || isBottomNav) ? AppColors.navBarColor :  Color(0xff333333)));
   }
 }

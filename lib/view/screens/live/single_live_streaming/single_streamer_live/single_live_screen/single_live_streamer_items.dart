@@ -122,7 +122,7 @@ class SingleStreamerLiveItemWidget extends StatelessWidget {
                               liveViewModel.role== ZegoLiveRole.host ? BottomBar() : AudienceBottomBar(),
                               if(liveViewModel.chatField.value==true)
                                 ChatTextField(),
-                              // if(liveViewModel.chatField.value==false)
+                              if(liveViewModel.chatField.value==false)
                               SizedBox(height: 20),
                             ],
                           );

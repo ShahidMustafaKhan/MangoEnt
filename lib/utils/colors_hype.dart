@@ -16,6 +16,3 @@ const gradientColor= const LinearGradient (
   colors: <Color>[Color(0xff3d8ee1), Color(0xff68c5e2)],
   stops: <double>[0, 1],
 );
-
-
-

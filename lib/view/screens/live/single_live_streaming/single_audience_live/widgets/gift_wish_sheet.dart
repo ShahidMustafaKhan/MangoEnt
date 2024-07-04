@@ -147,20 +147,27 @@ class GiftWishSheet extends StatelessWidget {
                         ),
                         if(liveViewModel.myWishList!.isEmpty)
                           Container(
-                            height: 200.h,
+                            height: 230.h,
+                            width: Get.width,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("*  ", style: sfProDisplayBlack.copyWith(color: Colors.red),),
-                                    Text("No item added yet", style: sfProDisplayMedium.copyWith(
-                                      fontSize: 14.sp,
-
-                                    ),),
-                                  ],
+                                Container(
+                                  child: Image.asset(
+                                    bag,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
+                                SizedBox(height: 9.h,),
+                                Text(
+                                  "No item added yet",
+                                  style: TextStyle(
+                                    color:  Get.isDarkMode ?  Colors.white70 : Colors.black.withOpacity(0.4),
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
                               ],
                             ),
                           )
