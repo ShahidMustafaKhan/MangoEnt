@@ -17,9 +17,9 @@ class Config {
   static final String initialCountry = 'US'; // United States
 
   static final String serverUrl = "https://parseapi.back4app.com/";
-  static final String liveQueryUrl = "wss://mangoent.b4a.io/";
-  static final String appId = "dE1igtlCX7OOJT40zP3nteJiiZCr174A2G0kJCRH";
-  static final String clientKey = "8HMBtsC07trC34YkqeoVKiY0RBTgMkCbshghVuT2";
+  static final String liveQueryUrl = "wss://mangoentertainment.b4a.io/";
+  static final String appId = "07ztj22rjuSg71z24akstsnCW8OO8N6OYnCXfPEJ";
+  static final String clientKey = "zjguZWtyWJukt1cZTDNco0c37Wdmsc21AwziplzA";
 
   static final String pushGcm = "95114049968";
   static final String webPushCertificate =

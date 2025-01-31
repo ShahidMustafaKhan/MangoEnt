@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cached_video_player/cached_video_player.dart';
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:teego/helpers/quick_actions.dart';
@@ -61,7 +61,7 @@ class VideoItemWidget<V extends VideoInfo> extends StatefulWidget {
 
 class _VideoItemWidgetState<V extends VideoInfo>
     extends State<VideoItemWidget<V>> {
-  late CachedVideoPlayerController? _videoPlayerController;
+  late CachedVideoPlayerPlusController? _videoPlayerController;
   bool initialized = false;
   bool actualDisposed = false;
   bool isEnded = false;
@@ -201,7 +201,7 @@ class _VideoItemWidgetState<V extends VideoInfo>
 
 
     if(widget.videoInfo.file!=null){
-      _videoPlayerController = CachedVideoPlayerController.file(
+      _videoPlayerController = CachedVideoPlayerPlusController.file(
         widget.videoInfo.file,
       );
       _videoPlayerController!.addListener(_videoListener);
@@ -220,7 +220,7 @@ class _VideoItemWidgetState<V extends VideoInfo>
 
       final fileInfo= await checkedCacheFor(widget.videoInfo.url!);
       if(fileInfo==null){
-        _videoPlayerController = CachedVideoPlayerController.network(
+        _videoPlayerController = CachedVideoPlayerPlusController.network(
           widget.videoInfo.url!,
         );
         _videoPlayerController!.addListener(_videoListener);
@@ -236,7 +236,7 @@ class _VideoItemWidgetState<V extends VideoInfo>
       }
       else {
         final file= fileInfo.file;
-        _videoPlayerController = CachedVideoPlayerController.file(
+        _videoPlayerController = CachedVideoPlayerPlusController.file(
           file,
         );
         _videoPlayerController!.addListener(_videoListener);
@@ -327,7 +327,7 @@ class _VideoItemWidgetState<V extends VideoInfo>
     return Center(
       child: AspectRatio(
         child: VisibilityDetector(
-            child: CachedVideoPlayer(_videoPlayerController!),
+            child: CachedVideoPlayerPlus(_videoPlayerController!),
             onVisibilityChanged: _handleVisibilityDetector,
             key: Key('key_${widget.currentPageIndex}')),
         aspectRatio: _videoPlayerController!.value.aspectRatio,
@@ -355,7 +355,7 @@ class _VideoItemWidgetState<V extends VideoInfo>
         child: VisibilityDetector(
             onVisibilityChanged: _handleVisibilityDetector,
             key: Key('key_${widget.currentPageIndex}'),
-            child: CachedVideoPlayer(_videoPlayerController!)),
+            child: CachedVideoPlayerPlus(_videoPlayerController!)),
         maxHeight: screenRatio > previewRatio
             ? screenH
             : screenW / previewW * previewH,

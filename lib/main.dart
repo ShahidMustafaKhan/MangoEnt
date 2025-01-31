@@ -112,9 +112,9 @@ void main() async {
     clientKey: Config.clientKey,
     liveQueryUrl: Config.liveQueryUrl,
     autoSendSessionId: true,
-    coreStore: QuickHelp.isWebPlatform()
-        ? await CoreStoreSharedPrefsImp.getInstance()
-        : await CoreStoreSembastImp.getInstance(password: Config.appId),
+    // coreStore: QuickHelp.isWebPlatform()
+    //     ? await CoreStoreSharedPrefsImp.getInstance()
+    //     : await CoreStoreSembastImp.getInstance(password: Config.appId),
     debug: Setup.isDebug,
     appName: Setup.appName,
     appPackageName: Setup.appPackageName,
@@ -223,3 +223,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     Constants.queryParseConfig(preferences);
   }
 }
+
+
+

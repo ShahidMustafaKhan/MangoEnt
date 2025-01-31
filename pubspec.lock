@@ -161,14 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  cached_video_player:
+  cached_video_player_plus:
     dependency: "direct main"
     description:
-      name: cached_video_player
-      sha256: "7af99d5502676ae89a032d87a0bc0bc77efde63b19045ec84bd1de02fe54fae8"
+      name: cached_video_player_plus
+      sha256: ac1aefd1b4da2d8c362850df4326be8d6a9c9d32f30233e8cf9e026562261e5b
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "1.0.1"
   camera:
     dependency: "direct main"
     description:
