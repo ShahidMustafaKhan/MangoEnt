@@ -21,28 +21,28 @@ import '../theme/colors_constant.dart';
 class PermissionHandler{
 
 
-static Future<void> checkPermission(bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber}) async {
+static Future<void> checkPermission(bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber, bool backgroundImage=false}) async {
   if (QuickHelp.isAndroidPlatform()) {
     PermissionStatus status = await Permission.storage.status;
     PermissionStatus status2 = await Permission.camera.status;
     print('Permission android');
 
-    checkStatus(status, status2, isAvatar, context, liveStreamingFile: liveStreamingFile, avatarNumber: avatarNumber);
+    checkStatus(status, status2, isAvatar, context, liveStreamingFile: liveStreamingFile, avatarNumber: avatarNumber, backgroundImage: backgroundImage);
   } else if (QuickHelp.isIOSPlatform()) {
     PermissionStatus status = await Permission.photos.status;
     PermissionStatus status2 = await Permission.camera.status;
     print('Permission ios');
 
-    checkStatus(status, status2, isAvatar, context, liveStreamingFile: liveStreamingFile, avatarNumber: avatarNumber);
+    checkStatus(status, status2, isAvatar, context, liveStreamingFile: liveStreamingFile, avatarNumber: avatarNumber, backgroundImage: backgroundImage);
   } else {
     print('Permission other device');
 
-    _choosePhoto(isAvatar, context, avatarNumber: avatarNumber, liveStreamingFile: liveStreamingFile);
+    _choosePhoto(isAvatar, context, avatarNumber: avatarNumber, liveStreamingFile: liveStreamingFile, backgroundImage: backgroundImage);
   }
 }
 
 static Future<void> checkStatus(
-    PermissionStatus status, PermissionStatus status2, bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber}) async {
+    PermissionStatus status, PermissionStatus status2, bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber, bool backgroundImage=false}) async {
   if (status.isDenied || status2.isDenied) {
     // We didn't ask for permission yet or the permission has been denied before but not permanently.
 
@@ -69,7 +69,7 @@ static Future<void> checkStatus(
           if (statuses[Permission.camera]!.isGranted &&
               statuses[Permission.photos]!.isGranted ||
               statuses[Permission.storage]!.isGranted) {
-            _choosePhoto(isAvatar, context, avatarNumber: avatarNumber, liveStreamingFile: liveStreamingFile );
+            _choosePhoto(isAvatar, context, avatarNumber: avatarNumber, liveStreamingFile: liveStreamingFile , backgroundImage: backgroundImage);
           }
         });
   } else if (status.isPermanentlyDenied || status2.isPermanentlyDenied) {
@@ -86,14 +86,14 @@ static Future<void> checkStatus(
         });
   } else if (status.isGranted && status2.isGranted) {
     //_uploadPhotos(ImageSource.gallery);
-    _choosePhoto(isAvatar,context, avatarNumber: avatarNumber , liveStreamingFile: liveStreamingFile);
+    _choosePhoto(isAvatar,context, avatarNumber: avatarNumber , liveStreamingFile: liveStreamingFile, backgroundImage: backgroundImage);
   }
 
   print('Permission $status');
   print('Permission $status2');
 }
 
-static Future<void> _choosePhoto(bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber}) async {
+static Future<void> _choosePhoto(bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber, bool backgroundImage=false}) async {
 
   final List<AssetEntity>? result = await AssetPicker.pickAssets(
     context,
@@ -109,7 +109,7 @@ static Future<void> _choosePhoto(bool isAvatar, BuildContext context, {bool live
 
   if (result != null && result.length > 0) {
     final File? image = await result.first.file;
-     cropPhoto(image!.path, isAvatar, context, avatarNumber: avatarNumber,liveStreamingFile: liveStreamingFile);
+     cropPhoto(image!.path, isAvatar, context, avatarNumber: avatarNumber,liveStreamingFile: liveStreamingFile, backgroundImage: backgroundImage);
 
   } else {
     print("Photos null");
@@ -123,17 +123,17 @@ static Future<String> _getNewImagePath() async {
   return '$path/$fileName';
 }
 
-static Future<void> cropPhoto(String path, bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber}) async {
+static Future<void> cropPhoto(String path, bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber, bool backgroundImage=false}) async {
   QuickHelp.showLoadingDialog(context);
 
   CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: path,
       aspectRatioPresets: [
-        isAvatar == true ? CropAspectRatioPreset.square : CropAspectRatioPreset.ratio16x9,
+        backgroundImage==true ? CropAspectRatioPreset.original : isAvatar == true ? CropAspectRatioPreset.square : CropAspectRatioPreset.ratio16x9,
       ],
       //maxHeight: 480,
       //maxWidth: 740,
-      aspectRatio: isAvatar == true ? CropAspectRatio(ratioX: 4, ratioY: 4) : CropAspectRatio(ratioX: 16, ratioY: 9),
+      aspectRatio: backgroundImage==true ? null : isAvatar == true ? CropAspectRatio(ratioX: 4, ratioY: 4) : CropAspectRatio(ratioX: 16, ratioY: 9),
       uiSettings: [
         AndroidUiSettings(
             toolbarTitle: "edit_photo".tr(),
@@ -148,14 +148,14 @@ static Future<void> cropPhoto(String path, bool isAvatar, BuildContext context, 
 
   if (croppedFile != null) {
 
-    compressImage(croppedFile.path, isAvatar,context, avatarNumber: avatarNumber,liveStreamingFile: liveStreamingFile);
+    compressImage(croppedFile.path, isAvatar,context, avatarNumber: avatarNumber,liveStreamingFile: liveStreamingFile,backgroundImage: backgroundImage);
   } else {
     QuickHelp.hideLoadingDialog(context);
     return;
   }
 }
 
-static Future<void> compressImage(String path, bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber}) async {
+static Future<void> compressImage(String path, bool isAvatar, BuildContext context, {bool liveStreamingFile=false, int? avatarNumber, bool backgroundImage=false}) async {
 
   QuickHelp.showLoadingDialogWithText(context, description: "crop_image_scree.optimizing_image".tr(), useLogo: true);
 
@@ -164,7 +164,7 @@ static Future<void> compressImage(String path, bool isAvatar, BuildContext conte
 
     if(result != null){
 
-      liveStreamingFile==true ? uploadLiveStreamingFile(result, isAvatar, context) : uploadFile(result, isAvatar, context, avatarNumber);
+      backgroundImage==true ? uploadBackGroundImage(result, context) : liveStreamingFile==true ? uploadLiveStreamingFile(result, isAvatar, context) : uploadFile(result, isAvatar, context, avatarNumber);
 
     } else {
 
@@ -242,6 +242,21 @@ static uploadLiveStreamingFile(File imageFile, bool isAvatar, BuildContext conte
   }
 
     Get.find<LiveViewModel>().addParseFile(parseFile, imageFile, context);
+
+
+}
+
+static uploadBackGroundImage(File imageFile, BuildContext context) async {
+  ParseFileBase? parseFile;
+
+  if(imageFile.absolute.path.isNotEmpty){
+    parseFile = ParseFile(File(imageFile.absolute.path), name: "avatar.jpg");
+  } else {
+    parseFile = ParseWebFile(imageFile.readAsBytesSync(), name: "avatar.jpg");
+  }
+
+  Get.find<LiveViewModel>().addBackGroundImage(parseFile, imageFile, context);
+
 
 
 }

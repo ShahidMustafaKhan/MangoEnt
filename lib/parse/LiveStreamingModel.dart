@@ -256,8 +256,8 @@ class LiveStreamingModel extends ParseObject implements ParseCloneable {
   String? get getTitle => get<String>(keyTitle);
   set setTitle(String title) => set<String>(keyTitle, title);
 
-  String? get getBackgroundImage => get<String>(keyBackgroundImage);
-  set setBackgroundImage(String image) => set<String>(keyBackgroundImage, image);
+  ParseFileBase? get getBackgroundImage => get<ParseFileBase>(keyBackgroundImage);
+  set setBackgroundImage(ParseFileBase? image) => set<ParseFileBase?>(keyBackgroundImage, image);
 
   List? get getTags => get<List>(keyTags);
   set setTags(List tags) => set<List>(keyTags, tags);

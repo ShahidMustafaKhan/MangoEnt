@@ -446,6 +446,11 @@ class AppImagePath {
   static const avatarFramePurple1 = "assets/svg/avatar_frame/avatar_frame_purple1.svg";
   static const avatarFramePurple2 = "assets/svg/avatar_frame/avatar_frame_purple2.svg";
 
+  static const micOff = "assets/png/mic_off.png";
+  static const micOn = "assets/png/mic_on.png";
+
+
+
 
 
 }

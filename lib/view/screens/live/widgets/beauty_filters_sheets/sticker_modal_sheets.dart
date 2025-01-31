@@ -37,7 +37,7 @@ class _StickerModalSheetState extends State<StickerModalSheet> {
         return BeautyWidget();
       case 'Background':
         return
-          Get.find<LiveViewModel>().isSingleLive ? BackgroundSingleLiveWidget() :
+          // Get.find<LiveViewModel>().isSingleLive ? BackgroundSingleLiveWidget() :
           BackgroundWidget();
       default:
         return StickerWidget();

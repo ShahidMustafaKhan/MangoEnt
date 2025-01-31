@@ -1923,6 +1923,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
 
     QuickActions.showAlertDialog(context, "Are you sure you want to delete this post?", (){_confirmDeletePost(context, post);});
 
+
   }
 
   _suspendUser(BuildContext context, UserModel user) {
@@ -1982,6 +1983,7 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
       Get.find<CommunityController>().loadFeedsVideo(Get.find<UserViewModel>().currentUser, false, updateBuild: true);
 
       QuickHelp.goBackToPreviousPage(context);
+      Get.back();
 
       QuickHelp.showAppNotificationAdvanced(
         context: context,
@@ -2301,14 +2303,14 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.28,
+          height: userViewModel.currentUser!.objectId == widget.postModel!.getAuthorId ?  MediaQuery.of(context).size.height * 0.24 : MediaQuery.of(context).size.height * 0.28,
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 width: MediaQuery.of(context).size.width * .9,
-                height: MediaQuery.of(context).size.height * .139,
+                height: userViewModel.currentUser!.objectId == widget.postModel!.getAuthorId ? MediaQuery.of(context).size.height * .1 : MediaQuery.of(context).size.height * .139,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: AppColors.card,
@@ -2354,13 +2356,16 @@ class _DefaultVideoInfoWidgetState extends State<DefaultVideoInfoWidget> {
                       thickness: 0.1,
                       color: AppColors.grey,
                     ),
-                    GestureDetector(
+                    if(userViewModel.currentUser!.objectId != widget.postModel!.getAuthorId)
+                      GestureDetector(
                       onTap: ()=> QuickActions.showAlertDialog(context, "Are you sure you want to block this user?",
                               () {
                         Get.back();
                         Get.find<UserViewModel>().addToBlockList(widget.postModel!.getAuthor!.getUid!);
                         QuickHelp.showAppNotificationAdvanced(title: 'User added to block list', context: context);
-                      }),
+                        Get.back();
+
+                              }),
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

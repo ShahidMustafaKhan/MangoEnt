@@ -6,6 +6,7 @@ import 'package:get/get.dart' hide Trans;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:teego/utils/constants/status.dart';
 import 'package:teego/utils/routes/app_routes.dart';
+import 'package:teego/view_model/ranking_controller.dart';
 
 
 import '../helpers/quick_actions.dart';
@@ -260,6 +261,7 @@ class UserViewModel extends GetxController {
       if(response.results!=null){
         currentUser = response.results!.first as UserModel;
         update();
+        Get.find<RankingViewModel>().addCoinsRecord(coins);
       }
     }
   }
@@ -276,6 +278,9 @@ class UserViewModel extends GetxController {
       if (response.success) {
         currentUser = response.results!.first as UserModel;
         update();
+        Get.find<RankingViewModel>().addLevelRecord(xp);
+
+
       }
     }
     else if(xpTemp <= 50 && (currentUser.getLevel == 1 || currentUser.getLevel==null) ){
@@ -286,6 +291,7 @@ class UserViewModel extends GetxController {
       if (response.success) {
         currentUser = response.results!.first as UserModel;
         update();
+        Get.find<RankingViewModel>().addLevelRecord(xp);
       }
     }
     else{
@@ -294,6 +300,7 @@ class UserViewModel extends GetxController {
         if (response.success) {
           currentUser = response.results!.first as UserModel;
           update();
+          Get.find<RankingViewModel>().addLevelRecord(xp);
         }
       }
 

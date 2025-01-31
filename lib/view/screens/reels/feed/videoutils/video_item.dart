@@ -1,10 +1,8 @@
 import 'dart:math';
-
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:teego/helpers/quick_actions.dart';
-import 'package:teego/utils/colors_hype.dart';
 import 'package:teego/view/screens/reels/feed/videoutils/video.dart';
 import 'package:teego/view/screens/reels/feed/videoutils/video_item_config.dart';
 import 'package:visibility_detector/visibility_detector.dart';

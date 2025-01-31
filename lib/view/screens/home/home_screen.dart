@@ -8,7 +8,7 @@ import '../../../view_model/tab_bar_controller.dart';
 import '../../widgets/toggle_button_list.dart';
 import 'battle.dart';
 import 'explore.dart';
-import 'game.dart';
+import 'game/game.dart';
 
 
 class HomeView extends StatelessWidget {

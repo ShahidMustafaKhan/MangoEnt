@@ -56,7 +56,7 @@ class VideoWidget extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.r),
                           child: Image.network(
-                            gridItems[index].postModel!.getAuthor!.getAvatar!.url!,
+                            gridItems[index].postModel!.getVideoThumbnail!.url ?? gridItems[index].postModel!.getAuthor!.getAvatar!.url!,
                             width: double.infinity,
                             height: double.infinity,
                             fit: BoxFit.cover,

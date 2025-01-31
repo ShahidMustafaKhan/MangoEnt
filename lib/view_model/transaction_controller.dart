@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:get/get.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:teego/parse/UserModel.dart';
+import 'package:teego/view_model/ranking_controller.dart';
 import 'package:teego/view_model/userViewModel.dart';
 import 'package:english_words/english_words.dart';
 
@@ -110,6 +111,7 @@ class TransactionController extends GetxController {
 
 
       paymentModel.save();
+      Get.find<RankingViewModel>().addRechargeRecord(coins);
 
     });
     }

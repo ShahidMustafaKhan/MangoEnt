@@ -3,6 +3,7 @@ import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' hide Trans;
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:teego/utils/constants/app_constants.dart';
 import 'package:teego/utils/routes/app_routes.dart';
 import 'package:teego/utils/theme/colors_constant.dart';
@@ -235,11 +236,13 @@ class _ChatView extends State<ChatView> {
                           Positioned(
                               right: 10.w,
                               child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    chatListViewModel.messagesResults.removeAt(index);
-
-                                  });
+                                onTap: () async {
+                                    ParseResponse response = await chatMessage.delete();
+                                    if(response.success){
+                                      // chatListViewModel.messagesResults.removeAt(index);
+                                      longPressedIndex = null;
+                                      setState(() { });
+                                    }
                                 },
                                 child: Container(
                                   width: 148.w,

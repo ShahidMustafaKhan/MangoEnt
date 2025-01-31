@@ -34,7 +34,7 @@ class MultiLiveWidget extends StatelessWidget {
               children: [
                 SizedBox(height: 45),
                 AudioLiveTopBar(),
-                if(liveViewModel.liveStreamingModel.getYoutube ?? false == false)
+                if(liveViewModel.liveStreamingModel.getYoutube==false)
                   MultiGuestView(),
                 if(liveViewModel.liveStreamingModel.getYoutube==true)
                   Expanded(child: YoutubeView()),

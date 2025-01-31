@@ -29,7 +29,7 @@ import '../../view/screens/live/audio_live_streaming/audio_streamer_live/audio_s
 import '../../view/screens/live/multi_live_streaming/multi_audience_live/multi_audience_live_screen.dart';
 import '../../view/screens/live/multi_live_streaming/multi_streamer_live/multi_streamer_live_screen.dart';
 import '../../view/screens/live/single_live_streaming/single_audience_live/single_audience_live.dart';
-import '../../view/screens/live/single_live_streaming/single_audience_live/top_fan_view.dart';
+import '../../view/screens/ranking/top_fan_view.dart';
 import '../../view/screens/live/single_live_streaming/single_streamer_live/single_live_screen/single_live_screen.dart';
 import '../../view/screens/live/streamer_live_preview/live_preview_screen.dart';
 import '../../view/screens/live/widgets/basic_feature_sheets/end_screen.dart';

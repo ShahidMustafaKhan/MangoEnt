@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import '../../../../../../../view_model/live_controller.dart';
 import '../../internal/sdk/express/express_service.dart';
 
 class ZegoAudioVideoView extends StatefulWidget {
@@ -156,7 +159,7 @@ class _ZegoAudioVideoViewState extends State<ZegoAudioVideoView> {
           child: ValueListenableBuilder<String?>(
               valueListenable: widget.userInfo.avatarUrlNotifier,
               builder: (context, url, _) {
-                if(url != null)
+                if(url != null || Get.find<LiveViewModel>().liveStreamingModel.getAuthorUid.toString() == widget.userInfo.userID)
                   return Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: Container(
@@ -166,9 +169,7 @@ class _ZegoAudioVideoViewState extends State<ZegoAudioVideoView> {
                   ),
                   child: CircleAvatar(
                     radius: 45.r,
-                    child: ClipRRect(
-                                borderRadius: BorderRadius.circular(65),
-                                child: Image.network(url))
+                    backgroundImage: NetworkImage(Get.find<LiveViewModel>().liveStreamingModel.getAuthorUid.toString() == widget.userInfo.userID ? Get.find<LiveViewModel>().liveStreamingModel.getAuthor!.getAvatar!.url! : url!)
 
                   ),
                 ),

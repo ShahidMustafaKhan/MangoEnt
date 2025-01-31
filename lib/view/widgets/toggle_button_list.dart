@@ -8,6 +8,7 @@ import 'package:teego/view_model/ranking_controller.dart';
 import '../../utils/constants/app_constants.dart';
 import '../../utils/constants/typography.dart';
 import '../../utils/routes/app_routes.dart';
+import '../../view_model/tab_bar_controller.dart';
 
 class ToggleButtonList extends StatefulWidget {
   final int? selected;
@@ -27,6 +28,8 @@ class ToggleButtonList extends StatefulWidget {
 
 class _ToggleButtonListState extends State<ToggleButtonList> {
   int _selectedIndex = 0;
+  final TabBarViewModel tabBarViewModel = Get.find();
+  final RankingViewModel rankingViewModel = Get.find();
 
   @override
   void initState() {
@@ -69,7 +72,8 @@ class _ToggleButtonListState extends State<ToggleButtonList> {
             ),
           ),
           GestureDetector(
-            onTap: () => Get.toNamed(AppRoutes.topFan),
+            // onTap: () => Get.toNamed(AppRoutes.topFan),
+            onTap: () => rankingViewModel.showTrophyScreen.value = true,
             child: Padding(
               padding: const EdgeInsets.only(top: 8),
               child:

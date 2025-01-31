@@ -299,45 +299,7 @@ class MultiUserDetails extends StatelessWidget {
                     ),
                   ],
                 )),
-            Positioned(
-              bottom: 2,
-              right: 4,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment:
-                MainAxisAlignment.center,
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 14),
-                        child: Image.asset(
-                            AppImagePath.topPerson3,
-                            width: 8,
-                            height: 8),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 8),
-                        child: Image.asset(
-                            AppImagePath.topPerson2,
-                            width: 10,
-                            height: 10),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 1),
-                        child: Image.asset(
-                            AppImagePath.topPerson1,
-                            width: 10,
-                            height: 10),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+
           ],
         );
       }

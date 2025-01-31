@@ -27,6 +27,7 @@ dependencies:
   wechat_assets_picker: ^8.4.0
   wechat_camera_picker: ^3.7.0
   flutter_image_compress: ^1.1.3
+#  cached_video_player_plus:
   cached_video_player_plus:
 #  cached_video_player: ^2.0.4
   mime: ^1.0.4

@@ -223,6 +223,3 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     Constants.queryParseConfig(preferences);
   }
 }
-
-
-

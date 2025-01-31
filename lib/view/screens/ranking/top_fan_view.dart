@@ -5,15 +5,16 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:teego/helpers/quick_actions.dart';
 import 'package:teego/helpers/quick_help.dart';
+import 'package:teego/view_model/userViewModel.dart';
 
-import '../../../../../parse/RankingModel.dart';
-import '../../../../../parse/UserModel.dart';
-import '../../../../../utils/constants/app_constants.dart';
-import '../../../../../utils/constants/typography.dart';
-import '../../../../../utils/theme/colors_constant.dart';
-import '../../../../../view_model/ranking_controller.dart';
-import '../../../../widgets/base_scaffold.dart';
-import '../../../../widgets/nothing_widget.dart';
+import '../../../parse/RankingModel.dart';
+import '../../../parse/UserModel.dart';
+import '../../../utils/constants/app_constants.dart';
+import '../../../utils/constants/typography.dart';
+import '../../../utils/theme/colors_constant.dart';
+import '../../../view_model/ranking_controller.dart';
+import '../../widgets/base_scaffold.dart';
+import '../../widgets/nothing_widget.dart';
 
 class TopFanView extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _TopFanViewState extends State<TopFanView> {
 
   @override
   void initState() {
-    rankingViewModel.fetchRanking();
+    rankingViewModel.fetchTopFansRanking();
     super.initState();
   }
 
@@ -37,13 +38,13 @@ class _TopFanViewState extends State<TopFanView> {
     final textColor = isLightTheme ? Colors.black : Colors.white;
     final backgroundColor = isLightTheme ? Colors.white : AppColors.grey900;
 
-    rankingViewModel.fetchRanking();
+    rankingViewModel.fetchTopFansRanking();
     if (activeTab == "Daily")
-      ranking = rankingViewModel.dailyRanking;
+      ranking = rankingViewModel.dailyTopFansRanking;
     else if (activeTab == "Weekly")
-      ranking = rankingViewModel.weeklyRanking;
+      ranking = rankingViewModel.weeklyLevelRanking;
     else
-      ranking = rankingViewModel.monthRanking;
+      ranking = rankingViewModel.monthLevelRanking;
 
     return BaseScaffold(
       // backgroundColor: AppColors.grey700,
@@ -52,11 +53,11 @@ class _TopFanViewState extends State<TopFanView> {
             init: rankingViewModel,
             builder: (rankingViewModel) {
               if (activeTab == "Daily")
-                ranking = rankingViewModel.dailyRanking;
+                ranking = rankingViewModel.dailyTopFansRanking;
               else if (activeTab == "Weekly")
-                ranking = rankingViewModel.weeklyRanking;
+                ranking = rankingViewModel.weeklyLevelRanking;
               else
-                ranking = rankingViewModel.monthRanking;
+                ranking = rankingViewModel.monthLevelRanking;
               if (ranking.isNotEmpty)
                 return Column(
                   children: [
@@ -74,7 +75,9 @@ class _TopFanViewState extends State<TopFanView> {
                                 color: textColor),
                           ),
                           Text(
-                            '15k 🚨 MICMIC',
+                            '${
+                                Get.find<UserViewModel>().currentUser.getFullName
+                            }',
                             style: sfProDisplayMedium.copyWith(
                                 color: textColor, fontSize: 16),
                           ),

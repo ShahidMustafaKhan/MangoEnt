@@ -68,6 +68,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   void _onItemTapped(int index) {
     setState(() {
+      rankingViewModel.showTrophyScreen.value = false;
       _selectedIndex = index;
     });
   }

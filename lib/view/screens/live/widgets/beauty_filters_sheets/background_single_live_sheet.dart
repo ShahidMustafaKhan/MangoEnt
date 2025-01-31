@@ -16,41 +16,6 @@ class BackgroundSingleLiveWidget extends StatelessWidget {
     BattleViewModel battleViewModel = Get.find();
     RxInt selectedIndex = 30.obs;
 
-    final List<String> stickerPaths = [
-      AppImagePath.sticker1,
-      // AppImagePath.background1,
-      AppImagePath.background2,
-      AppImagePath.background3,
-      AppImagePath.background4,
-      AppImagePath.background5,
-      AppImagePath.background6,
-      AppImagePath.background7,
-      AppImagePath.background8,
-      AppImagePath.background9,
-      AppImagePath.background10,
-      AppImagePath.background11,
-      AppImagePath.background12,
-      AppImagePath.background13,
-      AppImagePath.background14,
-      AppImagePath.background2,
-    ];
-
-    final List<String> stickerPathsPng = [
-      "assets/png/background/bg1.png",
-      "assets/png/background/bg2.png",
-      "assets/png/background/bg3.png",
-      "assets/png/background/bg4.png",
-      "assets/png/background/bg5.png",
-      "assets/png/background/bg6.png",
-      "assets/png/background/bg7.png",
-      "assets/png/background/bg8.png",
-      "assets/png/background/bg9.png",
-      "assets/png/background/bg10.png",
-      "assets/png/background/bg11.png",
-      "assets/png/background/bg3.png",
-      "assets/png/background/bg4.png",
-      "assets/png/background/bg1.png",
-    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,26 +28,26 @@ class BackgroundSingleLiveWidget extends StatelessWidget {
               mainAxisSpacing: 15.w,
               childAspectRatio: 1.0,
             ),
-            itemCount: stickerPaths.length,
+            itemCount: liveViewModel.stickerPaths.length,
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 onTap: (){
-                  selectedIndex.value = index;
-
-                  if(index==0)
-                    liveViewModel.backgroundImage.value = '';
-
-
-                  if(index>0)
-                  liveViewModel.backgroundImage.value = stickerPathsPng[index-1];
-
-
-                  liveViewModel.liveStreamingModel.setBackgroundImage = stickerPathsPng[index-1];
-                  liveViewModel.liveStreamingModel.save();
-                  if(battleViewModel.isBattleStarted==false){
-                    battleViewModel.battleModel.setBackgroundImage = stickerPathsPng[index-1];
-                    battleViewModel.battleModel.save();
-                  }
+                  // selectedIndex.value = index;
+                  //
+                  // if(index==0)
+                  //   liveViewModel.backgroundImage.value = '';
+                  //
+                  //
+                  // if(index>0)
+                  // liveViewModel.backgroundImage.value = stickerPathsPng[index-1];
+                  //
+                  //
+                  // liveViewModel.liveStreamingModel.setBackgroundImage = stickerPathsPng[index-1];
+                  // liveViewModel.liveStreamingModel.save();
+                  // if(battleViewModel.isBattleStarted==false){
+                  //   battleViewModel.battleModel.setBackgroundImage = stickerPathsPng[index-1];
+                  //   battleViewModel.battleModel.save();
+                  // }
 
                 },
                 child: Obx(() {
@@ -101,7 +66,7 @@ class BackgroundSingleLiveWidget extends StatelessWidget {
                         children: [
                           Center(
                             child: Image.asset(
-                              stickerPaths[index],
+                              liveViewModel.stickerPaths[index],
                               fit: BoxFit.cover,
                             ),
                           ),

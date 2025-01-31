@@ -233,6 +233,17 @@ class BasicFeatureSheet extends StatelessWidget {
                       },),
                       if(!isAudioLive)
                         SizedBox(width: 32),
+                      ValueListenableBuilder<bool>(
+                          valueListenable: zegoController.expressService.currentUser!.isMicOnNotifier,
+                          builder: (context, micOn, _) {
+                            return ToolWidget(title: "Mic", icon: micOn ? AppImagePath.micOn: AppImagePath.micOff, onTap: (){
+                            final user = zegoController.expressService.currentUser!;
+                            user.isMicOnNotifier.value= !user.isMicOnNotifier.value;
+                            ZEGOSDKManager.instance.expressService.turnMicrophoneOn(user.isMicOnNotifier.value);
+                          },);
+                        }
+                      ),
+                      SizedBox(width: 32),
                       ToolWidget(title: 'Data', icon: AppImagePath.dataIcon, onTap: ()=> openBottomSheet(DataSheetWidget(), context, back: true) ),
                       SizedBox(width: 32),
                       ToolWidget(title: 'Record', icon: AppImagePath.recordIcon, onTap: ()=> openBottomSheet(ScreenRecordingSheet(), context, back: true)),

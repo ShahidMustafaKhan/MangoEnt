@@ -46,30 +46,33 @@ class SingleLiveAudienceScreen extends StatelessWidget {
       safeArea: true,
       resizeToAvoidBottomInset: false,
       body: GetBuilder<GiftViewModel>(init: giftViewModel, builder: (giftViewModel) {
-        return Container(
-          child: Stack(
-            children: [
-              BackgroundImage(),
-              if(battleViewModel.isBattleView==false)
-                ZegoCloudPreview(role:ZegoLiveRole.audience),
-              SingleStreamerLiveItemWidget(),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: GiftAnimationView(giftViewModel: giftViewModel,)
+        return GetBuilder<BattleViewModel>(init: battleViewModel, builder: (battleViewModel) {
+            return Container(
+              child: Stack(
+                children: [
+                  BackgroundImage(),
+                  if(battleViewModel.isBattleView==false)
+                    ZegoCloudPreview(role:ZegoLiveRole.audience),
+                  SingleStreamerLiveItemWidget(),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: GiftAnimationView(giftViewModel: giftViewModel,)
+                  ),
+                  GiftReceivedWidget(),
+                  if(battleViewModel.isBattleView == true)
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Obx(() {
+                      if(liveViewModel.chatField.value==true && battleViewModel.isBattleView == true)
+                        return ChatTextField();
+                      else
+                        return SizedBox();
+                    }),
+                  ),
+                ],
               ),
-              GiftReceivedWidget(),
-              if(battleViewModel.isBattleView == true)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Obx(() {
-                  if(liveViewModel.chatField.value==true && battleViewModel.isBattleView == true)
-                    return ChatTextField();
-                  else
-                    return SizedBox();
-                }),
-              ),
-            ],
-          ),
+            );
+          }
         );
       }
       ),

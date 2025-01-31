@@ -11,6 +11,7 @@ import 'package:teego/view_model/userViewModel.dart';
 import 'package:teego/view_model/zego_controller.dart';
 
 import '../parse/BattleStreamingModel.dart';
+import '../parse/RankingModel.dart';
 import '../parse/TimerModel.dart';
 import '../parse/UserModel.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
@@ -205,8 +206,8 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
       ..setBattleStarted = false
       ..setLiveObjectId = liveObjectId
       ..setLiveObject= liveObject
-      ..setHostUid = host.getUid!
-      ..setBackgroundImage = Get.find<LiveViewModel>().backgroundImage.value;
+      ..setHostUid = host.getUid!;
+      // ..setBackgroundImage = Get.find<LiveViewModel>().backgroundImage.value;
     ;
     
     ParseResponse response = await _battleModel.save();
@@ -615,7 +616,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     if (response.success && response.results!.isNotEmpty) {
 
       _battleModel = response.results!.first as BattleModel;
-      Get.find<LiveViewModel>().backgroundImage.value = _battleModel.getBackgroundImage ?? '';
+      // Get.find<LiveViewModel>().backgroundImage.value = _battleModel.getBackgroundImage ?? '';
       Get.find<LiveViewModel>().joinOtherHostSession(_battleModel.getLiveObjectId ?? '');
     if (_battleModel.getBattleStarted! == true) {    //  if battleStarted is true than trigger versus animation
         versusAnimationLoaded = true;
@@ -814,8 +815,8 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   resetBackgroundForPkPlayer(){
-    if(isCurrentUserPlayerB==true)
-        Get.find<LiveViewModel>().backgroundImage.value= Get.find<LiveViewModel>().liveStreamingModel.getBackgroundImage ?? '';
+    // if(isCurrentUserPlayerB==true)
+        // Get.find<LiveViewModel>().backgroundImage.value= Get.find<LiveViewModel>().liveStreamingModel.getBackgroundImage ?? '';
   }
 
 
@@ -938,7 +939,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setTeamScoreA= coins + _battleModel.getTeamScoreA;
     _battleModel.setHostGifterAvatarList= Get.find<UserViewModel>().currentUser.getAvatar!.url!;
     _battleModel.save();
-    Get.find<RankingViewModel>().addRecord(coins);
+    Get.find<RankingViewModel>().addRecord(coins,RankingModel.keyCategoryGifter);
     Get.find<UserViewModel>().deductBalance(coins);
     Get.find<LiveViewModel>().incrementCount(coins);
 
@@ -949,7 +950,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setTeamScoreB= coins + _battleModel.getTeamScoreB;
     _battleModel.setPlayerGifterAvatarList= Get.find<UserViewModel>().currentUser.getAvatar!.url!;
     _battleModel.save();
-    Get.find<RankingViewModel>().addRecord(coins);
+    Get.find<RankingViewModel>().addRecord(coins,RankingModel.keyCategoryGifter);
     Get.find<UserViewModel>().deductBalance(coins);
     Get.find<LiveViewModel>().incrementCount(coins);
 
@@ -964,7 +965,7 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
     _battleModel.setHostGifterAvatarList= Get.find<UserViewModel>().currentUser.getAvatar!.url!;
     _battleModel.setPlayerGifterAvatarList= Get.find<UserViewModel>().currentUser.getAvatar!.url!;
     _battleModel.save();
-    Get.find<RankingViewModel>().addRecord(coins);
+    Get.find<RankingViewModel>().addRecord(coins,RankingModel.keyCategoryGifter);
     Get.find<UserViewModel>().deductBalance(coins);
     Get.find<LiveViewModel>().incrementCount(coins);
 
@@ -998,9 +999,9 @@ class BattleViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   changeBackgroundImage(BattleModel value){
-    if(value.getBackgroundImage != null)
-      Get.find<LiveViewModel>().
-      backgroundImage.value = value.getBackgroundImage!;
+    // if(value.getBackgroundImage != null)
+    //   Get.find<LiveViewModel>().
+      // backgroundImage.value = value.getBackgroundImage!;
   }
 
   saveHostGifterList(String avatar){

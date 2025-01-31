@@ -87,24 +87,41 @@ class _YoutubeViewState extends State<YoutubeView> {
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Container(
-                            height: double.infinity,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: AppColors.black.withOpacity(0.2),
-                            ),
-                            child: YoutubePlayer(
-                              controller: youtubeController.youtubePlayerController,
-                              showVideoProgressIndicator: true,
-                              progressIndicatorColor: Colors.amber,
-                              progressColors: const ProgressBarColors(
-                                playedColor: Colors.amber,
-                                handleColor: Colors.amberAccent,
+                        child: Stack(
+                          children: [
+                            Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: AppColors.black.withOpacity(0.2),
+                                ),
+                                child: YoutubePlayer(
+                                  controller: youtubeController.youtubePlayerController,
+                                  showVideoProgressIndicator: true,
+                                  progressIndicatorColor: Colors.amber,
+                                  progressColors: const ProgressBarColors(
+                                    playedColor: Colors.amber,
+                                    handleColor: Colors.amberAccent,
+                                  ),
+                                  onReady: () {
+                                    youtubeController.youtubePlayerController.play();
+                                  },
+                                ),),
+                            Positioned(
+                              top: 10.h,
+                              right: 15.w,
+                              child: GestureDetector(
+                                onTap: (){
+                                  liveViewModel.liveStreamingModel.setYoutube=false;
+                                  liveViewModel.liveStreamingModel.save();
+                                },
+                                child: Container(
+                                  child: Image.asset("assets/png/ic_cross.png", color: AppColors.white,),
+                                ),
                               ),
-                              onReady: () {
-                                youtubeController.youtubePlayerController.play();
-                              },
-                            ),),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,

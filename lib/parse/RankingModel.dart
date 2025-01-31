@@ -23,10 +23,11 @@ class RankingModel extends ParseObject implements ParseCloneable {
 
 
   static String keyCategory = "category";
-  static String keyCategoryGifter = "gifter";
+  static String keyCategoryGifter = "Gifter";
+  static String keyCategoryCoins = "Coins";
+  static String keyCategoryRecharger = "Recharger";
+  static String keyCategoryLevel = "Level";
   static String keyCoins = "coins";
-
-
 
   UserModel? get getGifter => get<UserModel>(keySender);
   set setGifter(UserModel author) => set<UserModel>(keySender, author);

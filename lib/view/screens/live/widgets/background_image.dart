@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:teego/view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
-import 'package:teego/view/screens/live/zegocloud/zim_zego_sdk/internal/internal_defines.dart';
 import 'package:teego/view_model/live_controller.dart';
 
 class BackgroundImage extends StatelessWidget {
@@ -11,22 +8,25 @@ class BackgroundImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LiveViewModel liveViewModel = Get.find();
-    return
-      Positioned.fill(top:0, bottom:0,
-      child:
-      Obx((){
-        if(liveViewModel.backgroundImage.isNotEmpty)
-          return Container(
-            decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(liveViewModel.backgroundImage.value)
-          ),
+      return GetBuilder<LiveViewModel>(
+          init: liveViewModel,
+          builder: (liveViewModel) {
+            if(liveViewModel.backgroundImage!=null)
+            return Positioned.fill(top:0, bottom:0,
+                child: Container(
+                decoration: BoxDecoration(
+                 image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(liveViewModel.backgroundImage!.url!)
+              ),
 
-          ),);
-        return SizedBox();
+              ),));
+            else
+              return SizedBox();
         }
-      ));
+      );
+
+
 
   }
 }

@@ -19,8 +19,10 @@ import 'package:teego/view_model/zego_controller.dart';
 import 'package:wakelock/wakelock.dart';
 import '../data/app/setup.dart';
 import '../helpers/quick_help.dart';
+import '../parse/RankingModel.dart';
 import '../parse/TimerModel.dart';
 import '../parse/UserModel.dart';
+import '../utils/constants/app_constants.dart';
 import '../utils/constants/status.dart';
 import '../utils/routes/app_routes.dart';
 import '../view/screens/live/zegocloud/zim_zego_sdk/internal/business/business_define.dart';
@@ -60,7 +62,6 @@ class LiveViewModel extends GetxController {
 
   RxString title = ''.obs;
   RxString mode = 'Public'.obs;
-  RxString backgroundImage=''.obs;
   RxList tagList=[].obs;
   RxString selectedLanguage='Language'.obs;
   RxString roomAnnouncement=''.obs;
@@ -72,6 +73,8 @@ class LiveViewModel extends GetxController {
   List giftSendersList=[];
   RxBool isCameraOn = true.obs;
   ParseFileBase? parseFile;
+  ParseFileBase? backgroundImage;
+  ParseFileBase? savedBackgroundImage;
   RxString selectedLiveType=LiveStreamingModel.keyTypeSingleLive.obs;
   List viewerList=[];
   RxBool giftAnimation = true.obs;
@@ -81,6 +84,12 @@ class LiveViewModel extends GetxController {
 
   //------ people who are live list
   List<UserModel> friendsList=[];
+
+  final List stickerPaths = [
+    AppImagePath.sticker1,
+    AppImagePath.background1,
+  ];
+
 
   Widget? video;
 
@@ -148,6 +157,27 @@ class LiveViewModel extends GetxController {
       liveStreamingModel = response.results!.first;
       QuickHelp.hideLoadingDialog(context);
       QuickHelp.hideLoadingDialog(context);
+      update();
+
+    }
+    else{
+      QuickHelp.hideLoadingDialog(context);
+      QuickHelp.hideLoadingDialog(context);
+    }
+
+  }
+
+  addBackGroundImage(ParseFileBase? file, File imageFile, BuildContext context) async {
+    parseFile = file;
+    liveStreamingModel.setBackgroundImage = file!;
+    savedBackgroundImage = file;
+    ParseResponse response = await liveStreamingModel.save();
+    if(response.success && response.results!= null ){
+      liveStreamingModel = response.results!.first;
+      QuickHelp.hideLoadingDialog(context);
+      QuickHelp.hideLoadingDialog(context);
+      stickerPaths.insert(2, liveStreamingModel.getBackgroundImage!.url!);
+      update();
       update();
 
     }
@@ -258,7 +288,8 @@ class LiveViewModel extends GetxController {
     liveStreamingModel.setMode =  mode.value;
     liveStreamingModel.setRoomAnnouncement =  roomAnnouncement.value;
     liveStreamingModel.setLanguage=  selectedLanguage.value;
-    liveStreamingModel.setBackgroundImage =  backgroundImage.value;
+    if(backgroundImage!=null)
+    liveStreamingModel.setBackgroundImage =  backgroundImage!;
 
     if(selectedLiveType.value == bottomTab[audioLiveIndex])
     liveStreamingModel.setAudioSeats= nineMemberIndex.value == 0 ? 8 : 11;
@@ -429,7 +460,7 @@ class LiveViewModel extends GetxController {
     liveStreamingModel.setTotalCoins = coins;
     liveStreamingModel.addDiamonds = coins;
     liveStreamingModel.save();
-    Get.find<RankingViewModel>().addRecord(coins);
+    Get.find<RankingViewModel>().addRecord(coins,RankingModel.keyCategoryGifter);
     Get.find<UserViewModel>().deductBalance(coins);
   }
 
@@ -972,8 +1003,11 @@ class LiveViewModel extends GetxController {
   }
 
   changeBackgroundImage(LiveStreamingModel value){
-    if(value.getBackgroundImage != null && value.getBackgroundImage == backgroundImage.value)
-    backgroundImage.value = value.getBackgroundImage!;
+    if(value.getBackgroundImage != null)
+    backgroundImage = value.getBackgroundImage!;
+    else if(value.getBackgroundImage == null && role==ZegoLiveRole.audience)
+      backgroundImage=null;
+    update();
   }
 
   addGifterList(Map value){
@@ -1027,7 +1061,7 @@ class LiveViewModel extends GetxController {
   addGiftCoins(Map value){
     if(value[LiveStreamingModel.keyReceiverUid] == Get.find<UserViewModel>().currentUser.getUid) {
       Get.find<UserViewModel>().addBalance(value[LiveStreamingModel.keyCoins]).then((value) => update());
-      }
+    }
     }
 
 

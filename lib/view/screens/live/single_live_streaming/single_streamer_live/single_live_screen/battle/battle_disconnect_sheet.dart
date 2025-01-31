@@ -55,7 +55,7 @@ class BattleDisconnectSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 30),
-              Image.asset(AppImagePath.vsIcon, height: 50, width: 52),
+              Image.asset(AppImagePath.boxingIcon, height: 50, width: 52),
               const SizedBox(width: 30),
               Container(
                 height: 80,
